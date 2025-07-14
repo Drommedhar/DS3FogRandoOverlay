@@ -125,8 +125,7 @@
               "RelativeToolTip": "src\\Overlay\\Services\\DS3MemoryReader.cs",
               "ViewState": "AgIAAIwAAAAAAAAAAAD4v5wAAAANAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-14T18:19:45.835Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-07-14T18:19:45.835Z"
             },
             {
               "$type": "Document",
@@ -136,7 +135,7 @@
               "RelativeDocumentMoniker": "src\\Overlay\\MainWindow.xaml.cs",
               "ToolTip": "D:\\git\\DS3FogRandoOverlay\\src\\Overlay\\MainWindow.xaml.cs",
               "RelativeToolTip": "src\\Overlay\\MainWindow.xaml.cs",
-              "ViewState": "AgIAAFkBAAAAAAAAAAAzwHMBAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAFkBAAAAAAAAAAAzwHMBAAAmAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-07-14T18:15:57.57Z",
               "EditorCaption": ""
@@ -151,8 +150,7 @@
               "RelativeToolTip": "src\\Overlay\\Services\\AreaMapper.cs",
               "ViewState": "AgIAABgCAAAAAAAAAAAmwC4CAAAMAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-14T18:15:39.628Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-07-14T18:15:39.628Z"
             },
             {
               "$type": "Document",
@@ -164,8 +162,7 @@
               "RelativeToolTip": "src\\SoulsFormats\\SoulsFormats\\Formats\\TAE3\\TAE3.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAAAeAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-14T18:04:26.827Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-07-14T18:04:26.827Z"
             },
             {
               "$type": "Document",
@@ -177,8 +174,7 @@
               "RelativeToolTip": "src\\SoulsFormats\\SoulsFormats\\Formats\\MSB\\MSB3\\MSB3.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAZAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-14T18:04:19.548Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-07-14T18:04:19.548Z"
             },
             {
               "$type": "Document",
@@ -188,8 +184,7 @@
               "ToolTip": "C:\\Users\\domin\\source\\repos\\SoulsFormats\\SoulsFormats\\Util\\SFEncoding.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAAMAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-14T16:09:06.195Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-07-14T16:09:06.195Z"
             },
             {
               "$type": "Document",
@@ -201,8 +196,7 @@
               "RelativeToolTip": "src\\Overlay\\Services\\MsbParser.cs",
               "ViewState": "AgIAAF4AAAAAAAAAAAAjwGsAAAAQAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-14T16:07:24.779Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-07-14T16:07:24.779Z"
             },
             {
               "$type": "Document",
@@ -214,8 +208,7 @@
               "RelativeToolTip": "src\\Overlay\\TestMsbParsing.cs",
               "ViewState": "AgIAAAsAAAAAAAAAAAAgwAwAAAAIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-14T16:06:15.759Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-07-14T16:06:15.759Z"
             },
             {
               "$type": "Document",
@@ -227,8 +220,7 @@
               "RelativeToolTip": "src\\Tests\\Tests\\UnitTest1.cs",
               "ViewState": "AgIAABAAAAAAAAAAAAAIwFYAAAAMAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-14T16:05:53.683Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-07-14T16:05:53.683Z"
             }
           ]
         }

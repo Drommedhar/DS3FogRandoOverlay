@@ -209,121 +209,7 @@ namespace DS3FogRandoOverlay
             }
         }
 
-        private void UpdateFogGatesDisplay(string? currentArea)
-        {
-            FogGatesPanel.Children.Clear();
 
-            if (currentSpoilerData == null)
-            {
-                var noDataText = new TextBlock
-                {
-                    Text = "No spoiler log data found",
-                    Style = (Style)FindResource("OverlayTextStyle")
-                };
-                FogGatesPanel.Children.Add(noDataText);
-                return;
-            }
-
-            if (string.IsNullOrEmpty(currentArea))
-            {
-                var noAreaText = new TextBlock
-                {
-                    Text = "Current area unknown",
-                    Style = (Style)FindResource("OverlayTextStyle")
-                };
-                FogGatesPanel.Children.Add(noAreaText);
-                return;
-            }
-
-            // Debug logging
-            System.IO.File.AppendAllText("ds3_debug.log",
-                $"[MainWindow] {DateTime.Now:HH:mm:ss.fff} - Searching fog gates for area: {currentArea}\n");
-
-            // Get all possible area names for the current area
-            var possibleAreaNames = areaMapper.GetPossibleSpoilerLogAreaNames(currentArea);
-
-            // Debug logging
-            System.IO.File.AppendAllText("ds3_debug.log",
-                $"[MainWindow] {DateTime.Now:HH:mm:ss.fff} - Possible area names: {string.Join(", ", possibleAreaNames)}\n");
-
-            // Find fog gates for current area
-            var fogGatesInArea = new List<FogGate>();
-
-            // Look for fog gates that start from any of the possible area names
-            foreach (var area in currentSpoilerData.Areas)
-            {
-                foreach (var fogGate in area.FogGates)
-                {
-                    // Check if fog gate matches any of the possible area names
-                    bool foundMatch = false;
-                    foreach (var possibleName in possibleAreaNames)
-                    {
-                        if (fogGate.FromArea.Equals(possibleName, StringComparison.OrdinalIgnoreCase) ||
-                            FuzzyAreaMatch(fogGate.FromArea, possibleName))
-                        {
-                            fogGatesInArea.Add(fogGate);
-                            foundMatch = true;
-                            System.IO.File.AppendAllText("ds3_debug.log",
-                                $"[MainWindow] {DateTime.Now:HH:mm:ss.fff} - Found fog gate match: '{fogGate.FromArea}' -> '{fogGate.ToArea}' (matched with '{possibleName}')\n");
-                            break;
-                        }
-                    }
-
-                    // Also try direct match with current area name if not found yet
-                    if (!foundMatch &&
-                        (fogGate.FromArea.Equals(currentArea, StringComparison.OrdinalIgnoreCase) ||
-                         FuzzyAreaMatch(fogGate.FromArea, currentArea)))
-                    {
-                        fogGatesInArea.Add(fogGate);
-                        System.IO.File.AppendAllText("ds3_debug.log",
-                            $"[MainWindow] {DateTime.Now:HH:mm:ss.fff} - Found fog gate direct match: '{fogGate.FromArea}' -> '{fogGate.ToArea}'\n");
-                    }
-                }
-            }
-
-            // Debug logging
-            System.IO.File.AppendAllText("ds3_debug.log",
-                $"[MainWindow] {DateTime.Now:HH:mm:ss.fff} - Total fog gates found: {fogGatesInArea.Count}\n");
-
-            if (fogGatesInArea.Count == 0)
-            {
-                var noGatesText = new TextBlock
-                {
-                    Text = "No fog gates found in this area",
-                    Style = (Style)FindResource("OverlayTextStyle")
-                };
-                FogGatesPanel.Children.Add(noGatesText);
-                return;
-            }
-
-            foreach (var fogGate in fogGatesInArea.OrderBy(fg => fg.IsBoss ? 0 : 1).ThenBy(fg => fg.ToArea))
-            {
-                var fogGateText = new TextBlock
-                {
-                    Text = $"→ {fogGate.ToArea}",
-                    Style = fogGate.IsBoss ?
-                        (Style)FindResource("BossGateTextStyle") :
-                        (Style)FindResource("FogGateTextStyle")
-                };
-
-                if (!string.IsNullOrEmpty(fogGate.Description))
-                {
-                    string tooltipText = $"{fogGate.Description}\n" +
-                                       $"Scaling: {fogGate.ScalingPercent}%\n" +
-                                       $"Type: {(fogGate.IsRandom ? "Random" : "Preexisting")}\n" +
-                                       $"From: {fogGate.FromArea}";
-
-                    if (fogGate.IsBoss)
-                    {
-                        tooltipText += "\n★ BOSS FOG GATE ★";
-                    }
-
-                    fogGateText.ToolTip = tooltipText;
-                }
-
-                FogGatesPanel.Children.Add(fogGateText);
-            }
-        }
 
         private void UpdateFogGatesDisplayWithDistances(string? currentArea)
         {
@@ -361,7 +247,7 @@ namespace DS3FogRandoOverlay
             {
                 try
                 {
-                    msbFogGates = msbParser.GetNearbyFogGates(mapId, playerPosition, 200f); // 200 units max distance
+                    msbFogGates = msbParser.GetNearbyFogGates(mapId, playerPosition, float.MaxValue); // No distance limit
                 }
                 catch (Exception ex)
                 {
@@ -373,22 +259,19 @@ namespace DS3FogRandoOverlay
             // Get enhanced fog gate info
             var enhancedMsbGates = areaMapper.GetEnhancedFogGateInfo(msbFogGates, currentArea, eventsParser);
 
-            // Get spoiler log fog gates (existing logic)
-            var fogGatesInArea = GetSpoilerLogFogGates(currentArea);
-
-            // Display MSB fog gates with distances first
+            // Display MSB fog gates with distances
             if (enhancedMsbGates.Any())
             {
                 var msbHeaderText = new TextBlock
                 {
-                    Text = "Nearby Physical Gates:",
+                    Text = "Fog Gates:",
                     Style = (Style)FindResource("OverlayTextStyle"),
                     FontWeight = FontWeights.Bold,
                     Margin = new Thickness(0, 5, 0, 2)
                 };
                 FogGatesPanel.Children.Add(msbHeaderText);
 
-                foreach (var enhancedGate in enhancedMsbGates.Take(5)) // Show top 5 closest
+                foreach (var enhancedGate in enhancedMsbGates)
                 {
                     var gateText = new TextBlock
                     {
@@ -405,43 +288,7 @@ namespace DS3FogRandoOverlay
                     FogGatesPanel.Children.Add(gateText);
                 }
             }
-
-            // Display spoiler log fog gates
-            if (fogGatesInArea.Any())
-            {
-                var spoilerHeaderText = new TextBlock
-                {
-                    Text = "Randomized Connections:",
-                    Style = (Style)FindResource("OverlayTextStyle"),
-                    FontWeight = FontWeights.Bold,
-                    Margin = new Thickness(0, 10, 0, 2)
-                };
-                FogGatesPanel.Children.Add(spoilerHeaderText);
-
-                foreach (var fogGate in fogGatesInArea.OrderBy(fg => fg.IsBoss ? 0 : 1).ThenBy(fg => fg.ToArea))
-                {
-                    var fogGateText = new TextBlock
-                    {
-                        Text = $"→ {fogGate.ToArea}",
-                        Style = fogGate.IsBoss ?
-                            (Style)FindResource("BossGateTextStyle") :
-                            (Style)FindResource("FogGateTextStyle"),
-                        Margin = new Thickness(10, 1, 0, 1)
-                    };
-
-                    if (!string.IsNullOrEmpty(fogGate.Description))
-                    {
-                        string tooltipText = $"{fogGate.Description}\n" +
-                                           $"Scaling: {fogGate.ScalingPercent}%\n" +
-                                           $"From: {fogGate.FromArea}";
-                        fogGateText.ToolTip = tooltipText;
-                    }
-
-                    FogGatesPanel.Children.Add(fogGateText);
-                }
-            }
-
-            if (!enhancedMsbGates.Any() && !fogGatesInArea.Any())
+            else
             {
                 var noGatesText = new TextBlock
                 {
@@ -452,63 +299,7 @@ namespace DS3FogRandoOverlay
             }
         }
 
-        private List<FogGate> GetSpoilerLogFogGates(string currentArea)
-        {
-            // Debug logging
-            System.IO.File.AppendAllText("ds3_debug.log",
-                $"[MainWindow] {DateTime.Now:HH:mm:ss.fff} - Searching fog gates for area: {currentArea}\n");
 
-            // Get all possible area names for the current area
-            var possibleAreaNames = areaMapper.GetPossibleSpoilerLogAreaNames(currentArea);
-
-            // Debug logging
-            System.IO.File.AppendAllText("ds3_debug.log",
-                $"[MainWindow] {DateTime.Now:HH:mm:ss.fff} - Possible area names: {string.Join(", ", possibleAreaNames)}\n");
-
-            // Find fog gates for current area
-            var fogGatesInArea = new List<FogGate>();
-
-            // Look for fog gates that start from any of the possible area names
-            if (currentSpoilerData?.Areas != null)
-            {
-                foreach (var area in currentSpoilerData.Areas)
-                {
-                    foreach (var fogGate in area.FogGates)
-                    {
-                        // Check if fog gate matches any of the possible area names
-                        bool foundMatch = false;
-                        foreach (var possibleName in possibleAreaNames)
-                        {
-                            if (fogGate.FromArea.Equals(possibleName, StringComparison.OrdinalIgnoreCase) ||
-                                FuzzyAreaMatch(fogGate.FromArea, possibleName))
-                            {
-                                fogGatesInArea.Add(fogGate);
-                                foundMatch = true;
-                                System.IO.File.AppendAllText("ds3_debug.log",
-                                    $"[MainWindow] {DateTime.Now:HH:mm:ss.fff} - Found fog gate match: '{fogGate.FromArea}' -> '{fogGate.ToArea}' (matched with '{possibleName}')\n");
-                                break;
-                            }
-                        }
-
-                        // Also try direct match with current area name if not found yet
-                        if (!foundMatch &&
-                            (fogGate.FromArea.Equals(currentArea, StringComparison.OrdinalIgnoreCase) ||
-                             FuzzyAreaMatch(fogGate.FromArea, currentArea)))
-                        {
-                            fogGatesInArea.Add(fogGate);
-                            System.IO.File.AppendAllText("ds3_debug.log",
-                                $"[MainWindow] {DateTime.Now:HH:mm:ss.fff} - Found fog gate direct match: '{fogGate.FromArea}' -> '{fogGate.ToArea}'\n");
-                        }
-                    }
-                }
-            }
-
-            // Debug logging
-            System.IO.File.AppendAllText("ds3_debug.log",
-                $"[MainWindow] {DateTime.Now:HH:mm:ss.fff} - Total fog gates found: {fogGatesInArea.Count}\n");
-
-            return fogGatesInArea;
-        }
 
         private bool FuzzyAreaMatch(string areaName1, string areaName2)
         {
@@ -540,7 +331,7 @@ namespace DS3FogRandoOverlay
         private void RefreshButton_Click(object sender, RoutedEventArgs e)
         {
             LoadSpoilerLogData();
-            UpdateFogGatesDisplay(lastKnownArea);
+            UpdateFogGatesDisplayWithDistances(lastKnownArea);
         }
 
         private void Settings_Click(object sender, RoutedEventArgs e)
@@ -590,7 +381,7 @@ namespace DS3FogRandoOverlay
 
                 // Force a refresh
                 LoadSpoilerLogData();
-                UpdateFogGatesDisplay(lastKnownArea);
+                UpdateFogGatesDisplayWithDistances(lastKnownArea);
             }
             catch (Exception ex)
             {
@@ -723,7 +514,7 @@ namespace DS3FogRandoOverlay
         private void AdjustUpdateFrequency()
         {
             // Check if we currently have fog gates displayed
-            bool currentlyHasFogGates = FogGatesPanel.Children.Count > 2; // More than just headers
+            bool currentlyHasFogGates = FogGatesPanel.Children.Count > 1; // More than just header
             
             if (currentlyHasFogGates != hasActiveFogGates)
             {
