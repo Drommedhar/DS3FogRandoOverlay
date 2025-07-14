@@ -439,12 +439,6 @@ namespace DS3FogRandoOverlay
                    name2.Split(' ').Any(word => name1.Contains(word));
         }
 
-        private void RefreshButton_Click(object sender, RoutedEventArgs e)
-        {
-            LoadSpoilerLogData();
-            UpdateFogGatesDisplayWithDistances(lastKnownArea);
-        }
-
         private void Settings_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -549,10 +543,6 @@ namespace DS3FogRandoOverlay
         {
             switch (e.Key)
             {
-                case System.Windows.Input.Key.F5:
-                    // Refresh data
-                    RefreshButton_Click(sender, new RoutedEventArgs());
-                    break;
                 case System.Windows.Input.Key.F9:
                     // Reset position
                     ResetPosition_Click(sender, new RoutedEventArgs());

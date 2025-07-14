@@ -80,7 +80,6 @@ To capture the overlay in OBS for streaming/recording:
 ## Controls
 
 ### Keyboard Shortcuts
-- **F5**: Refresh spoiler log data
 - **F9**: Reset window position to top-right corner
 - **Esc**: Exit application
 
