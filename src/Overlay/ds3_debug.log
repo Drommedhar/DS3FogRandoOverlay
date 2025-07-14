@@ -1,0 +1,707 @@
+[2025-07-14 20:39:18.567] Successfully attached to Dark Souls III (PID: 48340, Base: 0x140000000)
+[2025-07-14 20:39:19.067] === Scanning for Exact Cheat Engine Values ===
+[2025-07-14 20:39:19.068] Looking for X=392,57114 (0x43C4491B), Y=-258,11 (0xC3810E14), Z=-775,3391 (0xC441D5B4)
+[2025-07-14 20:39:19.069] Method 1: Scanning around WorldChrMan base 0x7FF4FC251B10...
+[2025-07-14 20:39:19.072] No target values found in WorldChrMan base (scanned 0x3000 bytes)
+[2025-07-14 20:39:19.072] Method 2: Scanning around first pointer 0x7FF4ACFB2580...
+[2025-07-14 20:39:19.073] Found potential target value in first pointer at +0x1050: 0x43C4491B
+[2025-07-14 20:39:19.074] Position at +0x1050: X=392,571136, Y=-258,109985, Z=-775,339111
+[2025-07-14 20:39:19.075] *** EXACT MATCH FOUND IN FIRST POINTER AT +0x1050 ***
+[2025-07-14 20:39:19.075] Raw hex: 1B 49 C4 43 14 0E 81 C3 B4 D5 41 C4
+[2025-07-14 20:39:19.075] Found potential target value in first pointer at +0x1054: 0xC3810E14
+[2025-07-14 20:39:19.075] Position at +0x1054: X=-258,109985, Y=-775,339111, Z=0,000000
+[2025-07-14 20:39:19.076] Found potential target value in first pointer at +0x1058: 0xC441D5B4
+[2025-07-14 20:39:19.076] Position at +0x1058: X=-775,339111, Y=0,000000, Z=392,571136
+[2025-07-14 20:39:19.076] Found potential target value in first pointer at +0x1060: 0x43C4491B
+[2025-07-14 20:39:19.076] Position at +0x1060: X=392,571136, Y=-258,109985, Z=-775,339111
+[2025-07-14 20:39:19.076] *** EXACT MATCH FOUND IN FIRST POINTER AT +0x1060 ***
+[2025-07-14 20:39:19.077] Raw hex: 1B 49 C4 43 14 0E 81 C3 B4 D5 41 C4
+[2025-07-14 20:39:19.077] Found potential target value in first pointer at +0x1064: 0xC3810E14
+[2025-07-14 20:39:19.077] Position at +0x1064: X=-258,109985, Y=-775,339111, Z=0,000000
+[2025-07-14 20:39:19.077] Found potential target value in first pointer at +0x1068: 0xC441D5B4
+[2025-07-14 20:39:19.077] Position at +0x1068: X=-775,339111, Y=0,000000, Z=0,000000
+[2025-07-14 20:39:19.078] Method 3: Attempting original Cheat Engine offset path...
+[2025-07-14 20:39:19.079] Original path Step 1 (BaseB+0x80): 0x7FF4ACFB2580
+[2025-07-14 20:39:19.079] Original path Step 2 (+0x20): 0x7FF4ACFB7F90
+[2025-07-14 20:39:19.079] Original path Step 2 (+0x30): 0x7FF4ACFB8080
+[2025-07-14 20:39:19.079] Original path Step 2 (+0x18): 0x7FF4FC15B5F0
+[2025-07-14 20:39:19.080] *** EXACT MATCH via original path: +0x18 -> +0x28 -> +0x80 ***
+[2025-07-14 20:39:19.080] Position: X=392,571136, Y=-258,109985, Z=-775,339111
+[2025-07-14 20:39:19.080] Raw hex: 1B 49 C4 43 14 0E 81 C3 B4 D5 41 C4
+[2025-07-14 20:39:19.080] Current position at +0xE0: X=371,786530, Y=-252,186981, Z=-762,768005
+[2025-07-14 20:39:19.080] Current raw hex: AD E4 B9 43 DE 2F 7C C3 27 B1 3E C4
+[2025-07-14 20:39:19.080] Delta from target: X=20,784607, Y=-5,923004, Z=-12,571106
+[2025-07-14 20:39:19.081] Player position address: 0x7FF4ACFB2660
+[2025-07-14 20:39:19.081] Player position: X=371,79, Y=-252,19, Z=-762,77
+[2025-07-14 20:39:19.082] WorldChrMan address: 0x7FF4FC251B10
+[2025-07-14 20:39:19.082] Map ID address: 0x7FF4ACFB4560
+[2025-07-14 20:39:19.083] Raw map ID: 0x25000000 (620756992), Formatted: m37_00_00_00
+[2025-07-14 20:39:19.084] === Scanning for Exact Cheat Engine Values ===
+[2025-07-14 20:39:19.084] Looking for X=392,57114 (0x43C4491B), Y=-258,11 (0xC3810E14), Z=-775,3391 (0xC441D5B4)
+[2025-07-14 20:39:19.084] Method 1: Scanning around WorldChrMan base 0x7FF4FC251B10...
+[2025-07-14 20:39:19.087] No target values found in WorldChrMan base (scanned 0x3000 bytes)
+[2025-07-14 20:39:19.087] Method 2: Scanning around first pointer 0x7FF4ACFB2580...
+[2025-07-14 20:39:19.088] Found potential target value in first pointer at +0x1050: 0x43C4491B
+[2025-07-14 20:39:19.088] Position at +0x1050: X=392,571136, Y=-258,109985, Z=-775,339111
+[2025-07-14 20:39:19.088] *** EXACT MATCH FOUND IN FIRST POINTER AT +0x1050 ***
+[2025-07-14 20:39:19.088] Raw hex: 1B 49 C4 43 14 0E 81 C3 B4 D5 41 C4
+[2025-07-14 20:39:19.089] Found potential target value in first pointer at +0x1054: 0xC3810E14
+[2025-07-14 20:39:19.089] Position at +0x1054: X=-258,109985, Y=-775,339111, Z=0,000000
+[2025-07-14 20:39:19.089] Found potential target value in first pointer at +0x1058: 0xC441D5B4
+[2025-07-14 20:39:19.089] Position at +0x1058: X=-775,339111, Y=0,000000, Z=392,571136
+[2025-07-14 20:39:19.089] Found potential target value in first pointer at +0x1060: 0x43C4491B
+[2025-07-14 20:39:19.090] Position at +0x1060: X=392,571136, Y=-258,109985, Z=-775,339111
+[2025-07-14 20:39:19.090] *** EXACT MATCH FOUND IN FIRST POINTER AT +0x1060 ***
+[2025-07-14 20:39:19.090] Raw hex: 1B 49 C4 43 14 0E 81 C3 B4 D5 41 C4
+[2025-07-14 20:39:19.090] Found potential target value in first pointer at +0x1064: 0xC3810E14
+[2025-07-14 20:39:19.090] Position at +0x1064: X=-258,109985, Y=-775,339111, Z=0,000000
+[2025-07-14 20:39:19.091] Found potential target value in first pointer at +0x1068: 0xC441D5B4
+[2025-07-14 20:39:19.091] Position at +0x1068: X=-775,339111, Y=0,000000, Z=0,000000
+[2025-07-14 20:39:19.092] Method 3: Attempting original Cheat Engine offset path...
+[2025-07-14 20:39:19.092] Original path Step 1 (BaseB+0x80): 0x7FF4ACFB2580
+[2025-07-14 20:39:19.092] Original path Step 2 (+0x20): 0x7FF4ACFB7F90
+[2025-07-14 20:39:19.092] Original path Step 2 (+0x30): 0x7FF4ACFB8080
+[2025-07-14 20:39:19.092] Original path Step 2 (+0x18): 0x7FF4FC15B5F0
+[2025-07-14 20:39:19.092] *** EXACT MATCH via original path: +0x18 -> +0x28 -> +0x80 ***
+[2025-07-14 20:39:19.092] Position: X=392,571136, Y=-258,109985, Z=-775,339111
+[2025-07-14 20:39:19.093] Raw hex: 1B 49 C4 43 14 0E 81 C3 B4 D5 41 C4
+[2025-07-14 20:39:19.093] Current position at +0xE0: X=371,786530, Y=-252,186981, Z=-762,768005
+[2025-07-14 20:39:19.093] Current raw hex: AD E4 B9 43 DE 2F 7C C3 27 B1 3E C4
+[2025-07-14 20:39:19.093] Delta from target: X=20,784607, Y=-5,923004, Z=-12,571106
+[2025-07-14 20:39:19.094] Player position address: 0x7FF4ACFB2660
+[2025-07-14 20:39:19.094] Player position: X=371,79, Y=-252,19, Z=-762,77
+[2025-07-14 20:39:19.094] WorldChrMan address: 0x7FF4FC251B10
+[2025-07-14 20:39:19.094] Map ID address: 0x7FF4ACFB4560
+[2025-07-14 20:39:19.094] Raw map ID: 0x25000000 (620756992), Formatted: m37_00_00_00
+[MainWindow] 20:39:19.498 - Searching fog gates for area: Irithyll of the Boreal Valley
+[MainWindow] 20:39:19.498 - Possible area names: before the bridge into Irithyll, the bridge into Irithyll, Central Irithyll, above Dorhys in Irithyll, Dorhys in Irithyll, Irithyll Distant Manor, Pontiff Sulyvahn, Yorshka's Prison Tower in Irithyll, immediately after Pontiff Sulyvahn, Anor Londo, above Pontiff, Aldrich, Devourer of Gods, above Aldrich, left elevator after Aldrich, right elevator after Aldrich
+[MainWindow] 20:39:19.499 - Found fog gate match: 'Anor Londo' -> 'Profaned Capital' (matched with 'Anor Londo')
+[MainWindow] 20:39:19.499 - Found fog gate match: 'Anor Londo' -> 'Grand Archives Bonfire' (matched with 'Anor Londo')
+[MainWindow] 20:39:19.499 - Found fog gate match: 'Anor Londo' -> 'Curse-Rotted Greatwood' (matched with 'Anor Londo')
+[MainWindow] 20:39:19.500 - Found fog gate match: 'Central Irithyll' -> 'after Dragonslayer Armour' (matched with 'Central Irithyll')
+[MainWindow] 20:39:19.500 - Found fog gate match: 'Central Irithyll' -> 'Old Demon King' (matched with 'Central Irithyll')
+[MainWindow] 20:39:19.500 - Found fog gate match: 'before the bridge into Irithyll' -> 'immediately after Pontiff Sulyvahn' (matched with 'before the bridge into Irithyll')
+[MainWindow] 20:39:19.500 - Found fog gate match: 'Pontiff Sulyvahn' -> 'High Wall' (matched with 'Pontiff Sulyvahn')
+[MainWindow] 20:39:19.500 - Found fog gate match: 'the bridge into Irithyll' -> 'Champion's Gravetender' (matched with 'before the bridge into Irithyll')
+[MainWindow] 20:39:19.501 - Found fog gate match: 'Aldrich, Devourer of Gods' -> 'Irithyll Distant Manor' (matched with 'Aldrich, Devourer of Gods')
+[MainWindow] 20:39:19.501 - Found fog gate match: 'Aldrich, Devourer of Gods' -> 'above Pontiff' (matched with 'Aldrich, Devourer of Gods')
+[MainWindow] 20:39:19.501 - Found fog gate match: 'Irithyll Distant Manor' -> 'Consumed King's Gardens' (matched with 'Irithyll Distant Manor')
+[MainWindow] 20:39:19.502 - Found fog gate match: 'Central Irithyll' -> 'left elevator after Aldrich' (matched with 'Central Irithyll')
+[MainWindow] 20:39:19.502 - Total fog gates found: 12
+[2025-07-14 20:39:20.014] === Scanning for Exact Cheat Engine Values ===
+[2025-07-14 20:39:20.015] Looking for X=392,57114 (0x43C4491B), Y=-258,11 (0xC3810E14), Z=-775,3391 (0xC441D5B4)
+[2025-07-14 20:39:20.015] Method 1: Scanning around WorldChrMan base 0x7FF4FC251B10...
+[2025-07-14 20:39:20.018] No target values found in WorldChrMan base (scanned 0x3000 bytes)
+[2025-07-14 20:39:20.018] Method 2: Scanning around first pointer 0x7FF4ACFB2580...
+[2025-07-14 20:39:20.019] Found potential target value in first pointer at +0x1050: 0x43C4491B
+[2025-07-14 20:39:20.019] Position at +0x1050: X=392,571136, Y=-258,109985, Z=-775,339111
+[2025-07-14 20:39:20.019] *** EXACT MATCH FOUND IN FIRST POINTER AT +0x1050 ***
+[2025-07-14 20:39:20.019] Raw hex: 1B 49 C4 43 14 0E 81 C3 B4 D5 41 C4
+[2025-07-14 20:39:20.019] Found potential target value in first pointer at +0x1054: 0xC3810E14
+[2025-07-14 20:39:20.019] Position at +0x1054: X=-258,109985, Y=-775,339111, Z=0,000000
+[2025-07-14 20:39:20.020] Found potential target value in first pointer at +0x1058: 0xC441D5B4
+[2025-07-14 20:39:20.020] Position at +0x1058: X=-775,339111, Y=0,000000, Z=392,571136
+[2025-07-14 20:39:20.020] Found potential target value in first pointer at +0x1060: 0x43C4491B
+[2025-07-14 20:39:20.020] Position at +0x1060: X=392,571136, Y=-258,109985, Z=-775,339111
+[2025-07-14 20:39:20.021] *** EXACT MATCH FOUND IN FIRST POINTER AT +0x1060 ***
+[2025-07-14 20:39:20.021] Raw hex: 1B 49 C4 43 14 0E 81 C3 B4 D5 41 C4
+[2025-07-14 20:39:20.021] Found potential target value in first pointer at +0x1064: 0xC3810E14
+[2025-07-14 20:39:20.021] Position at +0x1064: X=-258,109985, Y=-775,339111, Z=0,000000
+[2025-07-14 20:39:20.021] Found potential target value in first pointer at +0x1068: 0xC441D5B4
+[2025-07-14 20:39:20.022] Position at +0x1068: X=-775,339111, Y=0,000000, Z=0,000000
+[2025-07-14 20:39:20.022] Method 3: Attempting original Cheat Engine offset path...
+[2025-07-14 20:39:20.023] Original path Step 1 (BaseB+0x80): 0x7FF4ACFB2580
+[2025-07-14 20:39:20.023] Original path Step 2 (+0x20): 0x7FF4ACFB7F90
+[2025-07-14 20:39:20.023] Original path Step 2 (+0x30): 0x7FF4ACFB8080
+[2025-07-14 20:39:20.023] Original path Step 2 (+0x18): 0x7FF4FC15B5F0
+[2025-07-14 20:39:20.023] *** EXACT MATCH via original path: +0x18 -> +0x28 -> +0x80 ***
+[2025-07-14 20:39:20.023] Position: X=392,571136, Y=-258,109985, Z=-775,339111
+[2025-07-14 20:39:20.024] Raw hex: 1B 49 C4 43 14 0E 81 C3 B4 D5 41 C4
+[2025-07-14 20:39:20.024] Current position at +0xE0: X=371,786530, Y=-252,186981, Z=-762,768005
+[2025-07-14 20:39:20.024] Current raw hex: AD E4 B9 43 DE 2F 7C C3 27 B1 3E C4
+[2025-07-14 20:39:20.024] Delta from target: X=20,784607, Y=-5,923004, Z=-12,571106
+[2025-07-14 20:39:20.024] Player position address: 0x7FF4ACFB2660
+[2025-07-14 20:39:20.025] Player position: X=371,79, Y=-252,19, Z=-762,77
+[2025-07-14 20:39:20.025] WorldChrMan address: 0x7FF4FC251B10
+[2025-07-14 20:39:20.025] Map ID address: 0x7FF4ACFB4560
+[2025-07-14 20:39:20.025] Raw map ID: 0x25000000 (620756992), Formatted: m37_00_00_00
+[2025-07-14 20:39:20.528] === Scanning for Exact Cheat Engine Values ===
+[2025-07-14 20:39:20.528] Looking for X=392,57114 (0x43C4491B), Y=-258,11 (0xC3810E14), Z=-775,3391 (0xC441D5B4)
+[2025-07-14 20:39:20.528] Method 1: Scanning around WorldChrMan base 0x7FF4FC251B10...
+[2025-07-14 20:39:20.531] No target values found in WorldChrMan base (scanned 0x3000 bytes)
+[2025-07-14 20:39:20.531] Method 2: Scanning around first pointer 0x7FF4ACFB2580...
+[2025-07-14 20:39:20.532] Found potential target value in first pointer at +0x1050: 0x43C4491B
+[2025-07-14 20:39:20.532] Position at +0x1050: X=392,571136, Y=-258,109985, Z=-775,339111
+[2025-07-14 20:39:20.532] *** EXACT MATCH FOUND IN FIRST POINTER AT +0x1050 ***
+[2025-07-14 20:39:20.532] Raw hex: 1B 49 C4 43 14 0E 81 C3 B4 D5 41 C4
+[2025-07-14 20:39:20.532] Found potential target value in first pointer at +0x1054: 0xC3810E14
+[2025-07-14 20:39:20.533] Position at +0x1054: X=-258,109985, Y=-775,339111, Z=0,000000
+[2025-07-14 20:39:20.533] Found potential target value in first pointer at +0x1058: 0xC441D5B4
+[2025-07-14 20:39:20.533] Position at +0x1058: X=-775,339111, Y=0,000000, Z=392,571136
+[2025-07-14 20:39:20.533] Found potential target value in first pointer at +0x1060: 0x43C4491B
+[2025-07-14 20:39:20.533] Position at +0x1060: X=392,571136, Y=-258,109985, Z=-775,339111
+[2025-07-14 20:39:20.533] *** EXACT MATCH FOUND IN FIRST POINTER AT +0x1060 ***
+[2025-07-14 20:39:20.534] Raw hex: 1B 49 C4 43 14 0E 81 C3 B4 D5 41 C4
+[2025-07-14 20:39:20.534] Found potential target value in first pointer at +0x1064: 0xC3810E14
+[2025-07-14 20:39:20.534] Position at +0x1064: X=-258,109985, Y=-775,339111, Z=0,000000
+[2025-07-14 20:39:20.534] Found potential target value in first pointer at +0x1068: 0xC441D5B4
+[2025-07-14 20:39:20.535] Position at +0x1068: X=-775,339111, Y=0,000000, Z=0,000000
+[2025-07-14 20:39:20.535] Method 3: Attempting original Cheat Engine offset path...
+[2025-07-14 20:39:20.535] Original path Step 1 (BaseB+0x80): 0x7FF4ACFB2580
+[2025-07-14 20:39:20.536] Original path Step 2 (+0x20): 0x7FF4ACFB7F90
+[2025-07-14 20:39:20.536] Original path Step 2 (+0x30): 0x7FF4ACFB8080
+[2025-07-14 20:39:20.536] Original path Step 2 (+0x18): 0x7FF4FC15B5F0
+[2025-07-14 20:39:20.536] *** EXACT MATCH via original path: +0x18 -> +0x28 -> +0x80 ***
+[2025-07-14 20:39:20.536] Position: X=392,571136, Y=-258,109985, Z=-775,339111
+[2025-07-14 20:39:20.536] Raw hex: 1B 49 C4 43 14 0E 81 C3 B4 D5 41 C4
+[2025-07-14 20:39:20.536] Current position at +0xE0: X=371,786530, Y=-252,186981, Z=-762,768005
+[2025-07-14 20:39:20.537] Current raw hex: AD E4 B9 43 DE 2F 7C C3 27 B1 3E C4
+[2025-07-14 20:39:20.537] Delta from target: X=20,784607, Y=-5,923004, Z=-12,571106
+[2025-07-14 20:39:20.537] Player position address: 0x7FF4ACFB2660
+[2025-07-14 20:39:20.537] Player position: X=371,79, Y=-252,19, Z=-762,77
+[2025-07-14 20:39:20.537] WorldChrMan address: 0x7FF4FC251B10
+[2025-07-14 20:39:20.537] Map ID address: 0x7FF4ACFB4560
+[2025-07-14 20:39:20.538] Raw map ID: 0x25000000 (620756992), Formatted: m37_00_00_00
+[2025-07-14 20:39:21.041] === Scanning for Exact Cheat Engine Values ===
+[2025-07-14 20:39:21.041] Looking for X=392,57114 (0x43C4491B), Y=-258,11 (0xC3810E14), Z=-775,3391 (0xC441D5B4)
+[2025-07-14 20:39:21.041] Method 1: Scanning around WorldChrMan base 0x7FF4FC251B10...
+[2025-07-14 20:39:21.044] No target values found in WorldChrMan base (scanned 0x3000 bytes)
+[2025-07-14 20:39:21.044] Method 2: Scanning around first pointer 0x7FF4ACFB2580...
+[2025-07-14 20:39:21.045] Found potential target value in first pointer at +0x1050: 0x43C4491B
+[2025-07-14 20:39:21.045] Position at +0x1050: X=392,571136, Y=-258,109985, Z=-775,339111
+[2025-07-14 20:39:21.045] *** EXACT MATCH FOUND IN FIRST POINTER AT +0x1050 ***
+[2025-07-14 20:39:21.045] Raw hex: 1B 49 C4 43 14 0E 81 C3 B4 D5 41 C4
+[2025-07-14 20:39:21.045] Found potential target value in first pointer at +0x1054: 0xC3810E14
+[2025-07-14 20:39:21.046] Position at +0x1054: X=-258,109985, Y=-775,339111, Z=0,000000
+[2025-07-14 20:39:21.046] Found potential target value in first pointer at +0x1058: 0xC441D5B4
+[2025-07-14 20:39:21.046] Position at +0x1058: X=-775,339111, Y=0,000000, Z=392,571136
+[2025-07-14 20:39:21.046] Found potential target value in first pointer at +0x1060: 0x43C4491B
+[2025-07-14 20:39:21.046] Position at +0x1060: X=392,571136, Y=-258,109985, Z=-775,339111
+[2025-07-14 20:39:21.046] *** EXACT MATCH FOUND IN FIRST POINTER AT +0x1060 ***
+[2025-07-14 20:39:21.046] Raw hex: 1B 49 C4 43 14 0E 81 C3 B4 D5 41 C4
+[2025-07-14 20:39:21.047] Found potential target value in first pointer at +0x1064: 0xC3810E14
+[2025-07-14 20:39:21.047] Position at +0x1064: X=-258,109985, Y=-775,339111, Z=0,000000
+[2025-07-14 20:39:21.047] Found potential target value in first pointer at +0x1068: 0xC441D5B4
+[2025-07-14 20:39:21.047] Position at +0x1068: X=-775,339111, Y=0,000000, Z=0,000000
+[2025-07-14 20:39:21.048] Method 3: Attempting original Cheat Engine offset path...
+[2025-07-14 20:39:21.048] Original path Step 1 (BaseB+0x80): 0x7FF4ACFB2580
+[2025-07-14 20:39:21.048] Original path Step 2 (+0x20): 0x7FF4ACFB7F90
+[2025-07-14 20:39:21.048] Original path Step 2 (+0x30): 0x7FF4ACFB8080
+[2025-07-14 20:39:21.049] Original path Step 2 (+0x18): 0x7FF4FC15B5F0
+[2025-07-14 20:39:21.049] *** EXACT MATCH via original path: +0x18 -> +0x28 -> +0x80 ***
+[2025-07-14 20:39:21.049] Position: X=392,571136, Y=-258,109985, Z=-775,339111
+[2025-07-14 20:39:21.049] Raw hex: 1B 49 C4 43 14 0E 81 C3 B4 D5 41 C4
+[2025-07-14 20:39:21.049] Current position at +0xE0: X=371,786530, Y=-252,186981, Z=-762,768005
+[2025-07-14 20:39:21.049] Current raw hex: AD E4 B9 43 DE 2F 7C C3 27 B1 3E C4
+[2025-07-14 20:39:21.049] Delta from target: X=20,784607, Y=-5,923004, Z=-12,571106
+[2025-07-14 20:39:21.049] Player position address: 0x7FF4ACFB2660
+[2025-07-14 20:39:21.050] Player position: X=371,79, Y=-252,19, Z=-762,77
+[2025-07-14 20:39:21.050] WorldChrMan address: 0x7FF4FC251B10
+[2025-07-14 20:39:21.050] Map ID address: 0x7FF4ACFB4560
+[2025-07-14 20:39:21.050] Raw map ID: 0x25000000 (620756992), Formatted: m37_00_00_00
+[2025-07-14 20:39:21.553] === Scanning for Exact Cheat Engine Values ===
+[2025-07-14 20:39:21.553] Looking for X=392,57114 (0x43C4491B), Y=-258,11 (0xC3810E14), Z=-775,3391 (0xC441D5B4)
+[2025-07-14 20:39:21.553] Method 1: Scanning around WorldChrMan base 0x7FF4FC251B10...
+[2025-07-14 20:39:21.556] No target values found in WorldChrMan base (scanned 0x3000 bytes)
+[2025-07-14 20:39:21.556] Method 2: Scanning around first pointer 0x7FF4ACFB2580...
+[2025-07-14 20:39:21.557] Found potential target value in first pointer at +0x1050: 0x43C4491B
+[2025-07-14 20:39:21.557] Position at +0x1050: X=392,571136, Y=-258,109985, Z=-775,339111
+[2025-07-14 20:39:21.557] *** EXACT MATCH FOUND IN FIRST POINTER AT +0x1050 ***
+[2025-07-14 20:39:21.557] Raw hex: 1B 49 C4 43 14 0E 81 C3 B4 D5 41 C4
+[2025-07-14 20:39:21.557] Found potential target value in first pointer at +0x1054: 0xC3810E14
+[2025-07-14 20:39:21.557] Position at +0x1054: X=-258,109985, Y=-775,339111, Z=0,000000
+[2025-07-14 20:39:21.558] Found potential target value in first pointer at +0x1058: 0xC441D5B4
+[2025-07-14 20:39:21.558] Position at +0x1058: X=-775,339111, Y=0,000000, Z=392,571136
+[2025-07-14 20:39:21.558] Found potential target value in first pointer at +0x1060: 0x43C4491B
+[2025-07-14 20:39:21.558] Position at +0x1060: X=392,571136, Y=-258,109985, Z=-775,339111
+[2025-07-14 20:39:21.558] *** EXACT MATCH FOUND IN FIRST POINTER AT +0x1060 ***
+[2025-07-14 20:39:21.558] Raw hex: 1B 49 C4 43 14 0E 81 C3 B4 D5 41 C4
+[2025-07-14 20:39:21.559] Found potential target value in first pointer at +0x1064: 0xC3810E14
+[2025-07-14 20:39:21.559] Position at +0x1064: X=-258,109985, Y=-775,339111, Z=0,000000
+[2025-07-14 20:39:21.559] Found potential target value in first pointer at +0x1068: 0xC441D5B4
+[2025-07-14 20:39:21.559] Position at +0x1068: X=-775,339111, Y=0,000000, Z=0,000000
+[2025-07-14 20:39:21.560] Method 3: Attempting original Cheat Engine offset path...
+[2025-07-14 20:39:21.560] Original path Step 1 (BaseB+0x80): 0x7FF4ACFB2580
+[2025-07-14 20:39:21.560] Original path Step 2 (+0x20): 0x7FF4ACFB7F90
+[2025-07-14 20:39:21.560] Original path Step 2 (+0x30): 0x7FF4ACFB8080
+[2025-07-14 20:39:21.561] Original path Step 2 (+0x18): 0x7FF4FC15B5F0
+[2025-07-14 20:39:21.561] *** EXACT MATCH via original path: +0x18 -> +0x28 -> +0x80 ***
+[2025-07-14 20:39:21.561] Position: X=392,571136, Y=-258,109985, Z=-775,339111
+[2025-07-14 20:39:21.561] Raw hex: 1B 49 C4 43 14 0E 81 C3 B4 D5 41 C4
+[2025-07-14 20:39:21.561] Current position at +0xE0: X=371,786530, Y=-252,186981, Z=-762,768005
+[2025-07-14 20:39:21.561] Current raw hex: AD E4 B9 43 DE 2F 7C C3 27 B1 3E C4
+[2025-07-14 20:39:21.561] Delta from target: X=20,784607, Y=-5,923004, Z=-12,571106
+[2025-07-14 20:39:21.562] Player position address: 0x7FF4ACFB2660
+[2025-07-14 20:39:21.562] Player position: X=371,79, Y=-252,19, Z=-762,77
+[2025-07-14 20:39:21.562] WorldChrMan address: 0x7FF4FC251B10
+[2025-07-14 20:39:21.562] Map ID address: 0x7FF4ACFB4560
+[2025-07-14 20:39:21.562] Raw map ID: 0x25000000 (620756992), Formatted: m37_00_00_00
+[2025-07-14 20:39:22.062] === Scanning for Exact Cheat Engine Values ===
+[2025-07-14 20:39:22.062] Looking for X=392,57114 (0x43C4491B), Y=-258,11 (0xC3810E14), Z=-775,3391 (0xC441D5B4)
+[2025-07-14 20:39:22.062] Method 1: Scanning around WorldChrMan base 0x7FF4FC251B10...
+[2025-07-14 20:39:22.065] No target values found in WorldChrMan base (scanned 0x3000 bytes)
+[2025-07-14 20:39:22.065] Method 2: Scanning around first pointer 0x7FF4ACFB2580...
+[2025-07-14 20:39:22.065] Found potential target value in first pointer at +0x1050: 0x43C4491B
+[2025-07-14 20:39:22.066] Position at +0x1050: X=392,571136, Y=-258,109985, Z=-775,339111
+[2025-07-14 20:39:22.066] *** EXACT MATCH FOUND IN FIRST POINTER AT +0x1050 ***
+[2025-07-14 20:39:22.066] Raw hex: 1B 49 C4 43 14 0E 81 C3 B4 D5 41 C4
+[2025-07-14 20:39:22.066] Found potential target value in first pointer at +0x1054: 0xC3810E14
+[2025-07-14 20:39:22.066] Position at +0x1054: X=-258,109985, Y=-775,339111, Z=0,000000
+[2025-07-14 20:39:22.066] Found potential target value in first pointer at +0x1058: 0xC441D5B4
+[2025-07-14 20:39:22.066] Position at +0x1058: X=-775,339111, Y=0,000000, Z=392,571136
+[2025-07-14 20:39:22.066] Found potential target value in first pointer at +0x1060: 0x43C4491B
+[2025-07-14 20:39:22.067] Position at +0x1060: X=392,571136, Y=-258,109985, Z=-775,339111
+[2025-07-14 20:39:22.067] *** EXACT MATCH FOUND IN FIRST POINTER AT +0x1060 ***
+[2025-07-14 20:39:22.067] Raw hex: 1B 49 C4 43 14 0E 81 C3 B4 D5 41 C4
+[2025-07-14 20:39:22.067] Found potential target value in first pointer at +0x1064: 0xC3810E14
+[2025-07-14 20:39:22.067] Position at +0x1064: X=-258,109985, Y=-775,339111, Z=0,000000
+[2025-07-14 20:39:22.067] Found potential target value in first pointer at +0x1068: 0xC441D5B4
+[2025-07-14 20:39:22.068] Position at +0x1068: X=-775,339111, Y=0,000000, Z=0,000000
+[2025-07-14 20:39:22.068] Method 3: Attempting original Cheat Engine offset path...
+[2025-07-14 20:39:22.069] Original path Step 1 (BaseB+0x80): 0x7FF4ACFB2580
+[2025-07-14 20:39:22.069] Original path Step 2 (+0x20): 0x7FF4ACFB7F90
+[2025-07-14 20:39:22.069] Original path Step 2 (+0x30): 0x7FF4ACFB8080
+[2025-07-14 20:39:22.069] Original path Step 2 (+0x18): 0x7FF4FC15B5F0
+[2025-07-14 20:39:22.069] *** EXACT MATCH via original path: +0x18 -> +0x28 -> +0x80 ***
+[2025-07-14 20:39:22.069] Position: X=392,571136, Y=-258,109985, Z=-775,339111
+[2025-07-14 20:39:22.069] Raw hex: 1B 49 C4 43 14 0E 81 C3 B4 D5 41 C4
+[2025-07-14 20:39:22.070] Current position at +0xE0: X=371,786530, Y=-252,186981, Z=-762,768005
+[2025-07-14 20:39:22.070] Current raw hex: AD E4 B9 43 DE 2F 7C C3 27 B1 3E C4
+[2025-07-14 20:39:22.070] Delta from target: X=20,784607, Y=-5,923004, Z=-12,571106
+[2025-07-14 20:39:22.070] Player position address: 0x7FF4ACFB2660
+[2025-07-14 20:39:22.070] Player position: X=371,79, Y=-252,19, Z=-762,77
+[2025-07-14 20:39:22.070] WorldChrMan address: 0x7FF4FC251B10
+[2025-07-14 20:39:22.070] Map ID address: 0x7FF4ACFB4560
+[2025-07-14 20:39:22.071] Raw map ID: 0x25000000 (620756992), Formatted: m37_00_00_00
+[2025-07-14 20:39:22.573] === Scanning for Exact Cheat Engine Values ===
+[2025-07-14 20:39:22.574] Looking for X=392,57114 (0x43C4491B), Y=-258,11 (0xC3810E14), Z=-775,3391 (0xC441D5B4)
+[2025-07-14 20:39:22.574] Method 1: Scanning around WorldChrMan base 0x7FF4FC251B10...
+[2025-07-14 20:39:22.576] No target values found in WorldChrMan base (scanned 0x3000 bytes)
+[2025-07-14 20:39:22.576] Method 2: Scanning around first pointer 0x7FF4ACFB2580...
+[2025-07-14 20:39:22.577] Found potential target value in first pointer at +0x1050: 0x43C4491B
+[2025-07-14 20:39:22.577] Position at +0x1050: X=392,571136, Y=-258,109985, Z=-775,339111
+[2025-07-14 20:39:22.577] *** EXACT MATCH FOUND IN FIRST POINTER AT +0x1050 ***
+[2025-07-14 20:39:22.577] Raw hex: 1B 49 C4 43 14 0E 81 C3 B4 D5 41 C4
+[2025-07-14 20:39:22.577] Found potential target value in first pointer at +0x1054: 0xC3810E14
+[2025-07-14 20:39:22.578] Position at +0x1054: X=-258,109985, Y=-775,339111, Z=0,000000
+[2025-07-14 20:39:22.578] Found potential target value in first pointer at +0x1058: 0xC441D5B4
+[2025-07-14 20:39:22.578] Position at +0x1058: X=-775,339111, Y=0,000000, Z=392,571136
+[2025-07-14 20:39:22.578] Found potential target value in first pointer at +0x1060: 0x43C4491B
+[2025-07-14 20:39:22.579] Position at +0x1060: X=392,571136, Y=-258,109985, Z=-775,339111
+[2025-07-14 20:39:22.579] *** EXACT MATCH FOUND IN FIRST POINTER AT +0x1060 ***
+[2025-07-14 20:39:22.579] Raw hex: 1B 49 C4 43 14 0E 81 C3 B4 D5 41 C4
+[2025-07-14 20:39:22.579] Found potential target value in first pointer at +0x1064: 0xC3810E14
+[2025-07-14 20:39:22.579] Position at +0x1064: X=-258,109985, Y=-775,339111, Z=0,000000
+[2025-07-14 20:39:22.579] Found potential target value in first pointer at +0x1068: 0xC441D5B4
+[2025-07-14 20:39:22.579] Position at +0x1068: X=-775,339111, Y=0,000000, Z=0,000000
+[2025-07-14 20:39:22.580] Method 3: Attempting original Cheat Engine offset path...
+[2025-07-14 20:39:22.580] Original path Step 1 (BaseB+0x80): 0x7FF4ACFB2580
+[2025-07-14 20:39:22.580] Original path Step 2 (+0x20): 0x7FF4ACFB7F90
+[2025-07-14 20:39:22.581] Original path Step 2 (+0x30): 0x7FF4ACFB8080
+[2025-07-14 20:39:22.581] Original path Step 2 (+0x18): 0x7FF4FC15B5F0
+[2025-07-14 20:39:22.581] *** EXACT MATCH via original path: +0x18 -> +0x28 -> +0x80 ***
+[2025-07-14 20:39:22.581] Position: X=392,571136, Y=-258,109985, Z=-775,339111
+[2025-07-14 20:39:22.581] Raw hex: 1B 49 C4 43 14 0E 81 C3 B4 D5 41 C4
+[2025-07-14 20:39:22.581] Current position at +0xE0: X=371,786530, Y=-252,186981, Z=-762,768005
+[2025-07-14 20:39:22.582] Current raw hex: AD E4 B9 43 DE 2F 7C C3 27 B1 3E C4
+[2025-07-14 20:39:22.582] Delta from target: X=20,784607, Y=-5,923004, Z=-12,571106
+[2025-07-14 20:39:22.582] Player position address: 0x7FF4ACFB2660
+[2025-07-14 20:39:22.582] Player position: X=371,79, Y=-252,19, Z=-762,77
+[2025-07-14 20:39:22.582] WorldChrMan address: 0x7FF4FC251B10
+[2025-07-14 20:39:22.582] Map ID address: 0x7FF4ACFB4560
+[2025-07-14 20:39:22.583] Raw map ID: 0x25000000 (620756992), Formatted: m37_00_00_00
+[2025-07-14 20:39:23.090] === Scanning for Exact Cheat Engine Values ===
+[2025-07-14 20:39:23.090] Looking for X=392,57114 (0x43C4491B), Y=-258,11 (0xC3810E14), Z=-775,3391 (0xC441D5B4)
+[2025-07-14 20:39:23.090] Method 1: Scanning around WorldChrMan base 0x7FF4FC251B10...
+[2025-07-14 20:39:23.092] No target values found in WorldChrMan base (scanned 0x3000 bytes)
+[2025-07-14 20:39:23.093] Method 2: Scanning around first pointer 0x7FF4ACFB2580...
+[2025-07-14 20:39:23.093] Found potential target value in first pointer at +0x1050: 0x43C4491B
+[2025-07-14 20:39:23.094] Position at +0x1050: X=392,571136, Y=-258,109985, Z=-775,339111
+[2025-07-14 20:39:23.094] *** EXACT MATCH FOUND IN FIRST POINTER AT +0x1050 ***
+[2025-07-14 20:39:23.094] Raw hex: 1B 49 C4 43 14 0E 81 C3 B4 D5 41 C4
+[2025-07-14 20:39:23.094] Found potential target value in first pointer at +0x1054: 0xC3810E14
+[2025-07-14 20:39:23.094] Position at +0x1054: X=-258,109985, Y=-775,339111, Z=0,000000
+[2025-07-14 20:39:23.094] Found potential target value in first pointer at +0x1058: 0xC441D5B4
+[2025-07-14 20:39:23.094] Position at +0x1058: X=-775,339111, Y=0,000000, Z=392,571136
+[2025-07-14 20:39:23.095] Found potential target value in first pointer at +0x1060: 0x43C4491B
+[2025-07-14 20:39:23.095] Position at +0x1060: X=392,571136, Y=-258,109985, Z=-775,339111
+[2025-07-14 20:39:23.095] *** EXACT MATCH FOUND IN FIRST POINTER AT +0x1060 ***
+[2025-07-14 20:39:23.095] Raw hex: 1B 49 C4 43 14 0E 81 C3 B4 D5 41 C4
+[2025-07-14 20:39:23.095] Found potential target value in first pointer at +0x1064: 0xC3810E14
+[2025-07-14 20:39:23.095] Position at +0x1064: X=-258,109985, Y=-775,339111, Z=0,000000
+[2025-07-14 20:39:23.095] Found potential target value in first pointer at +0x1068: 0xC441D5B4
+[2025-07-14 20:39:23.096] Position at +0x1068: X=-775,339111, Y=0,000000, Z=0,000000
+[2025-07-14 20:39:23.096] Method 3: Attempting original Cheat Engine offset path...
+[2025-07-14 20:39:23.097] Original path Step 1 (BaseB+0x80): 0x7FF4ACFB2580
+[2025-07-14 20:39:23.097] Original path Step 2 (+0x20): 0x7FF4ACFB7F90
+[2025-07-14 20:39:23.097] Original path Step 2 (+0x30): 0x7FF4ACFB8080
+[2025-07-14 20:39:23.097] Original path Step 2 (+0x18): 0x7FF4FC15B5F0
+[2025-07-14 20:39:23.097] *** EXACT MATCH via original path: +0x18 -> +0x28 -> +0x80 ***
+[2025-07-14 20:39:23.097] Position: X=392,571136, Y=-258,109985, Z=-775,339111
+[2025-07-14 20:39:23.098] Raw hex: 1B 49 C4 43 14 0E 81 C3 B4 D5 41 C4
+[2025-07-14 20:39:23.098] Current position at +0xE0: X=371,786530, Y=-252,186981, Z=-762,768005
+[2025-07-14 20:39:23.098] Current raw hex: AD E4 B9 43 DE 2F 7C C3 27 B1 3E C4
+[2025-07-14 20:39:23.098] Delta from target: X=20,784607, Y=-5,923004, Z=-12,571106
+[2025-07-14 20:39:23.098] Player position address: 0x7FF4ACFB2660
+[2025-07-14 20:39:23.098] Player position: X=371,79, Y=-252,19, Z=-762,77
+[2025-07-14 20:39:23.099] WorldChrMan address: 0x7FF4FC251B10
+[2025-07-14 20:39:23.099] Map ID address: 0x7FF4ACFB4560
+[2025-07-14 20:39:23.099] Raw map ID: 0x25000000 (620756992), Formatted: m37_00_00_00
+[2025-07-14 20:39:23.605] === Scanning for Exact Cheat Engine Values ===
+[2025-07-14 20:39:23.605] Looking for X=392,57114 (0x43C4491B), Y=-258,11 (0xC3810E14), Z=-775,3391 (0xC441D5B4)
+[2025-07-14 20:39:23.605] Method 1: Scanning around WorldChrMan base 0x7FF4FC251B10...
+[2025-07-14 20:39:23.608] No target values found in WorldChrMan base (scanned 0x3000 bytes)
+[2025-07-14 20:39:23.608] Method 2: Scanning around first pointer 0x7FF4ACFB2580...
+[2025-07-14 20:39:23.608] Found potential target value in first pointer at +0x1050: 0x43C4491B
+[2025-07-14 20:39:23.609] Position at +0x1050: X=392,571136, Y=-258,109985, Z=-775,339111
+[2025-07-14 20:39:23.609] *** EXACT MATCH FOUND IN FIRST POINTER AT +0x1050 ***
+[2025-07-14 20:39:23.609] Raw hex: 1B 49 C4 43 14 0E 81 C3 B4 D5 41 C4
+[2025-07-14 20:39:23.609] Found potential target value in first pointer at +0x1054: 0xC3810E14
+[2025-07-14 20:39:23.609] Position at +0x1054: X=-258,109985, Y=-775,339111, Z=0,000000
+[2025-07-14 20:39:23.609] Found potential target value in first pointer at +0x1058: 0xC441D5B4
+[2025-07-14 20:39:23.610] Position at +0x1058: X=-775,339111, Y=0,000000, Z=392,571136
+[2025-07-14 20:39:23.610] Found potential target value in first pointer at +0x1060: 0x43C4491B
+[2025-07-14 20:39:23.610] Position at +0x1060: X=392,571136, Y=-258,109985, Z=-775,339111
+[2025-07-14 20:39:23.610] *** EXACT MATCH FOUND IN FIRST POINTER AT +0x1060 ***
+[2025-07-14 20:39:23.610] Raw hex: 1B 49 C4 43 14 0E 81 C3 B4 D5 41 C4
+[2025-07-14 20:39:23.610] Found potential target value in first pointer at +0x1064: 0xC3810E14
+[2025-07-14 20:39:23.611] Position at +0x1064: X=-258,109985, Y=-775,339111, Z=0,000000
+[2025-07-14 20:39:23.611] Found potential target value in first pointer at +0x1068: 0xC441D5B4
+[2025-07-14 20:39:23.611] Position at +0x1068: X=-775,339111, Y=0,000000, Z=0,000000
+[2025-07-14 20:39:23.612] Method 3: Attempting original Cheat Engine offset path...
+[2025-07-14 20:39:23.612] Original path Step 1 (BaseB+0x80): 0x7FF4ACFB2580
+[2025-07-14 20:39:23.612] Original path Step 2 (+0x20): 0x7FF4ACFB7F90
+[2025-07-14 20:39:23.612] Original path Step 2 (+0x30): 0x7FF4ACFB8080
+[2025-07-14 20:39:23.612] Original path Step 2 (+0x18): 0x7FF4FC15B5F0
+[2025-07-14 20:39:23.613] *** EXACT MATCH via original path: +0x18 -> +0x28 -> +0x80 ***
+[2025-07-14 20:39:23.613] Position: X=392,571136, Y=-258,109985, Z=-775,339111
+[2025-07-14 20:39:23.613] Raw hex: 1B 49 C4 43 14 0E 81 C3 B4 D5 41 C4
+[2025-07-14 20:39:23.613] Current position at +0xE0: X=371,786530, Y=-252,186981, Z=-762,768005
+[2025-07-14 20:39:23.613] Current raw hex: AD E4 B9 43 DE 2F 7C C3 27 B1 3E C4
+[2025-07-14 20:39:23.613] Delta from target: X=20,784607, Y=-5,923004, Z=-12,571106
+[2025-07-14 20:39:23.613] Player position address: 0x7FF4ACFB2660
+[2025-07-14 20:39:23.614] Player position: X=371,79, Y=-252,19, Z=-762,77
+[2025-07-14 20:39:23.614] WorldChrMan address: 0x7FF4FC251B10
+[2025-07-14 20:39:23.614] Map ID address: 0x7FF4ACFB4560
+[2025-07-14 20:39:23.614] Raw map ID: 0x25000000 (620756992), Formatted: m37_00_00_00
+[2025-07-14 20:40:46.638] Successfully attached to Dark Souls III (PID: 48340, Base: 0x140000000)
+[2025-07-14 20:40:47.142] Player position address: 0x7FF4ACFB6E80
+[2025-07-14 20:40:47.144] Player position: X=392,571136, Y=-258,109985, Z=-775,339111
+[2025-07-14 20:40:47.145] WorldChrMan address: 0x7FF4FC251B10
+[2025-07-14 20:40:47.145] Map ID address: 0x7FF4ACFB4560
+[2025-07-14 20:40:47.145] Raw map ID: 0x25000000 (620756992), Formatted: m37_00_00_00
+[2025-07-14 20:40:47.147] Player position address: 0x7FF4ACFB6E80
+[2025-07-14 20:40:47.147] Player position: X=392,571136, Y=-258,109985, Z=-775,339111
+[2025-07-14 20:40:47.147] WorldChrMan address: 0x7FF4FC251B10
+[2025-07-14 20:40:47.147] Map ID address: 0x7FF4ACFB4560
+[2025-07-14 20:40:47.147] Raw map ID: 0x25000000 (620756992), Formatted: m37_00_00_00
+[MainWindow] 20:40:47.590 - Searching fog gates for area: Irithyll of the Boreal Valley
+[MainWindow] 20:40:47.590 - Possible area names: before the bridge into Irithyll, the bridge into Irithyll, Central Irithyll, above Dorhys in Irithyll, Dorhys in Irithyll, Irithyll Distant Manor, Pontiff Sulyvahn, Yorshka's Prison Tower in Irithyll, immediately after Pontiff Sulyvahn, Anor Londo, above Pontiff, Aldrich, Devourer of Gods, above Aldrich, left elevator after Aldrich, right elevator after Aldrich
+[MainWindow] 20:40:47.591 - Found fog gate match: 'Anor Londo' -> 'Profaned Capital' (matched with 'Anor Londo')
+[MainWindow] 20:40:47.591 - Found fog gate match: 'Anor Londo' -> 'Grand Archives Bonfire' (matched with 'Anor Londo')
+[MainWindow] 20:40:47.592 - Found fog gate match: 'Anor Londo' -> 'Curse-Rotted Greatwood' (matched with 'Anor Londo')
+[MainWindow] 20:40:47.592 - Found fog gate match: 'Central Irithyll' -> 'after Dragonslayer Armour' (matched with 'Central Irithyll')
+[MainWindow] 20:40:47.592 - Found fog gate match: 'Central Irithyll' -> 'Old Demon King' (matched with 'Central Irithyll')
+[MainWindow] 20:40:47.592 - Found fog gate match: 'before the bridge into Irithyll' -> 'immediately after Pontiff Sulyvahn' (matched with 'before the bridge into Irithyll')
+[MainWindow] 20:40:47.593 - Found fog gate match: 'Pontiff Sulyvahn' -> 'High Wall' (matched with 'Pontiff Sulyvahn')
+[MainWindow] 20:40:47.593 - Found fog gate match: 'the bridge into Irithyll' -> 'Champion's Gravetender' (matched with 'before the bridge into Irithyll')
+[MainWindow] 20:40:47.593 - Found fog gate match: 'Aldrich, Devourer of Gods' -> 'Irithyll Distant Manor' (matched with 'Aldrich, Devourer of Gods')
+[MainWindow] 20:40:47.593 - Found fog gate match: 'Aldrich, Devourer of Gods' -> 'above Pontiff' (matched with 'Aldrich, Devourer of Gods')
+[MainWindow] 20:40:47.593 - Found fog gate match: 'Irithyll Distant Manor' -> 'Consumed King's Gardens' (matched with 'Irithyll Distant Manor')
+[MainWindow] 20:40:47.594 - Found fog gate match: 'Central Irithyll' -> 'left elevator after Aldrich' (matched with 'Central Irithyll')
+[MainWindow] 20:40:47.594 - Total fog gates found: 12
+[2025-07-14 20:40:48.101] Player position address: 0x7FF4ACFB6E80
+[2025-07-14 20:40:48.102] Player position: X=392,571136, Y=-258,109985, Z=-775,339111
+[2025-07-14 20:40:48.102] WorldChrMan address: 0x7FF4FC251B10
+[2025-07-14 20:40:48.102] Map ID address: 0x7FF4ACFB4560
+[2025-07-14 20:40:48.102] Raw map ID: 0x25000000 (620756992), Formatted: m37_00_00_00
+[2025-07-14 20:40:48.601] Player position address: 0x7FF4ACFB6E80
+[2025-07-14 20:40:48.601] Player position: X=392,571136, Y=-258,109985, Z=-775,339111
+[2025-07-14 20:40:48.601] WorldChrMan address: 0x7FF4FC251B10
+[2025-07-14 20:40:48.602] Map ID address: 0x7FF4ACFB4560
+[2025-07-14 20:40:48.602] Raw map ID: 0x25000000 (620756992), Formatted: m37_00_00_00
+[2025-07-14 20:40:49.098] Player position address: 0x7FF4ACFB6E80
+[2025-07-14 20:40:49.098] Player position: X=392,571136, Y=-258,109985, Z=-775,339111
+[2025-07-14 20:40:49.099] WorldChrMan address: 0x7FF4FC251B10
+[2025-07-14 20:40:49.099] Map ID address: 0x7FF4ACFB4560
+[2025-07-14 20:40:49.099] Raw map ID: 0x25000000 (620756992), Formatted: m37_00_00_00
+[2025-07-14 20:40:49.598] Player position address: 0x7FF4ACFB6E80
+[2025-07-14 20:40:49.598] Player position: X=392,571136, Y=-258,109985, Z=-775,339111
+[2025-07-14 20:40:49.598] WorldChrMan address: 0x7FF4FC251B10
+[2025-07-14 20:40:49.599] Map ID address: 0x7FF4ACFB4560
+[2025-07-14 20:40:49.599] Raw map ID: 0x25000000 (620756992), Formatted: m37_00_00_00
+[2025-07-14 20:40:50.097] Player position address: 0x7FF4ACFB6E80
+[2025-07-14 20:40:50.097] Player position: X=392,571136, Y=-258,109985, Z=-775,339111
+[2025-07-14 20:40:50.097] WorldChrMan address: 0x7FF4FC251B10
+[2025-07-14 20:40:50.097] Map ID address: 0x7FF4ACFB4560
+[2025-07-14 20:40:50.098] Raw map ID: 0x25000000 (620756992), Formatted: m37_00_00_00
+[2025-07-14 20:40:50.611] Player position address: 0x7FF4ACFB6E80
+[2025-07-14 20:40:50.611] Player position: X=392,571136, Y=-258,109985, Z=-775,339111
+[2025-07-14 20:40:50.612] WorldChrMan address: 0x7FF4FC251B10
+[2025-07-14 20:40:50.612] Map ID address: 0x7FF4ACFB4560
+[2025-07-14 20:40:50.612] Raw map ID: 0x25000000 (620756992), Formatted: m37_00_00_00
+[2025-07-14 20:40:51.122] Player position address: 0x7FF4ACFB6E80
+[2025-07-14 20:40:51.122] Player position: X=392,571136, Y=-258,109985, Z=-775,339111
+[2025-07-14 20:40:51.122] WorldChrMan address: 0x7FF4FC251B10
+[2025-07-14 20:40:51.123] Map ID address: 0x7FF4ACFB4560
+[2025-07-14 20:40:51.123] Raw map ID: 0x25000000 (620756992), Formatted: m37_00_00_00
+[2025-07-14 20:40:51.618] Player position address: 0x7FF4ACFB6E80
+[2025-07-14 20:40:51.619] Player position: X=392,571136, Y=-258,109985, Z=-775,339111
+[2025-07-14 20:40:51.619] WorldChrMan address: 0x7FF4FC251B10
+[2025-07-14 20:40:51.620] Map ID address: 0x7FF4ACFB4560
+[2025-07-14 20:40:51.620] Raw map ID: 0x25000000 (620756992), Formatted: m37_00_00_00
+[2025-07-14 20:40:52.115] Player position address: 0x7FF4ACFB6E80
+[2025-07-14 20:40:52.116] Player position: X=392,571136, Y=-258,109985, Z=-775,339111
+[2025-07-14 20:40:52.116] WorldChrMan address: 0x7FF4FC251B10
+[2025-07-14 20:40:52.116] Map ID address: 0x7FF4ACFB4560
+[2025-07-14 20:40:52.116] Raw map ID: 0x25000000 (620756992), Formatted: m37_00_00_00
+[2025-07-14 20:40:52.613] Player position address: 0x7FF4ACFB6E80
+[2025-07-14 20:40:52.613] Player position: X=392,571136, Y=-258,109985, Z=-775,339111
+[2025-07-14 20:40:52.614] WorldChrMan address: 0x7FF4FC251B10
+[2025-07-14 20:40:52.614] Map ID address: 0x7FF4ACFB4560
+[2025-07-14 20:40:52.614] Raw map ID: 0x25000000 (620756992), Formatted: m37_00_00_00
+[2025-07-14 20:40:53.114] Player position address: 0x7FF4ACFB6E80
+[2025-07-14 20:40:53.114] Player position: X=392,571136, Y=-258,109985, Z=-775,339111
+[2025-07-14 20:40:53.114] WorldChrMan address: 0x7FF4FC251B10
+[2025-07-14 20:40:53.114] Map ID address: 0x7FF4ACFB4560
+[2025-07-14 20:40:53.114] Raw map ID: 0x25000000 (620756992), Formatted: m37_00_00_00
+[2025-07-14 20:40:54.289] Player position address: 0x7FF4ACFB6E80
+[2025-07-14 20:40:54.289] Player position: X=392,571136, Y=-258,109985, Z=-775,339111
+[2025-07-14 20:40:54.299] WorldChrMan address: 0x7FF4FC251B10
+[2025-07-14 20:40:54.300] Map ID address: 0x7FF4ACFB4560
+[2025-07-14 20:40:54.300] Raw map ID: 0x25000000 (620756992), Formatted: m37_00_00_00
+[2025-07-14 20:40:54.803] Player position address: 0x7FF4ACFB6E80
+[2025-07-14 20:40:54.803] Player position: X=392,571136, Y=-258,109985, Z=-775,339111
+[2025-07-14 20:40:54.804] WorldChrMan address: 0x7FF4FC251B10
+[2025-07-14 20:40:54.804] Map ID address: 0x7FF4ACFB4560
+[2025-07-14 20:40:54.805] Raw map ID: 0x25000000 (620756992), Formatted: m37_00_00_00
+[2025-07-14 20:40:55.301] Player position address: 0x7FF4ACFB6E80
+[2025-07-14 20:40:55.301] Player position: X=392,571136, Y=-258,109985, Z=-775,339111
+[2025-07-14 20:40:55.301] WorldChrMan address: 0x7FF4FC251B10
+[2025-07-14 20:40:55.301] Map ID address: 0x7FF4ACFB4560
+[2025-07-14 20:40:55.301] Raw map ID: 0x25000000 (620756992), Formatted: m37_00_00_00
+[2025-07-14 20:40:55.803] Player position address: 0x7FF4ACFB6E80
+[2025-07-14 20:40:55.803] Player position: X=392,571136, Y=-258,109985, Z=-775,339111
+[2025-07-14 20:40:55.803] WorldChrMan address: 0x7FF4FC251B10
+[2025-07-14 20:40:55.803] Map ID address: 0x7FF4ACFB4560
+[2025-07-14 20:40:55.803] Raw map ID: 0x25000000 (620756992), Formatted: m37_00_00_00
+[2025-07-14 20:40:56.300] Player position address: 0x7FF4ACFB6E80
+[2025-07-14 20:40:56.300] Player position: X=392,571136, Y=-258,109985, Z=-775,339111
+[2025-07-14 20:40:56.300] WorldChrMan address: 0x7FF4FC251B10
+[2025-07-14 20:40:56.300] Map ID address: 0x7FF4ACFB4560
+[2025-07-14 20:40:56.301] Raw map ID: 0x25000000 (620756992), Formatted: m37_00_00_00
+[2025-07-14 20:40:56.802] Player position address: 0x7FF4ACFB6E80
+[2025-07-14 20:40:56.802] Player position: X=392,571136, Y=-258,109985, Z=-775,339111
+[2025-07-14 20:40:56.803] WorldChrMan address: 0x7FF4FC251B10
+[2025-07-14 20:40:56.803] Map ID address: 0x7FF4ACFB4560
+[2025-07-14 20:40:56.803] Raw map ID: 0x25000000 (620756992), Formatted: m37_00_00_00
+[2025-07-14 20:40:57.301] Player position address: 0x7FF4ACFB6E80
+[2025-07-14 20:40:57.302] Player position: X=392,571136, Y=-258,109985, Z=-775,339111
+[2025-07-14 20:40:57.302] WorldChrMan address: 0x7FF4FC251B10
+[2025-07-14 20:40:57.302] Map ID address: 0x7FF4ACFB4560
+[2025-07-14 20:40:57.302] Raw map ID: 0x25000000 (620756992), Formatted: m37_00_00_00
+[2025-07-14 20:40:57.800] Player position address: 0x7FF4ACFB6E80
+[2025-07-14 20:40:57.800] Player position: X=392,571136, Y=-258,109985, Z=-775,339111
+[2025-07-14 20:40:57.801] WorldChrMan address: 0x7FF4FC251B10
+[2025-07-14 20:40:57.801] Map ID address: 0x7FF4ACFB4560
+[2025-07-14 20:40:57.801] Raw map ID: 0x25000000 (620756992), Formatted: m37_00_00_00
+[2025-07-14 20:40:58.300] Player position address: 0x7FF4ACFB6E80
+[2025-07-14 20:40:58.300] Player position: X=392,571136, Y=-258,109985, Z=-775,339111
+[2025-07-14 20:40:58.300] WorldChrMan address: 0x7FF4FC251B10
+[2025-07-14 20:40:58.300] Map ID address: 0x7FF4ACFB4560
+[2025-07-14 20:40:58.301] Raw map ID: 0x25000000 (620756992), Formatted: m37_00_00_00
+[2025-07-14 20:40:58.813] Player position address: 0x7FF4ACFB6E80
+[2025-07-14 20:40:58.813] Player position: X=392,058258, Y=-258,097229, Z=-773,788269
+[2025-07-14 20:40:58.813] WorldChrMan address: 0x7FF4FC251B10
+[2025-07-14 20:40:58.814] Map ID address: 0x7FF4ACFB4560
+[2025-07-14 20:40:58.814] Raw map ID: 0x25000000 (620756992), Formatted: m37_00_00_00
+[2025-07-14 20:40:59.313] Player position address: 0x7FF4ACFB6E80
+[2025-07-14 20:40:59.313] Player position: X=391,463745, Y=-258,082458, Z=-771,914246
+[2025-07-14 20:40:59.313] WorldChrMan address: 0x7FF4FC251B10
+[2025-07-14 20:40:59.313] Map ID address: 0x7FF4ACFB4560
+[2025-07-14 20:40:59.313] Raw map ID: 0x25000000 (620756992), Formatted: m37_00_00_00
+[2025-07-14 20:40:59.809] Player position address: 0x7FF4ACFB6E80
+[2025-07-14 20:40:59.809] Player position: X=390,639832, Y=-258,114044, Z=-770,322815
+[2025-07-14 20:40:59.810] WorldChrMan address: 0x7FF4FC251B10
+[2025-07-14 20:40:59.810] Map ID address: 0x7FF4ACFB4560
+[2025-07-14 20:40:59.810] Raw map ID: 0x25000000 (620756992), Formatted: m37_00_00_00
+[2025-07-14 20:41:00.308] Player position address: 0x7FF4ACFB6E80
+[2025-07-14 20:41:00.308] Player position: X=390,514313, Y=-258,121338, Z=-768,773621
+[2025-07-14 20:41:00.308] WorldChrMan address: 0x7FF4FC251B10
+[2025-07-14 20:41:00.308] Map ID address: 0x7FF4ACFB4560
+[2025-07-14 20:41:00.309] Raw map ID: 0x25000000 (620756992), Formatted: m37_00_00_00
+[2025-07-14 20:41:00.809] Player position address: 0x7FF4ACFB6E80
+[2025-07-14 20:41:00.809] Player position: X=388,875336, Y=-257,937958, Z=-769,308960
+[2025-07-14 20:41:00.810] WorldChrMan address: 0x7FF4FC251B10
+[2025-07-14 20:41:00.810] Map ID address: 0x7FF4ACFB4560
+[2025-07-14 20:41:00.810] Raw map ID: 0x25000000 (620756992), Formatted: m37_00_00_00
+[2025-07-14 20:41:01.314] Player position address: 0x7FF4ACFB6E80
+[2025-07-14 20:41:01.314] Player position: X=386,850067, Y=-257,362701, Z=-769,455078
+[2025-07-14 20:41:01.314] WorldChrMan address: 0x7FF4FC251B10
+[2025-07-14 20:41:01.315] Map ID address: 0x7FF4ACFB4560
+[2025-07-14 20:41:01.315] Raw map ID: 0x25000000 (620756992), Formatted: m37_00_00_00
+[2025-07-14 20:41:01.801] Player position address: 0x7FF4ACFB6E80
+[2025-07-14 20:41:01.801] Player position: X=384,899689, Y=-256,346863, Z=-769,603394
+[2025-07-14 20:41:01.801] WorldChrMan address: 0x7FF4FC251B10
+[2025-07-14 20:41:01.802] Map ID address: 0x7FF4ACFB4560
+[2025-07-14 20:41:01.802] Raw map ID: 0x25000000 (620756992), Formatted: m37_00_00_00
+[2025-07-14 20:41:02.301] Player position address: 0x7FF4ACFB6E80
+[2025-07-14 20:41:02.301] Player position: X=381,968109, Y=-254,821320, Z=-769,644531
+[2025-07-14 20:41:02.301] WorldChrMan address: 0x7FF4FC251B10
+[2025-07-14 20:41:02.302] Map ID address: 0x7FF4ACFB4560
+[2025-07-14 20:41:02.302] Raw map ID: 0x25000000 (620756992), Formatted: m37_00_00_00
+[2025-07-14 20:41:02.814] Player position address: 0x7FF4ACFB6E80
+[2025-07-14 20:41:02.814] Player position: X=378,875336, Y=-253,213974, Z=-769,399231
+[2025-07-14 20:41:02.815] WorldChrMan address: 0x7FF4FC251B10
+[2025-07-14 20:41:02.815] Map ID address: 0x7FF4ACFB4560
+[2025-07-14 20:41:02.815] Raw map ID: 0x25000000 (620756992), Formatted: m37_00_00_00
+[2025-07-14 20:41:03.318] Player position address: 0x7FF4ACFB6E80
+[2025-07-14 20:41:03.318] Player position: X=376,232819, Y=-252,468704, Z=-768,191467
+[2025-07-14 20:41:03.319] WorldChrMan address: 0x7FF4FC251B10
+[2025-07-14 20:41:03.319] Map ID address: 0x7FF4ACFB4560
+[2025-07-14 20:41:03.319] Raw map ID: 0x25000000 (620756992), Formatted: m37_00_00_00
+[2025-07-14 20:41:03.818] Player position address: 0x7FF4ACFB6E80
+[2025-07-14 20:41:03.819] Player position: X=373,982910, Y=-252,196121, Z=-766,348633
+[2025-07-14 20:41:03.819] WorldChrMan address: 0x7FF4FC251B10
+[2025-07-14 20:41:03.819] Map ID address: 0x7FF4ACFB4560
+[2025-07-14 20:41:03.819] Raw map ID: 0x25000000 (620756992), Formatted: m37_00_00_00
+[2025-07-14 20:41:04.316] Player position address: 0x7FF4ACFB6E80
+[2025-07-14 20:41:04.317] Player position: X=372,170013, Y=-252,187027, Z=-764,719727
+[2025-07-14 20:41:04.317] WorldChrMan address: 0x7FF4FC251B10
+[2025-07-14 20:41:04.317] Map ID address: 0x7FF4ACFB4560
+[2025-07-14 20:41:04.317] Raw map ID: 0x25000000 (620756992), Formatted: m37_00_00_00
+[2025-07-14 20:41:04.827] Player position address: 0x7FF4ACFB6E80
+[2025-07-14 20:41:04.828] Player position: X=371,652252, Y=-252,187027, Z=-764,256470
+[2025-07-14 20:41:04.828] WorldChrMan address: 0x7FF4FC251B10
+[2025-07-14 20:41:04.828] Map ID address: 0x7FF4ACFB4560
+[2025-07-14 20:41:04.828] Raw map ID: 0x25000000 (620756992), Formatted: m37_00_00_00
+[2025-07-14 20:41:05.326] Player position address: 0x7FF4ACFB6E80
+[2025-07-14 20:41:05.326] Player position: X=371,711060, Y=-252,187027, Z=-764,309082
+[2025-07-14 20:41:05.326] WorldChrMan address: 0x7FF4FC251B10
+[2025-07-14 20:41:05.327] Map ID address: 0x7FF4ACFB4560
+[2025-07-14 20:41:05.327] Raw map ID: 0x25000000 (620756992), Formatted: m37_00_00_00
+[2025-07-14 20:41:05.828] Player position address: 0x7FF4ACFB6E80
+[2025-07-14 20:41:05.829] Player position: X=371,711487, Y=-252,187027, Z=-764,309448
+[2025-07-14 20:41:05.829] WorldChrMan address: 0x7FF4FC251B10
+[2025-07-14 20:41:05.829] Map ID address: 0x7FF4ACFB4560
+[2025-07-14 20:41:05.830] Raw map ID: 0x25000000 (620756992), Formatted: m37_00_00_00
+[2025-07-14 20:41:06.327] Player position address: 0x7FF4ACFB6E80
+[2025-07-14 20:41:06.327] Player position: X=371,711487, Y=-252,187027, Z=-764,309448
+[2025-07-14 20:41:06.327] WorldChrMan address: 0x7FF4FC251B10
+[2025-07-14 20:41:06.327] Map ID address: 0x7FF4ACFB4560
+[2025-07-14 20:41:06.327] Raw map ID: 0x25000000 (620756992), Formatted: m37_00_00_00
+[2025-07-14 20:41:06.820] Player position address: 0x7FF4ACFB6E80
+[2025-07-14 20:41:06.821] Player position: X=371,711487, Y=-252,187027, Z=-764,309448
+[2025-07-14 20:41:06.821] WorldChrMan address: 0x7FF4FC251B10
+[2025-07-14 20:41:06.821] Map ID address: 0x7FF4ACFB4560
+[2025-07-14 20:41:06.821] Raw map ID: 0x25000000 (620756992), Formatted: m37_00_00_00
+[2025-07-14 20:41:07.324] Player position address: 0x7FF4ACFB6E80
+[2025-07-14 20:41:07.325] Player position: X=371,711487, Y=-252,187027, Z=-764,309448
+[2025-07-14 20:41:07.325] WorldChrMan address: 0x7FF4FC251B10
+[2025-07-14 20:41:07.325] Map ID address: 0x7FF4ACFB4560
+[2025-07-14 20:41:07.325] Raw map ID: 0x25000000 (620756992), Formatted: m37_00_00_00
+[MainWindow] 20:41:07.589 - Searching fog gates for area: Irithyll of the Boreal Valley
+[MainWindow] 20:41:07.589 - Possible area names: before the bridge into Irithyll, the bridge into Irithyll, Central Irithyll, above Dorhys in Irithyll, Dorhys in Irithyll, Irithyll Distant Manor, Pontiff Sulyvahn, Yorshka's Prison Tower in Irithyll, immediately after Pontiff Sulyvahn, Anor Londo, above Pontiff, Aldrich, Devourer of Gods, above Aldrich, left elevator after Aldrich, right elevator after Aldrich
+[MainWindow] 20:41:07.590 - Found fog gate match: 'Anor Londo' -> 'Profaned Capital' (matched with 'Anor Londo')
+[MainWindow] 20:41:07.590 - Found fog gate match: 'Anor Londo' -> 'Grand Archives Bonfire' (matched with 'Anor Londo')
+[MainWindow] 20:41:07.590 - Found fog gate match: 'Anor Londo' -> 'Curse-Rotted Greatwood' (matched with 'Anor Londo')
+[MainWindow] 20:41:07.590 - Found fog gate match: 'Central Irithyll' -> 'after Dragonslayer Armour' (matched with 'Central Irithyll')
+[MainWindow] 20:41:07.590 - Found fog gate match: 'Central Irithyll' -> 'Old Demon King' (matched with 'Central Irithyll')
+[MainWindow] 20:41:07.590 - Found fog gate match: 'before the bridge into Irithyll' -> 'immediately after Pontiff Sulyvahn' (matched with 'before the bridge into Irithyll')
+[MainWindow] 20:41:07.591 - Found fog gate match: 'Pontiff Sulyvahn' -> 'High Wall' (matched with 'Pontiff Sulyvahn')
+[MainWindow] 20:41:07.591 - Found fog gate match: 'the bridge into Irithyll' -> 'Champion's Gravetender' (matched with 'before the bridge into Irithyll')
+[MainWindow] 20:41:07.591 - Found fog gate match: 'Aldrich, Devourer of Gods' -> 'Irithyll Distant Manor' (matched with 'Aldrich, Devourer of Gods')
+[MainWindow] 20:41:07.591 - Found fog gate match: 'Aldrich, Devourer of Gods' -> 'above Pontiff' (matched with 'Aldrich, Devourer of Gods')
+[MainWindow] 20:41:07.591 - Found fog gate match: 'Irithyll Distant Manor' -> 'Consumed King's Gardens' (matched with 'Irithyll Distant Manor')
+[MainWindow] 20:41:07.592 - Found fog gate match: 'Central Irithyll' -> 'left elevator after Aldrich' (matched with 'Central Irithyll')
+[MainWindow] 20:41:07.592 - Total fog gates found: 12
+[2025-07-14 20:41:07.825] Player position address: 0x7FF4ACFB6E80
+[2025-07-14 20:41:07.826] Player position: X=371,711487, Y=-252,187027, Z=-764,309448
+[2025-07-14 20:41:07.826] WorldChrMan address: 0x7FF4FC251B10
+[2025-07-14 20:41:07.826] Map ID address: 0x7FF4ACFB4560
+[2025-07-14 20:41:07.826] Raw map ID: 0x25000000 (620756992), Formatted: m37_00_00_00
+[2025-07-14 20:41:08.322] Player position address: 0x7FF4ACFB6E80
+[2025-07-14 20:41:08.323] Player position: X=371,711487, Y=-252,187027, Z=-764,309448
+[2025-07-14 20:41:08.323] WorldChrMan address: 0x7FF4FC251B10
+[2025-07-14 20:41:08.323] Map ID address: 0x7FF4ACFB4560
+[2025-07-14 20:41:08.323] Raw map ID: 0x25000000 (620756992), Formatted: m37_00_00_00
+[2025-07-14 20:41:08.822] Player position address: 0x7FF4ACFB6E80
+[2025-07-14 20:41:08.823] Player position: X=371,711487, Y=-252,187027, Z=-764,309448
+[2025-07-14 20:41:08.823] WorldChrMan address: 0x7FF4FC251B10
+[2025-07-14 20:41:08.823] Map ID address: 0x7FF4ACFB4560
+[2025-07-14 20:41:08.823] Raw map ID: 0x25000000 (620756992), Formatted: m37_00_00_00
+[MainWindow] 20:41:09.315 - Searching fog gates for area: Irithyll of the Boreal Valley
+[MainWindow] 20:41:09.315 - Possible area names: before the bridge into Irithyll, the bridge into Irithyll, Central Irithyll, above Dorhys in Irithyll, Dorhys in Irithyll, Irithyll Distant Manor, Pontiff Sulyvahn, Yorshka's Prison Tower in Irithyll, immediately after Pontiff Sulyvahn, Anor Londo, above Pontiff, Aldrich, Devourer of Gods, above Aldrich, left elevator after Aldrich, right elevator after Aldrich
+[MainWindow] 20:41:09.315 - Found fog gate match: 'Anor Londo' -> 'Profaned Capital' (matched with 'Anor Londo')
+[MainWindow] 20:41:09.315 - Found fog gate match: 'Anor Londo' -> 'Grand Archives Bonfire' (matched with 'Anor Londo')
+[MainWindow] 20:41:09.315 - Found fog gate match: 'Anor Londo' -> 'Curse-Rotted Greatwood' (matched with 'Anor Londo')
+[MainWindow] 20:41:09.315 - Found fog gate match: 'Central Irithyll' -> 'after Dragonslayer Armour' (matched with 'Central Irithyll')
+[MainWindow] 20:41:09.315 - Found fog gate match: 'Central Irithyll' -> 'Old Demon King' (matched with 'Central Irithyll')
+[MainWindow] 20:41:09.316 - Found fog gate match: 'before the bridge into Irithyll' -> 'immediately after Pontiff Sulyvahn' (matched with 'before the bridge into Irithyll')
+[MainWindow] 20:41:09.316 - Found fog gate match: 'Pontiff Sulyvahn' -> 'High Wall' (matched with 'Pontiff Sulyvahn')
+[MainWindow] 20:41:09.316 - Found fog gate match: 'the bridge into Irithyll' -> 'Champion's Gravetender' (matched with 'before the bridge into Irithyll')
+[MainWindow] 20:41:09.316 - Found fog gate match: 'Aldrich, Devourer of Gods' -> 'Irithyll Distant Manor' (matched with 'Aldrich, Devourer of Gods')
+[MainWindow] 20:41:09.316 - Found fog gate match: 'Aldrich, Devourer of Gods' -> 'above Pontiff' (matched with 'Aldrich, Devourer of Gods')
+[MainWindow] 20:41:09.316 - Found fog gate match: 'Irithyll Distant Manor' -> 'Consumed King's Gardens' (matched with 'Irithyll Distant Manor')
+[MainWindow] 20:41:09.316 - Found fog gate match: 'Central Irithyll' -> 'left elevator after Aldrich' (matched with 'Central Irithyll')
+[MainWindow] 20:41:09.317 - Total fog gates found: 12
+[2025-07-14 20:41:09.340] Player position address: 0x7FF4ACFB6E80
+[2025-07-14 20:41:09.340] Player position: X=371,711487, Y=-252,187027, Z=-764,309448
+[2025-07-14 20:41:09.340] WorldChrMan address: 0x7FF4FC251B10
+[2025-07-14 20:41:09.340] Map ID address: 0x7FF4ACFB4560
+[2025-07-14 20:41:09.340] Raw map ID: 0x25000000 (620756992), Formatted: m37_00_00_00
+[MainWindow] 20:41:09.482 - Searching fog gates for area: Irithyll of the Boreal Valley
+[MainWindow] 20:41:09.482 - Possible area names: before the bridge into Irithyll, the bridge into Irithyll, Central Irithyll, above Dorhys in Irithyll, Dorhys in Irithyll, Irithyll Distant Manor, Pontiff Sulyvahn, Yorshka's Prison Tower in Irithyll, immediately after Pontiff Sulyvahn, Anor Londo, above Pontiff, Aldrich, Devourer of Gods, above Aldrich, left elevator after Aldrich, right elevator after Aldrich
+[MainWindow] 20:41:09.482 - Found fog gate match: 'Anor Londo' -> 'Profaned Capital' (matched with 'Anor Londo')
+[MainWindow] 20:41:09.482 - Found fog gate match: 'Anor Londo' -> 'Grand Archives Bonfire' (matched with 'Anor Londo')
+[MainWindow] 20:41:09.482 - Found fog gate match: 'Anor Londo' -> 'Curse-Rotted Greatwood' (matched with 'Anor Londo')
+[MainWindow] 20:41:09.482 - Found fog gate match: 'Central Irithyll' -> 'after Dragonslayer Armour' (matched with 'Central Irithyll')
+[MainWindow] 20:41:09.482 - Found fog gate match: 'Central Irithyll' -> 'Old Demon King' (matched with 'Central Irithyll')
+[MainWindow] 20:41:09.483 - Found fog gate match: 'before the bridge into Irithyll' -> 'immediately after Pontiff Sulyvahn' (matched with 'before the bridge into Irithyll')
+[MainWindow] 20:41:09.483 - Found fog gate match: 'Pontiff Sulyvahn' -> 'High Wall' (matched with 'Pontiff Sulyvahn')
+[MainWindow] 20:41:09.483 - Found fog gate match: 'the bridge into Irithyll' -> 'Champion's Gravetender' (matched with 'before the bridge into Irithyll')
+[MainWindow] 20:41:09.483 - Found fog gate match: 'Aldrich, Devourer of Gods' -> 'Irithyll Distant Manor' (matched with 'Aldrich, Devourer of Gods')
+[MainWindow] 20:41:09.483 - Found fog gate match: 'Aldrich, Devourer of Gods' -> 'above Pontiff' (matched with 'Aldrich, Devourer of Gods')
+[MainWindow] 20:41:09.483 - Found fog gate match: 'Irithyll Distant Manor' -> 'Consumed King's Gardens' (matched with 'Irithyll Distant Manor')
+[MainWindow] 20:41:09.483 - Found fog gate match: 'Central Irithyll' -> 'left elevator after Aldrich' (matched with 'Central Irithyll')
+[MainWindow] 20:41:09.484 - Total fog gates found: 12
+[MainWindow] 20:41:09.655 - Searching fog gates for area: Irithyll of the Boreal Valley
+[MainWindow] 20:41:09.655 - Possible area names: before the bridge into Irithyll, the bridge into Irithyll, Central Irithyll, above Dorhys in Irithyll, Dorhys in Irithyll, Irithyll Distant Manor, Pontiff Sulyvahn, Yorshka's Prison Tower in Irithyll, immediately after Pontiff Sulyvahn, Anor Londo, above Pontiff, Aldrich, Devourer of Gods, above Aldrich, left elevator after Aldrich, right elevator after Aldrich
+[MainWindow] 20:41:09.656 - Found fog gate match: 'Anor Londo' -> 'Profaned Capital' (matched with 'Anor Londo')
+[MainWindow] 20:41:09.656 - Found fog gate match: 'Anor Londo' -> 'Grand Archives Bonfire' (matched with 'Anor Londo')
+[MainWindow] 20:41:09.656 - Found fog gate match: 'Anor Londo' -> 'Curse-Rotted Greatwood' (matched with 'Anor Londo')
+[MainWindow] 20:41:09.656 - Found fog gate match: 'Central Irithyll' -> 'after Dragonslayer Armour' (matched with 'Central Irithyll')
+[MainWindow] 20:41:09.656 - Found fog gate match: 'Central Irithyll' -> 'Old Demon King' (matched with 'Central Irithyll')
+[MainWindow] 20:41:09.656 - Found fog gate match: 'before the bridge into Irithyll' -> 'immediately after Pontiff Sulyvahn' (matched with 'before the bridge into Irithyll')
+[MainWindow] 20:41:09.656 - Found fog gate match: 'Pontiff Sulyvahn' -> 'High Wall' (matched with 'Pontiff Sulyvahn')
+[MainWindow] 20:41:09.657 - Found fog gate match: 'the bridge into Irithyll' -> 'Champion's Gravetender' (matched with 'before the bridge into Irithyll')
+[MainWindow] 20:41:09.657 - Found fog gate match: 'Aldrich, Devourer of Gods' -> 'Irithyll Distant Manor' (matched with 'Aldrich, Devourer of Gods')
+[MainWindow] 20:41:09.657 - Found fog gate match: 'Aldrich, Devourer of Gods' -> 'above Pontiff' (matched with 'Aldrich, Devourer of Gods')
+[MainWindow] 20:41:09.657 - Found fog gate match: 'Irithyll Distant Manor' -> 'Consumed King's Gardens' (matched with 'Irithyll Distant Manor')
+[MainWindow] 20:41:09.657 - Found fog gate match: 'Central Irithyll' -> 'left elevator after Aldrich' (matched with 'Central Irithyll')
+[MainWindow] 20:41:09.658 - Total fog gates found: 12
+[2025-07-14 20:41:09.834] Player position address: 0x7FF4ACFB6E80
+[2025-07-14 20:41:09.835] Player position: X=371,711487, Y=-252,187027, Z=-764,309448
+[2025-07-14 20:41:09.835] WorldChrMan address: 0x7FF4FC251B10
+[2025-07-14 20:41:09.835] Map ID address: 0x7FF4ACFB4560
+[2025-07-14 20:41:09.835] Raw map ID: 0x25000000 (620756992), Formatted: m37_00_00_00
+[MainWindow] 20:41:09.844 - Searching fog gates for area: Irithyll of the Boreal Valley
+[MainWindow] 20:41:09.844 - Possible area names: before the bridge into Irithyll, the bridge into Irithyll, Central Irithyll, above Dorhys in Irithyll, Dorhys in Irithyll, Irithyll Distant Manor, Pontiff Sulyvahn, Yorshka's Prison Tower in Irithyll, immediately after Pontiff Sulyvahn, Anor Londo, above Pontiff, Aldrich, Devourer of Gods, above Aldrich, left elevator after Aldrich, right elevator after Aldrich
+[MainWindow] 20:41:09.845 - Found fog gate match: 'Anor Londo' -> 'Profaned Capital' (matched with 'Anor Londo')
+[MainWindow] 20:41:09.845 - Found fog gate match: 'Anor Londo' -> 'Grand Archives Bonfire' (matched with 'Anor Londo')
+[MainWindow] 20:41:09.845 - Found fog gate match: 'Anor Londo' -> 'Curse-Rotted Greatwood' (matched with 'Anor Londo')
+[MainWindow] 20:41:09.845 - Found fog gate match: 'Central Irithyll' -> 'after Dragonslayer Armour' (matched with 'Central Irithyll')
+[MainWindow] 20:41:09.845 - Found fog gate match: 'Central Irithyll' -> 'Old Demon King' (matched with 'Central Irithyll')
+[MainWindow] 20:41:09.846 - Found fog gate match: 'before the bridge into Irithyll' -> 'immediately after Pontiff Sulyvahn' (matched with 'before the bridge into Irithyll')
+[MainWindow] 20:41:09.846 - Found fog gate match: 'Pontiff Sulyvahn' -> 'High Wall' (matched with 'Pontiff Sulyvahn')
+[MainWindow] 20:41:09.846 - Found fog gate match: 'the bridge into Irithyll' -> 'Champion's Gravetender' (matched with 'before the bridge into Irithyll')
+[MainWindow] 20:41:09.846 - Found fog gate match: 'Aldrich, Devourer of Gods' -> 'Irithyll Distant Manor' (matched with 'Aldrich, Devourer of Gods')
+[MainWindow] 20:41:09.846 - Found fog gate match: 'Aldrich, Devourer of Gods' -> 'above Pontiff' (matched with 'Aldrich, Devourer of Gods')
+[MainWindow] 20:41:09.846 - Found fog gate match: 'Irithyll Distant Manor' -> 'Consumed King's Gardens' (matched with 'Irithyll Distant Manor')
+[MainWindow] 20:41:09.846 - Found fog gate match: 'Central Irithyll' -> 'left elevator after Aldrich' (matched with 'Central Irithyll')
+[MainWindow] 20:41:09.847 - Total fog gates found: 12
+[2025-07-14 20:41:10.331] Player position address: 0x7FF4ACFB6E80
+[2025-07-14 20:41:10.332] Player position: X=371,711487, Y=-252,187027, Z=-764,309448
+[2025-07-14 20:41:10.332] WorldChrMan address: 0x7FF4FC251B10
+[2025-07-14 20:41:10.332] Map ID address: 0x7FF4ACFB4560
+[2025-07-14 20:41:10.332] Raw map ID: 0x25000000 (620756992), Formatted: m37_00_00_00

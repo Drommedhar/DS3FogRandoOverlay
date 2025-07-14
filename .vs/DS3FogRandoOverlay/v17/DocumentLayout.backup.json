@@ -1,0 +1,238 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\git\\DS3FogRandoOverlay\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{AD6397CC-7584-A579-1C39-B6397516865F}|src\\Overlay\\DS3FogRandoOverlay.csproj|d:\\git\\ds3fograndooverlay\\src\\overlay\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AD6397CC-7584-A579-1C39-B6397516865F}|src\\Overlay\\DS3FogRandoOverlay.csproj|solutionrelative:src\\overlay\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AD6397CC-7584-A579-1C39-B6397516865F}|src\\Overlay\\DS3FogRandoOverlay.csproj|d:\\git\\ds3fograndooverlay\\src\\overlay\\services\\ds3memoryreader.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AD6397CC-7584-A579-1C39-B6397516865F}|src\\Overlay\\DS3FogRandoOverlay.csproj|solutionrelative:src\\overlay\\services\\ds3memoryreader.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AD6397CC-7584-A579-1C39-B6397516865F}|src\\Overlay\\DS3FogRandoOverlay.csproj|d:\\git\\ds3fograndooverlay\\src\\overlay\\services\\areamapper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AD6397CC-7584-A579-1C39-B6397516865F}|src\\Overlay\\DS3FogRandoOverlay.csproj|solutionrelative:src\\overlay\\services\\areamapper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AD6397CC-7584-A579-1C39-B6397516865F}|src\\Overlay\\DS3FogRandoOverlay.csproj|d:\\git\\ds3fograndooverlay\\src\\overlay\\services\\msbparser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AD6397CC-7584-A579-1C39-B6397516865F}|src\\Overlay\\DS3FogRandoOverlay.csproj|solutionrelative:src\\overlay\\services\\msbparser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0050B470-C684-59C9-8789-E714B8795582}|src\\SoulsFormats\\SoulsFormats\\SoulsFormats.csproj|d:\\git\\ds3fograndooverlay\\src\\soulsformats\\soulsformats\\formats\\tae3\\tae3.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0050B470-C684-59C9-8789-E714B8795582}|src\\SoulsFormats\\SoulsFormats\\SoulsFormats.csproj|solutionrelative:src\\soulsformats\\soulsformats\\formats\\tae3\\tae3.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0050B470-C684-59C9-8789-E714B8795582}|src\\SoulsFormats\\SoulsFormats\\SoulsFormats.csproj|d:\\git\\ds3fograndooverlay\\src\\soulsformats\\soulsformats\\formats\\msb\\msb3\\msb3.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0050B470-C684-59C9-8789-E714B8795582}|src\\SoulsFormats\\SoulsFormats\\SoulsFormats.csproj|solutionrelative:src\\soulsformats\\soulsformats\\formats\\msb\\msb3\\msb3.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{180C2F53-B9FF-4283-B212-81BBFCB06DED}|src\\Tests\\Tests\\Tests.csproj|d:\\git\\ds3fograndooverlay\\src\\tests\\tests\\unittest1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{180C2F53-B9FF-4283-B212-81BBFCB06DED}|src\\Tests\\Tests\\Tests.csproj|solutionrelative:src\\tests\\tests\\unittest1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\domin\\source\\repos\\SoulsFormats\\SoulsFormats\\Util\\SFEncoding.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AD6397CC-7584-A579-1C39-B6397516865F}|src\\Overlay\\DS3FogRandoOverlay.csproj|d:\\git\\ds3fograndooverlay\\src\\overlay\\testmsbparsing.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AD6397CC-7584-A579-1C39-B6397516865F}|src\\Overlay\\DS3FogRandoOverlay.csproj|solutionrelative:src\\overlay\\testmsbparsing.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 18,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:143:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:142:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:140:0:{13b12e3e-c1b4-4539-9371-4fe9a0d523fc}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:141:0:{13b12e3e-c1b4-4539-9371-4fe9a0d523fc}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:134:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:132:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:129:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:133:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:132:0:{13b12e3e-c1b4-4539-9371-4fe9a0d523fc}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:133:0:{13b12e3e-c1b4-4539-9371-4fe9a0d523fc}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:135:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:134:0:{13b12e3e-c1b4-4539-9371-4fe9a0d523fc}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:136:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:137:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:138:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:135:0:{13b12e3e-c1b4-4539-9371-4fe9a0d523fc}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:131:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "DS3MemoryReader.cs",
+              "DocumentMoniker": "D:\\git\\DS3FogRandoOverlay\\src\\Overlay\\Services\\DS3MemoryReader.cs",
+              "RelativeDocumentMoniker": "src\\Overlay\\Services\\DS3MemoryReader.cs",
+              "ToolTip": "D:\\git\\DS3FogRandoOverlay\\src\\Overlay\\Services\\DS3MemoryReader.cs",
+              "RelativeToolTip": "src\\Overlay\\Services\\DS3MemoryReader.cs",
+              "ViewState": "AgIAAIwAAAAAAAAAAAD4v5wAAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-14T18:19:45.835Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "MainWindow.xaml.cs",
+              "DocumentMoniker": "D:\\git\\DS3FogRandoOverlay\\src\\Overlay\\MainWindow.xaml.cs",
+              "RelativeDocumentMoniker": "src\\Overlay\\MainWindow.xaml.cs",
+              "ToolTip": "D:\\git\\DS3FogRandoOverlay\\src\\Overlay\\MainWindow.xaml.cs",
+              "RelativeToolTip": "src\\Overlay\\MainWindow.xaml.cs",
+              "ViewState": "AgIAAFkBAAAAAAAAAAAzwHMBAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-14T18:15:57.57Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "AreaMapper.cs",
+              "DocumentMoniker": "D:\\git\\DS3FogRandoOverlay\\src\\Overlay\\Services\\AreaMapper.cs",
+              "RelativeDocumentMoniker": "src\\Overlay\\Services\\AreaMapper.cs",
+              "ToolTip": "D:\\git\\DS3FogRandoOverlay\\src\\Overlay\\Services\\AreaMapper.cs",
+              "RelativeToolTip": "src\\Overlay\\Services\\AreaMapper.cs",
+              "ViewState": "AgIAABgCAAAAAAAAAAAmwC4CAAAMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-14T18:15:39.628Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "TAE3.cs",
+              "DocumentMoniker": "D:\\git\\DS3FogRandoOverlay\\src\\SoulsFormats\\SoulsFormats\\Formats\\TAE3\\TAE3.cs",
+              "RelativeDocumentMoniker": "src\\SoulsFormats\\SoulsFormats\\Formats\\TAE3\\TAE3.cs",
+              "ToolTip": "D:\\git\\DS3FogRandoOverlay\\src\\SoulsFormats\\SoulsFormats\\Formats\\TAE3\\TAE3.cs",
+              "RelativeToolTip": "src\\SoulsFormats\\SoulsFormats\\Formats\\TAE3\\TAE3.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAAAeAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-14T18:04:26.827Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "MSB3.cs",
+              "DocumentMoniker": "D:\\git\\DS3FogRandoOverlay\\src\\SoulsFormats\\SoulsFormats\\Formats\\MSB\\MSB3\\MSB3.cs",
+              "RelativeDocumentMoniker": "src\\SoulsFormats\\SoulsFormats\\Formats\\MSB\\MSB3\\MSB3.cs",
+              "ToolTip": "D:\\git\\DS3FogRandoOverlay\\src\\SoulsFormats\\SoulsFormats\\Formats\\MSB\\MSB3\\MSB3.cs",
+              "RelativeToolTip": "src\\SoulsFormats\\SoulsFormats\\Formats\\MSB\\MSB3\\MSB3.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAZAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-14T18:04:19.548Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "SFEncoding.cs",
+              "DocumentMoniker": "C:\\Users\\domin\\source\\repos\\SoulsFormats\\SoulsFormats\\Util\\SFEncoding.cs",
+              "ToolTip": "C:\\Users\\domin\\source\\repos\\SoulsFormats\\SoulsFormats\\Util\\SFEncoding.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAAMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-14T16:09:06.195Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "MsbParser.cs",
+              "DocumentMoniker": "D:\\git\\DS3FogRandoOverlay\\src\\Overlay\\Services\\MsbParser.cs",
+              "RelativeDocumentMoniker": "src\\Overlay\\Services\\MsbParser.cs",
+              "ToolTip": "D:\\git\\DS3FogRandoOverlay\\src\\Overlay\\Services\\MsbParser.cs",
+              "RelativeToolTip": "src\\Overlay\\Services\\MsbParser.cs",
+              "ViewState": "AgIAAF4AAAAAAAAAAAAjwGsAAAAQAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-14T16:07:24.779Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "TestMsbParsing.cs",
+              "DocumentMoniker": "D:\\git\\DS3FogRandoOverlay\\src\\Overlay\\TestMsbParsing.cs",
+              "RelativeDocumentMoniker": "src\\Overlay\\TestMsbParsing.cs",
+              "ToolTip": "D:\\git\\DS3FogRandoOverlay\\src\\Overlay\\TestMsbParsing.cs",
+              "RelativeToolTip": "src\\Overlay\\TestMsbParsing.cs",
+              "ViewState": "AgIAAAsAAAAAAAAAAAAgwAwAAAAIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-14T16:06:15.759Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "UnitTest1.cs",
+              "DocumentMoniker": "D:\\git\\DS3FogRandoOverlay\\src\\Tests\\Tests\\UnitTest1.cs",
+              "RelativeDocumentMoniker": "src\\Tests\\Tests\\UnitTest1.cs",
+              "ToolTip": "D:\\git\\DS3FogRandoOverlay\\src\\Tests\\Tests\\UnitTest1.cs",
+              "RelativeToolTip": "src\\Tests\\Tests\\UnitTest1.cs",
+              "ViewState": "AgIAABAAAAAAAAAAAAAIwFYAAAAMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-14T16:05:53.683Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
