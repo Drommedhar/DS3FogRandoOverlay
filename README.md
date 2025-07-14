@@ -13,6 +13,7 @@ A lightweight C# .NET 8 WPF overlay application for Dark Souls 3 that provides r
 - **Boss Highlighting**: Special highlighting for boss fog gates
 - **Persistent Settings**: Remembers window size and position
 - **Resizable**: Adjustable window size with visual resize grip
+- **Hover Tooltips**: Detailed spoiler log information when hovering over fog gates
 
 ## Requirements
 
@@ -88,6 +89,7 @@ To capture the overlay in OBS for streaming/recording:
 - **Drag bottom-right corner**: Resize window
 - **Right-click**: Access context menu with all options
 - **Mouse wheel**: Scroll through fog gates (scrollbar hidden for clean appearance)
+- **Hover over fog gates**: Show detailed spoiler log information in tooltips
 
 ## Configuration
 
@@ -123,6 +125,11 @@ Parses spoiler log files to extract:
 - **Distance Always Visible**: Smart text handling ensures distance info is never cut off
 - **Location Matching**: Gates matching your current location are highlighted in green
 - **Real-time Updates**: Distance updates as you move through the world
+- **Rich Tooltips**: Hover over fog gates to see detailed spoiler log information including:
+  - Destination area details and scaling percentage
+  - Boss area indicators
+  - Connection information (random vs preexisting)
+  - Multiple connection paths from/to the area
 
 ## OBS Streaming Tips
 
