@@ -11,6 +11,8 @@ namespace DS3FogRandoOverlay.Services
             public string DarkSouls3Path { get; set; } = @"C:\Program Files (x86)\Steam\steamapps\common\DARK SOULS III";
             public double WindowLeft { get; set; } = -1;
             public double WindowTop { get; set; } = -1;
+            public double WindowWidth { get; set; } = 320;
+            public double WindowHeight { get; set; } = 400;
             public bool AlwaysOnTop { get; set; } = true;
             public double UpdateIntervalMs { get; set; } = 500;
         }

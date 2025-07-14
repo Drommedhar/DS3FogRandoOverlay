@@ -27,7 +27,7 @@ namespace DS3FogRandoOverlay
         private SpoilerLogData? currentSpoilerData;
         private string? lastKnownArea;
         private DS3FogRandoOverlay.Services.Vector3? lastKnownPosition;
-        private bool isOverlayVisible = true;
+        private bool isConnectedToDS3 = false;
 
         private DateTime lastFogGateUpdate = DateTime.MinValue;
         private bool hasActiveFogGates = false;
@@ -55,14 +55,18 @@ namespace DS3FogRandoOverlay
             };
             fogGateUpdateTimer.Tick += FogGateUpdateTimer_Tick;
 
+            // Add event handlers for window state changes
+            this.LocationChanged += (s, e) => SaveWindowSettings();
+            this.SizeChanged += (s, e) => SaveWindowSettings();
+            this.Closing += (s, e) => SaveWindowSettings();
+
             InitializeOverlay();
         }
 
         private void InitializeOverlay()
         {
-            // Position overlay in top-right corner
-            this.Left = SystemParameters.PrimaryScreenWidth - this.Width - 20;
-            this.Top = 20;
+            // Load window size and position from config
+            LoadWindowSettings();
 
             // Load spoiler log data
             LoadSpoilerLogData();
@@ -70,15 +74,19 @@ namespace DS3FogRandoOverlay
             // Try to attach to DS3
             if (memoryReader.AttachToDS3())
             {
+                isConnectedToDS3 = true;
                 StatusText.Text = "Connected to DS3";
                 StatusText.Foreground = System.Windows.Media.Brushes.Green;
+                SetMinimalMode(true);
                 updateTimer.Start();
-                fogGateUpdateTimer.Start(); // Start the fog gate update timer
+                fogGateUpdateTimer.Start();
             }
             else
             {
+                isConnectedToDS3 = false;
                 StatusText.Text = "DS3 not found";
                 StatusText.Foreground = System.Windows.Media.Brushes.Red;
+                SetMinimalMode(false);
 
                 // Retry connection every 2 seconds
                 var retryTimer = new DispatcherTimer
@@ -89,10 +97,12 @@ namespace DS3FogRandoOverlay
                 {
                     if (memoryReader.AttachToDS3())
                     {
+                        isConnectedToDS3 = true;
                         StatusText.Text = "Connected to DS3";
                         StatusText.Foreground = System.Windows.Media.Brushes.Green;
+                        SetMinimalMode(true);
                         updateTimer.Start();
-                        fogGateUpdateTimer.Start(); // Start the fog gate update timer
+                        fogGateUpdateTimer.Start();
                         retryTimer.Stop();
                     }
                 };
@@ -262,30 +272,75 @@ namespace DS3FogRandoOverlay
             // Display MSB fog gates with distances
             if (enhancedMsbGates.Any())
             {
-                var msbHeaderText = new TextBlock
-                {
-                    Text = "Fog Gates:",
-                    Style = (Style)FindResource("OverlayTextStyle"),
-                    FontWeight = FontWeights.Bold,
-                    Margin = new Thickness(0, 5, 0, 2)
-                };
-                FogGatesPanel.Children.Add(msbHeaderText);
-
                 foreach (var enhancedGate in enhancedMsbGates)
                 {
-                    var gateText = new TextBlock
+                    // For very long names, use a vertical layout instead
+                    if (enhancedGate.DisplayName.Length > 35)
                     {
-                        Text = $"📍 {enhancedGate.DisplayName} ({enhancedGate.DistanceString}u)",
-                        Style = (Style)FindResource("FogGateTextStyle"),
-                        Margin = new Thickness(10, 1, 0, 1)
-                    };
+                        // Use vertical layout for long names
+                        var gateContainer = new StackPanel
+                        {
+                            Orientation = Orientation.Vertical,
+                            Margin = new Thickness(10, 1, 0, 3)
+                        };
 
-                    if (enhancedGate.IsLocationMatched)
-                    {
-                        gateText.Foreground = System.Windows.Media.Brushes.LightGreen;
+                        var gateNameText = new TextBlock
+                        {
+                            Text = $"📍 {enhancedGate.DisplayName}",
+                            Style = (Style)FindResource("FogGateTextStyle"),
+                            TextWrapping = TextWrapping.Wrap
+                        };
+
+                        var distanceText = new TextBlock
+                        {
+                            Text = $"   Distance: {enhancedGate.DistanceString}u",
+                            Style = (Style)FindResource("DistanceTextStyle"),
+                            Margin = new Thickness(0, 1, 0, 0)
+                        };
+
+                        if (enhancedGate.IsLocationMatched)
+                        {
+                            gateNameText.Foreground = System.Windows.Media.Brushes.LightGreen;
+                        }
+
+                        gateContainer.Children.Add(gateNameText);
+                        gateContainer.Children.Add(distanceText);
+                        FogGatesPanel.Children.Add(gateContainer);
                     }
+                    else
+                    {
+                        // Use horizontal layout for shorter names
+                        var gateContainer = new StackPanel
+                        {
+                            Orientation = Orientation.Horizontal,
+                            Margin = new Thickness(10, 1, 0, 1)
+                        };
 
-                    FogGatesPanel.Children.Add(gateText);
+                        var gateNameText = new TextBlock
+                        {
+                            Text = $"📍 {enhancedGate.DisplayName}",
+                            Style = (Style)FindResource("FogGateTextStyle"),
+                            VerticalAlignment = VerticalAlignment.Center,
+                            TextTrimming = TextTrimming.CharacterEllipsis
+                        };
+
+                        var distanceText = new TextBlock
+                        {
+                            Text = $"({enhancedGate.DistanceString}u)",
+                            Style = (Style)FindResource("DistanceTextStyle"),
+                            VerticalAlignment = VerticalAlignment.Center,
+                            Margin = new Thickness(5, 0, 0, 0)
+                        };
+
+                        if (enhancedGate.IsLocationMatched)
+                        {
+                            gateNameText.Foreground = System.Windows.Media.Brushes.LightGreen;
+                        }
+
+                        gateContainer.Children.Add(gateNameText);
+                        gateContainer.Children.Add(distanceText);
+                        FogGatesPanel.Children.Add(gateContainer);
+                    }
                 }
             }
             else
@@ -301,6 +356,78 @@ namespace DS3FogRandoOverlay
 
 
 
+        private void LoadWindowSettings()
+        {
+            var config = configurationService.Config;
+            
+            // Load window size
+            if (config.WindowWidth > 0 && config.WindowHeight > 0)
+            {
+                this.Width = Math.Max(config.WindowWidth, this.MinWidth);
+                this.Height = Math.Max(config.WindowHeight, this.MinHeight);
+            }
+            
+            // Load window position
+            if (config.WindowLeft >= 0 && config.WindowTop >= 0)
+            {
+                // Make sure the window is still visible on screen
+                if (config.WindowLeft + this.Width <= SystemParameters.PrimaryScreenWidth &&
+                    config.WindowTop + this.Height <= SystemParameters.PrimaryScreenHeight)
+                {
+                    this.Left = config.WindowLeft;
+                    this.Top = config.WindowTop;
+                }
+                else
+                {
+                    // Position in top-right corner if saved position is off-screen
+                    this.Left = SystemParameters.PrimaryScreenWidth - this.Width - 20;
+                    this.Top = 20;
+                }
+            }
+            else
+            {
+                // Default position in top-right corner
+                this.Left = SystemParameters.PrimaryScreenWidth - this.Width - 20;
+                this.Top = 20;
+            }
+        }
+
+        private void SaveWindowSettings()
+        {
+            var config = configurationService.Config;
+            config.WindowLeft = this.Left;
+            config.WindowTop = this.Top;
+            config.WindowWidth = this.Width;
+            config.WindowHeight = this.Height;
+            configurationService.SaveConfig();
+        }
+
+        private void SetMinimalMode(bool isMinimal)
+        {
+            if (isMinimal)
+            {
+                // Hide non-gameplay elements when connected to DS3
+                StatusPanel.Visibility = Visibility.Collapsed;
+                AreaPanel.Visibility = Visibility.Collapsed;
+                HeaderText.Text = "Fog Gates";
+                
+                // Make window more compact
+                this.MinHeight = 150;
+                this.Height = Math.Max(this.Height - 100, 200);
+            }
+            else
+            {
+                // Show all elements when not connected
+                StatusPanel.Visibility = Visibility.Visible;
+                AreaPanel.Visibility = Visibility.Visible;
+                HeaderText.Text = "DS3 Fog Randomizer";
+                
+                // Reset window size
+                this.MinHeight = 200;
+                this.Height = Math.Max(this.Height, 300);
+            }
+        }
+
         private bool FuzzyAreaMatch(string areaName1, string areaName2)
         {
             // Simple fuzzy matching for area names
@@ -310,22 +437,6 @@ namespace DS3FogRandoOverlay
             return name1.Contains(name2) || name2.Contains(name1) ||
                    name1.Split(' ').Any(word => name2.Contains(word)) ||
                    name2.Split(' ').Any(word => name1.Contains(word));
-        }
-
-        private void ToggleButton_Click(object sender, RoutedEventArgs e)
-        {
-            isOverlayVisible = !isOverlayVisible;
-
-            if (isOverlayVisible)
-            {
-                this.Show();
-                ToggleButton.Content = "Hide";
-            }
-            else
-            {
-                this.Hide();
-                ToggleButton.Content = "Show";
-            }
         }
 
         private void RefreshButton_Click(object sender, RoutedEventArgs e)
@@ -438,10 +549,6 @@ namespace DS3FogRandoOverlay
         {
             switch (e.Key)
             {
-                case System.Windows.Input.Key.F1:
-                    // Toggle overlay visibility
-                    ToggleButton_Click(sender, new RoutedEventArgs());
-                    break;
                 case System.Windows.Input.Key.F5:
                     // Refresh data
                     RefreshButton_Click(sender, new RoutedEventArgs());

@@ -6,21 +6,23 @@
         xmlns:local="clr-namespace:DS3FogRandoOverlay"
         mc:Ignorable="d"
         Title="DS3 Fog Randomizer Overlay"
-        Height="600"
-        Width="400"
+        Height="400"
+        Width="320"
+        MinHeight="200"
+        MaxHeight="800"
+        MinWidth="280"
+        MaxWidth="450"
         WindowStyle="None"
         AllowsTransparency="True"
         Background="Transparent"
         Topmost="True"
         ShowInTaskbar="False"
-        ResizeMode="NoResize"
+        ResizeMode="CanResizeWithGrip"
         MouseLeftButtonDown="Window_MouseLeftButtonDown"
         KeyDown="Window_KeyDown">
 
     <Window.ContextMenu>
         <ContextMenu>
-            <MenuItem Header="Toggle Overlay (F1)"
-                      Click="ToggleButton_Click"/>
             <MenuItem Header="Refresh Data (F5)"
                       Click="RefreshButton_Click"/>
             <Separator/>
@@ -56,8 +58,9 @@
             <Setter Property="Effect">
                 <Setter.Value>
                     <DropShadowEffect Color="Black"
-                                      BlurRadius="3"
-                                      ShadowDepth="1"/>
+                                      BlurRadius="4"
+                                      ShadowDepth="2"
+                                      Opacity="0.8"/>
                 </Setter.Value>
             </Setter>
         </Style>
@@ -88,28 +91,62 @@
             <Setter Property="FontWeight"
                     Value="Bold"/>
         </Style>
+
+        <Style x:Key="DistanceTextStyle"
+               TargetType="TextBlock"
+               BasedOn="{StaticResource OverlayTextStyle}">
+            <Setter Property="Foreground"
+                    Value="Yellow"/>
+            <Setter Property="FontWeight"
+                    Value="Bold"/>
+            <Setter Property="FontSize"
+                    Value="11"/>
+        </Style>
+
+        <Style x:Key="MinimalHeaderTextStyle"
+               TargetType="TextBlock"
+               BasedOn="{StaticResource OverlayTextStyle}">
+            <Setter Property="FontWeight"
+                    Value="Bold"/>
+            <Setter Property="FontSize"
+                    Value="12"/>
+            <Setter Property="Foreground"
+                    Value="Gold"/>
+        </Style>
     </Window.Resources>
 
-    <Grid Margin="10">
-        <Border Background="#AA000000"
+    <Grid Margin="8">
+        <Border Background="#66000000"
                 CornerRadius="5"
-                Padding="10">
-            <StackPanel>
-                <!-- Drag Handle Header -->
-                <Border Background="#22FFFFFF"
+                Padding="8">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- Drag Handle Header (Always visible for repositioning) -->
+                <Border Grid.Row="0"
+                        x:Name="HeaderBorder"
+                        Background="#44FFFFFF"
                         CornerRadius="3"
-                        Padding="5"
-                        Margin="0,0,0,10"
+                        Padding="4"
+                        Margin="0,0,0,8"
                         Cursor="SizeAll"
-                        ToolTip="Drag to move overlay. Right-click for options. F1=Toggle, F5=Refresh, F9=Reset, Esc=Exit">
+                        ToolTip="Drag to move. Resize from bottom-right. Right-click for options. F5=Refresh, F9=Reset, Esc=Exit">
                     <TextBlock x:Name="HeaderText"
-                               Text="DS3 Fog Randomizer Overlay"
-                               Style="{StaticResource HeaderTextStyle}"
+                               Text="Fog Gates"
+                               Style="{StaticResource MinimalHeaderTextStyle}"
                                HorizontalAlignment="Center"/>
                 </Border>
 
-                <!-- Status -->
-                <StackPanel Orientation="Horizontal"
+                <!-- Status (Hidden when connected to DS3) -->
+                <StackPanel Grid.Row="1"
+                            x:Name="StatusPanel"
+                            Orientation="Horizontal"
                             Margin="0,0,0,5">
                     <TextBlock Text="Status: "
                                Style="{StaticResource OverlayTextStyle}"/>
@@ -119,10 +156,12 @@
                                Foreground="Yellow"/>
                 </StackPanel>
 
-                <!-- Current Area -->
-                <StackPanel Orientation="Horizontal"
-                            Margin="0,0,0,10">
-                    <TextBlock Text="Current Area: "
+                <!-- Current Area (Hidden when connected to DS3) -->
+                <StackPanel Grid.Row="2"
+                            x:Name="AreaPanel"
+                            Orientation="Horizontal"
+                            Margin="0,0,0,8">
+                    <TextBlock Text="Area: "
                                Style="{StaticResource OverlayTextStyle}"/>
                     <TextBlock x:Name="CurrentAreaText"
                                Text="Unknown"
@@ -130,42 +169,27 @@
                                Foreground="Cyan"/>
                 </StackPanel>
 
-                <!-- Fog Gates Section -->
-                <TextBlock Text="Available Fog Gates:"
-                           Style="{StaticResource HeaderTextStyle}"
-                           Margin="0,5,0,5"/>
-
-                <ScrollViewer x:Name="FogGatesScrollViewer"
-                              MaxHeight="400"
-                              VerticalScrollBarVisibility="Auto"
-                              HorizontalScrollBarVisibility="Disabled">
+                <ScrollViewer Grid.Row="3"
+                              x:Name="FogGatesScrollViewer"
+                              VerticalScrollBarVisibility="Hidden"
+                              HorizontalScrollBarVisibility="Disabled"
+                              Margin="0,0,0,5">
                     <StackPanel x:Name="FogGatesPanel"/>
                 </ScrollViewer>
 
-                <!-- Controls -->
-                <StackPanel Orientation="Horizontal"
-                            HorizontalAlignment="Center"
-                            Margin="0,10,0,0">
-                    <Button x:Name="ToggleButton"
-                            Content="Hide"
-                            Width="60"
-                            Height="25"
-                            Margin="5,0"
-                            Click="ToggleButton_Click"/>
-                    <Button x:Name="RefreshButton"
-                            Content="Refresh"
-                            Width="60"
-                            Height="25"
-                            Margin="5,0"
-                            Click="RefreshButton_Click"/>
-                    <Button x:Name="ExitButton"
-                            Content="Exit"
-                            Width="60"
-                            Height="25"
-                            Margin="5,0"
-                            Click="ExitButton_Click"/>
-                </StackPanel>
-            </StackPanel>
+                <!-- Resize Grip Indicator -->
+                <Grid Grid.Row="4"
+                      HorizontalAlignment="Right"
+                      VerticalAlignment="Bottom"
+                      Width="12"
+                      Height="12"
+                      Margin="0,3,0,0">
+                    <Path Data="M 0,12 L 12,0 M 4,12 L 12,4 M 8,12 L 12,8"
+                          Stroke="#44FFFFFF"
+                          StrokeThickness="1"
+                          ToolTip="Drag to resize window"/>
+                </Grid>
+            </Grid>
         </Border>
     </Grid>
 </Window>
