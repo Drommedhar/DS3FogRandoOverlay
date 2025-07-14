@@ -1,0 +1,83 @@
+<Window x:Class="DS3FogRandoOverlay.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="Settings - DS3 Fog Randomizer Overlay"
+        Height="350"
+        Width="600"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <Border Grid.Row="0" Background="#2D2D30" Padding="15">
+            <TextBlock Text="Settings" FontSize="16" FontWeight="Bold" Foreground="White"/>
+        </Border>
+
+        <!-- Content -->
+        <ScrollViewer Grid.Row="1" Margin="15">
+            <StackPanel>
+                <GroupBox Header="Dark Souls 3 Installation" Margin="0,0,0,20">
+                    <Grid Margin="10">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Grid.Row="0" Text="Dark Souls 3 Path:" Margin="0,0,0,5"/>
+                        <Grid Grid.Row="1" Margin="0,0,0,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBox x:Name="DarkSouls3PathTextBox" Grid.Column="0" Margin="0,0,10,0" TextChanged="DarkSouls3PathTextBox_TextChanged"/>
+                            <Button x:Name="BrowseButton" Grid.Column="1" Content="Browse..." Width="80" Click="BrowseButton_Click"/>
+                        </Grid>
+
+                        <Button x:Name="AutoDetectButton" Grid.Row="2" Content="Auto-Detect Dark Souls 3" 
+                                Width="200" HorizontalAlignment="Left" Margin="0,0,0,10" Click="AutoDetectButton_Click"/>
+
+                        <TextBlock Grid.Row="3" Text="Status:" Margin="0,0,0,5"/>
+                        <TextBlock x:Name="StatusTextBlock" Grid.Row="4" Text="Ready" Foreground="Green" FontWeight="Bold"/>
+                    </Grid>
+                </GroupBox>
+
+                <GroupBox Header="Path Detection Results" Margin="0,0,0,20">
+                    <Grid Margin="10">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Grid.Row="0" Text="Fog Directory:" Margin="0,0,0,5"/>
+                        <TextBlock x:Name="FogPathTextBlock" Grid.Row="1" Margin="15,0,0,10" Foreground="Gray"/>
+
+                        <TextBlock Grid.Row="2" Text="Events File:" Margin="0,0,0,5"/>
+                        <TextBlock x:Name="EventsPathTextBlock" Grid.Row="3" Margin="15,0,0,10" Foreground="Gray"/>
+                    </Grid>
+                </GroupBox>
+            </StackPanel>
+        </ScrollViewer>
+
+        <!-- Buttons -->
+        <Border Grid.Row="2" Background="#F0F0F0" Padding="15">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button x:Name="SaveButton" Content="Save" Width="80" Margin="0,0,10,0" Click="SaveButton_Click"/>
+                <Button x:Name="CancelButton" Content="Cancel" Width="80" Click="CancelButton_Click"/>
+            </StackPanel>
+        </Border>
+    </Grid>
+</Window>

@@ -14,11 +14,23 @@ namespace DS3FogRandoOverlay.Services
     public class MsbParser
     {
         private readonly Dictionary<string, List<MsbFogGate>> _cachedFogGates = new();
-        private readonly string _mapStudioPath;
+        private readonly string? _mapStudioPath;
+        private readonly string _darkSouls3Path;
 
-        public MsbParser(string? mapStudioPath = null)
+        public MsbParser(string? darkSouls3Path = null, string? mapStudioPath = null)
         {
-            _mapStudioPath = mapStudioPath ?? @"c:\Program Files (x86)\Steam\steamapps\common\DARK SOULS III\Game\fog\map\mapstudio";
+            _darkSouls3Path = darkSouls3Path ?? PathResolver.AutoDetectDarkSouls3Path() ?? @"C:\Program Files (x86)\Steam\steamapps\common\DARK SOULS III";
+            
+            if (!string.IsNullOrEmpty(mapStudioPath))
+            {
+                _mapStudioPath = mapStudioPath;
+            }
+            else
+            {
+                // Auto-resolve mapstudio path using PathResolver
+                var pathResolver = new PathResolver(_darkSouls3Path);
+                _mapStudioPath = pathResolver.FindMapStudioDirectory();
+            }
         }
 
         /// <summary>
@@ -28,6 +40,13 @@ namespace DS3FogRandoOverlay.Services
         {
             if (_cachedFogGates.Any())
                 return _cachedFogGates;
+
+            if (string.IsNullOrEmpty(_mapStudioPath) || !Directory.Exists(_mapStudioPath))
+            {
+                File.AppendAllText("ds3_debug.log",
+                    $"[MsbParser] {DateTime.Now:HH:mm:ss.fff} - MapStudio path not found: {_mapStudioPath ?? "null"}\n");
+                return _cachedFogGates;
+            }
 
             var msbFiles = Directory.GetFiles(_mapStudioPath, "*.msb.dcx");
             

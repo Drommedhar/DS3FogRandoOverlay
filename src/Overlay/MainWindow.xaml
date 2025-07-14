@@ -24,6 +24,9 @@
             <MenuItem Header="Refresh Data (F5)"
                       Click="RefreshButton_Click"/>
             <Separator/>
+            <MenuItem Header="Settings..."
+                      Click="Settings_Click"/>
+            <Separator/>
             <MenuItem Header="Debug Options">
                 <MenuItem Header="Scan for Area IDs"
                           Click="ScanAreaIds_Click"/>

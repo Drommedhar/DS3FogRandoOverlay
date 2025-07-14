@@ -22,7 +22,14 @@ namespace DS3FogRandoOverlay.Services
 
         public SpoilerLogData? ParseLatestSpoilerLog()
         {
-            var fogModPath = configService.Config.FogModPath;
+            var darkSouls3Path = configService.Config.DarkSouls3Path;
+            if (string.IsNullOrEmpty(darkSouls3Path) || !Directory.Exists(darkSouls3Path))
+                return null;
+
+            // Use PathResolver to find the fog directory
+            var pathResolver = new PathResolver(darkSouls3Path);
+            var fogModPath = pathResolver.FindFogDirectory();
+            
             if (string.IsNullOrEmpty(fogModPath) || !Directory.Exists(fogModPath))
                 return null;
 
@@ -135,6 +142,14 @@ namespace DS3FogRandoOverlay.Services
             }
         }
 
-        public string GetFogModPath() => configService.Config.FogModPath;
+        public string? GetFogModPath()
+        {
+            var darkSouls3Path = configService.Config.DarkSouls3Path;
+            if (string.IsNullOrEmpty(darkSouls3Path))
+                return null;
+                
+            var pathResolver = new PathResolver(darkSouls3Path);
+            return pathResolver.FindFogDirectory();
+        }
     }
 }

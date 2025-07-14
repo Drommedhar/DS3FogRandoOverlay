@@ -46,3 +46,5 @@ D:\git\DS3FogRandoOverlay\src\Overlay\obj\Debug\net8.0-windows\DS3FogRa.92755E74
 D:\git\DS3FogRandoOverlay\src\Overlay\obj\Debug\net8.0-windows\DS3FogRandoOverlay.dll
 D:\git\DS3FogRandoOverlay\src\Overlay\obj\Debug\net8.0-windows\DS3FogRandoOverlay.pdb
 D:\git\DS3FogRandoOverlay\src\Overlay\obj\Debug\net8.0-windows\DS3FogRandoOverlay.genruntimeconfig.cache
+D:\git\DS3FogRandoOverlay\src\Overlay\obj\Debug\net8.0-windows\SettingsWindow.baml
+D:\git\DS3FogRandoOverlay\src\Overlay\obj\Debug\net8.0-windows\SettingsWindow.g.cs

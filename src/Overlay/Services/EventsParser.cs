@@ -12,18 +12,63 @@ namespace DS3FogRandoOverlay.Services
     {
         private readonly Dictionary<string, string> _fogGateNames = new(); // Key: fog gate ID, Value: description
         private readonly Dictionary<int, string> _entityIdToFogGateNames = new(); // Key: entity ID, Value: description
-        private readonly string _eventsFilePath;
+        private readonly string? _eventsFilePath;
+        private readonly string _darkSouls3Path;
         private bool _isLoaded = false;
 
         public EventsParser()
         {
-            // Default path to events.txt in the DS3 fog mod directory
-            _eventsFilePath = @"C:\Program Files (x86)\Steam\steamapps\common\DARK SOULS III\Game\fog\fogdist\events.txt";
+            // Try to auto-detect Dark Souls 3 path
+            _darkSouls3Path = PathResolver.AutoDetectDarkSouls3Path() ?? @"C:\Program Files (x86)\Steam\steamapps\common\DARK SOULS III";
+            _eventsFilePath = ResolveEventsPath();
         }
 
-        public EventsParser(string eventsFilePath)
+        public EventsParser(string darkSouls3Path)
         {
-            _eventsFilePath = eventsFilePath;
+            _darkSouls3Path = darkSouls3Path ?? throw new ArgumentNullException(nameof(darkSouls3Path));
+            _eventsFilePath = ResolveEventsPath();
+        }
+
+        public EventsParser(string darkSouls3Path, string eventsFilePath)
+        {
+            _darkSouls3Path = darkSouls3Path ?? throw new ArgumentNullException(nameof(darkSouls3Path));
+            _eventsFilePath = eventsFilePath ?? throw new ArgumentNullException(nameof(eventsFilePath));
+        }
+
+        /// <summary>
+        /// Get the resolved path to the events.txt file
+        /// </summary>
+        public string? EventsFilePath => _eventsFilePath;
+
+        /// <summary>
+        /// Resolve the path to events.txt using PathResolver
+        /// </summary>
+        private string? ResolveEventsPath()
+        {
+            try
+            {
+                var pathResolver = new PathResolver(_darkSouls3Path);
+                var eventsPath = pathResolver.FindEventsFile();
+                
+                if (!string.IsNullOrEmpty(eventsPath))
+                {
+                    File.AppendAllText("ds3_debug.log",
+                        $"[EventsParser] {DateTime.Now:HH:mm:ss.fff} - Resolved events.txt path: {eventsPath}\n");
+                    return eventsPath;
+                }
+                else
+                {
+                    File.AppendAllText("ds3_debug.log",
+                        $"[EventsParser] {DateTime.Now:HH:mm:ss.fff} - Could not resolve events.txt path for DS3 path: {_darkSouls3Path}\n");
+                    return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                File.AppendAllText("ds3_debug.log",
+                    $"[EventsParser] {DateTime.Now:HH:mm:ss.fff} - Error resolving events.txt path: {ex.Message}\n");
+                return null;
+            }
         }
 
         /// <summary>
@@ -74,10 +119,10 @@ namespace DS3FogRandoOverlay.Services
 
             try
             {
-                if (!File.Exists(_eventsFilePath))
+                if (string.IsNullOrEmpty(_eventsFilePath) || !File.Exists(_eventsFilePath))
                 {
                     System.IO.File.AppendAllText("ds3_debug.log",
-                        $"[EventsParser] {DateTime.Now:HH:mm:ss.fff} - Events file not found: {_eventsFilePath}\n");
+                        $"[EventsParser] {DateTime.Now:HH:mm:ss.fff} - Events file not found: {_eventsFilePath ?? "null"}\n");
                     _isLoaded = true;
                     return;
                 }

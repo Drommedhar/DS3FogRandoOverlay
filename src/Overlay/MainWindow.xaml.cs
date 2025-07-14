@@ -2,6 +2,7 @@ using DS3FogRandoOverlay.Models;
 using DS3FogRandoOverlay.Services;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -19,6 +20,7 @@ namespace DS3FogRandoOverlay
         private readonly AreaMapper areaMapper;
         private readonly MsbParser msbParser;
         private readonly EventsParser eventsParser;
+        private readonly ConfigurationService configurationService;
         private readonly DispatcherTimer updateTimer;
         private readonly DispatcherTimer fogGateUpdateTimer;
 
@@ -34,11 +36,12 @@ namespace DS3FogRandoOverlay
         {
             InitializeComponent();
 
+            configurationService = new ConfigurationService();
             memoryReader = new DS3MemoryReader();
-            spoilerLogParser = new SpoilerLogParser();
+            spoilerLogParser = new SpoilerLogParser(configurationService);
             areaMapper = new AreaMapper();
-            msbParser = new MsbParser();
-            eventsParser = new EventsParser();
+            msbParser = new MsbParser(configurationService.Config.DarkSouls3Path);
+            eventsParser = new EventsParser(configurationService.Config.DarkSouls3Path);
 
             updateTimer = new DispatcherTimer
             {
@@ -538,6 +541,65 @@ namespace DS3FogRandoOverlay
         {
             LoadSpoilerLogData();
             UpdateFogGatesDisplay(lastKnownArea);
+        }
+
+        private void Settings_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var settingsWindow = new SettingsWindow(configurationService)
+                {
+                    Owner = this
+                };
+
+                var result = settingsWindow.ShowDialog();
+                
+                if (result == true && settingsWindow.SettingsChanged)
+                {
+                    // Restart the services with new paths
+                    RestartServicesWithNewPaths();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error opening settings: {ex.Message}", "Settings Error",
+                              MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void RestartServicesWithNewPaths()
+        {
+            try
+            {
+                // Stop timers temporarily
+                updateTimer.Stop();
+                fogGateUpdateTimer.Stop();
+
+                // Reload services with new paths
+                // Note: We can't easily recreate the services since they're readonly fields
+                // Instead, we'll reload their data
+                eventsParser.Reload();
+                spoilerLogParser.ParseLatestSpoilerLog();
+
+                File.AppendAllText("ds3_debug.log",
+                    $"[MainWindow] {DateTime.Now:HH:mm:ss.fff} - Services restarted with new paths\n");
+
+                // Restart timers
+                updateTimer.Start();
+                fogGateUpdateTimer.Start();
+
+                // Force a refresh
+                LoadSpoilerLogData();
+                UpdateFogGatesDisplay(lastKnownArea);
+            }
+            catch (Exception ex)
+            {
+                File.AppendAllText("ds3_debug.log",
+                    $"[MainWindow] {DateTime.Now:HH:mm:ss.fff} - Error restarting services: {ex.Message}\n");
+                
+                MessageBox.Show($"Error restarting services with new paths: {ex.Message}\n\nPlease restart the application.",
+                              "Service Restart Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
         }
 
         private void ExitButton_Click(object sender, RoutedEventArgs e)
