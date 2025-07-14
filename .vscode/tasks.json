@@ -1,0 +1,178 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "build",
+			"type": "shell",
+			"command": "dotnet",
+			"args": [
+				"build",
+				"--configuration",
+				"Debug"
+			],
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"isBackground": false,
+			"problemMatcher": [
+				"$msCompile"
+			],
+			"presentation": {
+				"echo": true,
+				"reveal": "silent",
+				"focus": false,
+				"panel": "shared"
+			}
+		},
+		{
+			"label": "build-release",
+			"type": "shell",
+			"command": "dotnet",
+			"args": [
+				"build",
+				"--configuration",
+				"Release"
+			],
+			"group": "build",
+			"isBackground": false,
+			"problemMatcher": [
+				"$msCompile"
+			],
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared"
+			}
+		},
+		{
+			"label": "clean",
+			"type": "shell",
+			"command": "dotnet",
+			"args": [
+				"clean"
+			],
+			"group": "build",
+			"isBackground": false,
+			"problemMatcher": [
+				"$msCompile"
+			],
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared"
+			}
+		},
+		{
+			"label": "restore",
+			"type": "shell",
+			"command": "dotnet",
+			"args": [
+				"restore"
+			],
+			"group": "build",
+			"isBackground": false,
+			"problemMatcher": [
+				"$msCompile"
+			],
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared"
+			}
+		},
+		{
+			"label": "run",
+			"type": "shell",
+			"command": "dotnet",
+			"args": [
+				"run"
+			],
+			"group": "test",
+			"isBackground": false,
+			"dependsOn": "build",
+			"problemMatcher": [
+				"$msCompile"
+			],
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": true,
+				"panel": "shared"
+			}
+		},
+		{
+			"label": "run-release",
+			"type": "shell",
+			"command": "dotnet",
+			"args": [
+				"run",
+				"--configuration",
+				"Release"
+			],
+			"group": "test",
+			"isBackground": false,
+			"dependsOn": "build-release",
+			"problemMatcher": [
+				"$msCompile"
+			],
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": true,
+				"panel": "shared"
+			}
+		},
+		{
+			"label": "publish",
+			"type": "shell",
+			"command": "dotnet",
+			"args": [
+				"publish",
+				"--configuration",
+				"Release",
+				"--output",
+				"./publish",
+				"--self-contained",
+				"true",
+				"--runtime",
+				"win-x64"
+			],
+			"group": "build",
+			"isBackground": false,
+			"dependsOn": "clean",
+			"problemMatcher": [
+				"$msCompile"
+			],
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": true,
+				"panel": "shared"
+			}
+		},
+		{
+			"label": "watch",
+			"type": "shell",
+			"command": "dotnet",
+			"args": [
+				"watch",
+				"run"
+			],
+			"group": "test",
+			"isBackground": true,
+			"problemMatcher": [
+				"$msCompile"
+			],
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared"
+			}
+		}
+	]
+}

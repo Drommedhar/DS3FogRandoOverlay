@@ -1,0 +1,23 @@
+{
+    "recommendations": [
+        // Essential C# and .NET extensions
+        "ms-dotnettools.csharp",
+        "ms-dotnettools.csdevkit",
+        "ms-dotnettools.vscode-dotnet-runtime",
+        // XAML and WPF support
+        "ms-dotnettools.dotnet-interactive-vscode",
+        // Code quality and productivity
+        "streetsidesoftware.code-spell-checker",
+        "formulahendry.code-runner",
+        "ms-vscode.powershell",
+        // Git integration
+        "mhutchie.git-graph",
+        "eamodio.gitlens",
+        // Debugging and profiling
+        "ms-vscode.vscode-json",
+        // General productivity
+        "ms-vscode.hexeditor",
+        "redhat.vscode-xml",
+        "ms-vscode.cmake-tools"
+    ]
+}

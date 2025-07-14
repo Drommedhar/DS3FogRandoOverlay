@@ -1,0 +1,46 @@
+{
+    "folders": [
+        {
+            "name": "DS3 Fog Randomizer Overlay",
+            "path": "."
+        }
+    ],
+    "settings": {
+        // Workspace-specific settings
+        "files.associations": {
+            "*.xaml": "xml",
+            "*.csproj": "xml",
+            "*.sln": "text"
+        },
+        // Build and run configurations
+        "dotnet.completion.showCompletionItemsFromUnimportedNamespaces": true,
+        "dotnet.server.useOmnisharp": false,
+        // Editor preferences for this project
+        "editor.rulers": [
+            120
+        ],
+        "editor.wordWrap": "wordWrapColumn",
+        "editor.wordWrapColumn": 120,
+        // Project-specific file watching
+        "files.watcherExclude": {
+            "**/bin/**": true,
+            "**/obj/**": true,
+            "**/.vs/**": true,
+            "**/publish/**": true
+        }
+    },
+    "tasks": {
+        "version": "2.0.0",
+        "tasks": []
+    },
+    "launch": {
+        "version": "0.2.0",
+        "configurations": []
+    },
+    "extensions": {
+        "recommendations": [
+            "ms-dotnettools.csharp",
+            "ms-dotnettools.csdevkit"
+        ]
+    }
+}
