@@ -1,3 +1,5 @@
+using DS3Parser.Models;
+
 namespace DS3FogRandoOverlay.Models
 {
     /// <summary>

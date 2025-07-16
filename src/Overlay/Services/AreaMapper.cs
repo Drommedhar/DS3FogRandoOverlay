@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using DS3FogRandoOverlay.Models;
 using System.Linq;
+using DS3Parser.Models;
 
 namespace DS3FogRandoOverlay.Services
 {

@@ -2,11 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Numerics;
-using DS3FogRandoOverlay.Models;
+using DS3Parser.Models;
 using SoulsFormats;
 
-namespace DS3FogRandoOverlay.Services
+namespace DS3Parser.Services
 {
     /// <summary>
     /// Service for parsing MSB (MapStudio Binary) files to extract fog gate information
@@ -17,19 +16,13 @@ namespace DS3FogRandoOverlay.Services
         private readonly string? _mapStudioPath;
         private readonly string _darkSouls3Path;
 
-        public MsbParser(string? darkSouls3Path = null, string? mapStudioPath = null)
+        public MsbParser(string darkSouls3Path, string? mapStudioPath = null)
         {
-            _darkSouls3Path = darkSouls3Path ?? PathResolver.AutoDetectDarkSouls3Path() ?? @"C:\Program Files (x86)\Steam\steamapps\common\DARK SOULS III";
+            _darkSouls3Path = darkSouls3Path;
             
             if (!string.IsNullOrEmpty(mapStudioPath))
             {
                 _mapStudioPath = mapStudioPath;
-            }
-            else
-            {
-                // Auto-resolve mapstudio path using PathResolver
-                var pathResolver = new PathResolver(_darkSouls3Path);
-                _mapStudioPath = pathResolver.FindMapStudioDirectory();
             }
         }
 
@@ -224,36 +217,6 @@ namespace DS3FogRandoOverlay.Services
                 Console.WriteLine($"Error creating fog gate from collision part: {ex.Message}");
                 return null;
             }
-        }
-
-        /// <summary>
-        /// Get fog gates within a certain distance of a position
-        /// </summary>
-        public List<MsbFogGate> GetNearbyFogGates(string mapId, System.Numerics.Vector3 playerPosition, float maxDistance = 100f)
-        {
-            var fogGates = GetFogGatesForMap(mapId);
-            var nearbyFogGates = new List<MsbFogGate>();
-
-            foreach (var fogGate in fogGates)
-            {
-                var distance = System.Numerics.Vector3.Distance(playerPosition, fogGate.Position);
-                if (distance <= maxDistance)
-                {
-                    fogGate.DistanceToPlayer = distance;
-                    nearbyFogGates.Add(fogGate);
-                }
-            }
-
-            return nearbyFogGates.OrderBy(fg => fg.DistanceToPlayer ?? float.MaxValue).ToList();
-        }
-
-        /// <summary>
-        /// Get fog gates within a certain distance of a position (using DS3MemoryReader.Vector3)
-        /// </summary>
-        public List<MsbFogGate> GetNearbyFogGates(string mapId, DS3FogRandoOverlay.Services.Vector3 playerPosition, float maxDistance = 100f)
-        {
-            var systemPosition = new System.Numerics.Vector3(playerPosition.X, playerPosition.Y, playerPosition.Z);
-            return GetNearbyFogGates(mapId, systemPosition, maxDistance);
         }
 
         /// <summary>

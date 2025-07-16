@@ -70,5 +70,30 @@ namespace DS3Parser.Models
         /// Whether this is a DLC area
         /// </summary>
         public bool IsDLC => Tags.Contains("dlc1") || Tags.Contains("dlc2");
+
+        public static string GetAreaId(string name)
+        {
+            return name switch
+            {
+                "highwall" => "m30_00_00_00",
+                "lothric" => "m30_00_00_00",
+                "settlement" => "m31_00_00_00",
+                "archdragon" => "m32_00_00_00",
+                "farronkeep" => "m33_00_00_00",
+                "archives" => "m34_00_00_00",
+                "cathedral" => "m35_00_00_00",
+                "irithyll" => "m37_00_00_00",
+                "catacombs" => "m38_00_00_00",
+                "dungeon" => "m39_00_00_00",
+                "firelink" => "m40_00_00_00",
+                "untended" => "m40_00_00_00",
+                "kiln" => "m41_00_00_00",
+                "ariandel" => "m45_00_00_00",
+                "dregheap" => "m50_00_00_00",
+                "ringedcity" => "m51_00_00_00",
+                "filianore" => "m51_01_00_00",
+                _ => ""
+            };
+        }
     }
 }

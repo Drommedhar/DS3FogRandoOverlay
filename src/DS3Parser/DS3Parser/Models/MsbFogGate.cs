@@ -1,6 +1,6 @@
 using System.Numerics;
 
-namespace DS3FogRandoOverlay.Models
+namespace DS3Parser.Models
 {
     /// <summary>
     /// Represents a fog gate extracted from EMEVD files
@@ -93,15 +93,6 @@ namespace DS3FogRandoOverlay.Models
         public float CalculateDistanceTo(Vector3 position)
         {
             return Vector3.Distance(this.Position, position);
-        }
-
-        /// <summary>
-        /// Calculate distance to a given position (using DS3MemoryReader.Vector3)
-        /// </summary>
-        public float CalculateDistanceTo(DS3FogRandoOverlay.Services.Vector3 position)
-        {
-            var targetPos = new Vector3(position.X, position.Y, position.Z);
-            return Vector3.Distance(this.Position, targetPos);
         }
 
         public override string ToString()

@@ -1,7 +1,6 @@
-using System;
 using System.Collections.Generic;
 
-namespace DS3FogRandoOverlay.Models
+namespace DS3Parser.Models
 {
     public class FogGate
     {
