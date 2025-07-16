@@ -147,8 +147,25 @@ public class DS3Combiner
             }
         }
         
-        _areaToGates.TryAdd(areaId, gateToObj);
-        File.AppendAllText("ds3_debug.log", $"[DS3Combiner] Added {gateToObj.Count} gates for area {areaId}\n");
+        // Merge gates if this area ID already exists (multiple areas can map to same MSB)
+        if (_areaToGates.ContainsKey(areaId))
+        {
+            var existingGates = _areaToGates[areaId];
+            foreach (var kvp in gateToObj)
+            {
+                if (!existingGates.ContainsKey(kvp.Key))
+                {
+                    existingGates[kvp.Key] = kvp.Value;
+                    File.AppendAllText("ds3_debug.log", $"[DS3Combiner] Added additional gate: {kvp.Key.Name} to existing area {areaId}\n");
+                }
+            }
+            File.AppendAllText("ds3_debug.log", $"[DS3Combiner] Merged {gateToObj.Count} gates into existing area {areaId} (total: {existingGates.Count})\n");
+        }
+        else
+        {
+            _areaToGates[areaId] = gateToObj;
+            File.AppendAllText("ds3_debug.log", $"[DS3Combiner] Added {gateToObj.Count} gates for new area {areaId}\n");
+        }
     }
 
     /// <summary>

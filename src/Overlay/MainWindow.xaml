@@ -24,10 +24,10 @@
             <MenuItem Header="Settings..."
                       Click="Settings_Click"/>
             <Separator/>
-            <MenuItem x:Name="ToggleSpoilerMenuItem"
+            <!--><MenuItem x:Name="ToggleSpoilerMenuItem"
                       Header="Show Spoiler Information"
                       Click="ToggleSpoilerInfo_Click"/>
-            <Separator/>
+            <Separator/><!-->
             <MenuItem Header="Debug Options">
                 <MenuItem Header="Scan for Area IDs"
                           Click="ScanAreaIds_Click"/>

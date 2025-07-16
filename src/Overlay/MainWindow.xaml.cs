@@ -777,7 +777,7 @@ namespace DS3FogRandoOverlay
             
             return text;
         }
-
+/*
         private void ToggleSpoilerInfo_Click(object sender, RoutedEventArgs e)
         {
             showSpoilerInfo = !showSpoilerInfo;
@@ -790,12 +790,6 @@ namespace DS3FogRandoOverlay
             UpdateFogGatesDisplayWithDistances(lastKnownMapId);
             
             File.AppendAllText("ds3_debug.log", $"[MainWindow] {DateTime.Now:HH:mm:ss.fff} - Spoiler info toggled: {(showSpoilerInfo ? "Shown" : "Hidden")}\n");
-        }
-
-        private void ToggleFogGateExpansion(string gateKey)
-        {
-            // This method is now deprecated - spoiler info is controlled globally
-            // via the right-click menu option
-        }
+        }*/
     }
 }
