@@ -1,5 +1,6 @@
 using DS3FogRandoOverlay.Models;
 using DS3FogRandoOverlay.Services;
+using DS3Parser.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -16,18 +17,14 @@ namespace DS3FogRandoOverlay
     public partial class MainWindow : Window
     {
         private readonly DS3MemoryReader memoryReader;
-        private readonly SpoilerLogParser spoilerLogParser;
+        private readonly FogGateService fogGateService;
         private readonly AreaMapper areaMapper;
-        private readonly MsbParser msbParser;
-        private readonly EventsParser eventsParser;
         private readonly ConfigurationService configurationService;
         private readonly DispatcherTimer updateTimer;
         private readonly DispatcherTimer fogGateUpdateTimer;
 
-        private SpoilerLogData? currentSpoilerData;
         private string? lastKnownArea;
         private DS3FogRandoOverlay.Services.Vector3? lastKnownPosition;
-        private bool isConnectedToDS3 = false;
         private bool isTooltipActive = false;
 
         private DateTime lastFogGateUpdate = DateTime.MinValue;
@@ -39,10 +36,8 @@ namespace DS3FogRandoOverlay
 
             configurationService = new ConfigurationService();
             memoryReader = new DS3MemoryReader();
-            spoilerLogParser = new SpoilerLogParser(configurationService);
+            fogGateService = new FogGateService(configurationService);
             areaMapper = new AreaMapper();
-            msbParser = new MsbParser(configurationService.Config.DarkSouls3Path);
-            eventsParser = new EventsParser(configurationService.Config.DarkSouls3Path);
 
             updateTimer = new DispatcherTimer
             {
@@ -75,7 +70,6 @@ namespace DS3FogRandoOverlay
             // Try to attach to DS3
             if (memoryReader.AttachToDS3())
             {
-                isConnectedToDS3 = true;
                 StatusText.Text = "Connected to DS3";
                 StatusText.Foreground = System.Windows.Media.Brushes.Green;
                 SetMinimalMode(true);
@@ -84,7 +78,6 @@ namespace DS3FogRandoOverlay
             }
             else
             {
-                isConnectedToDS3 = false;
                 StatusText.Text = "DS3 not found";
                 StatusText.Foreground = System.Windows.Media.Brushes.Red;
                 SetMinimalMode(false);
@@ -98,7 +91,6 @@ namespace DS3FogRandoOverlay
                 {
                     if (memoryReader.AttachToDS3())
                     {
-                        isConnectedToDS3 = true;
                         StatusText.Text = "Connected to DS3";
                         StatusText.Foreground = System.Windows.Media.Brushes.Green;
                         SetMinimalMode(true);
@@ -113,10 +105,17 @@ namespace DS3FogRandoOverlay
 
         private void LoadSpoilerLogData()
         {
-            currentSpoilerData = spoilerLogParser.ParseLatestSpoilerLog();
-            if (currentSpoilerData != null)
+            System.Diagnostics.Debug.WriteLine("[MainWindow] Loading spoiler log data...");
+            File.AppendAllText("ds3_debug.log", "[MainWindow] Loading spoiler log data...\n");
+            
+            var currentSeed = fogGateService.GetCurrentSeed();
+            System.Diagnostics.Debug.WriteLine($"[MainWindow] Current seed: {currentSeed ?? "null"}");
+            System.Diagnostics.Debug.WriteLine($"[MainWindow] Has fog randomizer data: {fogGateService.HasFogRandomizerData()}");
+            File.AppendAllText("ds3_debug.log", $"[MainWindow] Current seed: {currentSeed ?? "null"}, Has data: {fogGateService.HasFogRandomizerData()}\n");
+            
+            if (!string.IsNullOrEmpty(currentSeed))
             {
-                HeaderText.Text = $"DS3 Fog Randomizer (Seed: {currentSpoilerData.Seed})";
+                HeaderText.Text = $"DS3 Fog Randomizer (Seed: {currentSeed})";
             }
             else
             {
@@ -225,12 +224,18 @@ namespace DS3FogRandoOverlay
         private void UpdateFogGatesDisplayWithDistances(string? currentArea)
         {
             FogGatesPanel.Children.Clear();
+            
+            System.Diagnostics.Debug.WriteLine($"[MainWindow] UpdateFogGatesDisplayWithDistances called for area: {currentArea}");
+            System.Diagnostics.Debug.WriteLine($"[MainWindow] Has fog randomizer data: {fogGateService.HasFogRandomizerData()}");
+            File.AppendAllText("ds3_debug.log", $"[MainWindow] UpdateFogGatesDisplayWithDistances called for area: {currentArea}, Has data: {fogGateService.HasFogRandomizerData()}\n");
 
-            if (currentSpoilerData == null)
+            if (!fogGateService.HasFogRandomizerData())
             {
+                System.Diagnostics.Debug.WriteLine("[MainWindow] No fog randomizer data found, displaying error message");
+                File.AppendAllText("ds3_debug.log", "[MainWindow] No fog randomizer data found, displaying error message\n");
                 var noDataText = new TextBlock
                 {
-                    Text = "No spoiler log data found",
+                    Text = "No fog randomizer data found",
                     Style = (Style)FindResource("OverlayTextStyle")
                 };
                 FogGatesPanel.Children.Add(noDataText);
@@ -239,6 +244,8 @@ namespace DS3FogRandoOverlay
 
             if (string.IsNullOrEmpty(currentArea))
             {
+                System.Diagnostics.Debug.WriteLine("[MainWindow] Current area is null or empty");
+                File.AppendAllText("ds3_debug.log", "[MainWindow] Current area is null or empty\n");
                 var noAreaText = new TextBlock
                 {
                     Text = "Current area unknown",
@@ -248,344 +255,113 @@ namespace DS3FogRandoOverlay
                 return;
             }
 
-            // Get player position and map ID
-            var playerPosition = memoryReader.GetPlayerPosition();
-            var mapId = memoryReader.GetCurrentMapId();
+            // Get fog gates and warps in current area
+            var fogGatesInArea = fogGateService.GetFogGatesInArea(currentArea);
+            var warpsInArea = fogGateService.GetWarpsInArea(currentArea);
+            var connectionsInArea = fogGateService.GetConnectionsInArea(currentArea);
 
-            // Get MSB fog gates for current map
-            List<MsbFogGate> msbFogGates = new List<MsbFogGate>();
-            if (!string.IsNullOrEmpty(mapId) && playerPosition != null)
+            System.Diagnostics.Debug.WriteLine($"[MainWindow] Found {fogGatesInArea.Count} fog gates, {warpsInArea.Count} warps, {connectionsInArea.Count} connections in area: {currentArea}");
+            File.AppendAllText("ds3_debug.log", $"[MainWindow] Found {fogGatesInArea.Count} fog gates, {warpsInArea.Count} warps, {connectionsInArea.Count} connections in area: {currentArea}\n");
+
+            bool hasAnyGates = fogGatesInArea.Any() || warpsInArea.Any();
+
+            if (!hasAnyGates)
             {
-                try
-                {
-                    msbFogGates = msbParser.GetNearbyFogGates(mapId, playerPosition, float.MaxValue); // No distance limit
-                }
-                catch (Exception ex)
-                {
-                    System.IO.File.AppendAllText("ds3_debug.log",
-                        $"[MainWindow] {DateTime.Now:HH:mm:ss.fff} - Error getting MSB fog gates: {ex.Message}\n");
-                }
-            }
-
-            // Get enhanced fog gate info
-            var enhancedMsbGates = areaMapper.GetEnhancedFogGateInfo(msbFogGates, currentArea, eventsParser);
-
-            // Display MSB fog gates with distances
-            if (enhancedMsbGates.Any())
-            {
-                foreach (var enhancedGate in enhancedMsbGates)
-                {
-                    // For very long names, use a vertical layout instead
-                    if (enhancedGate.DisplayName.Length > 35)
-                    {
-                        // Use vertical layout for long names
-                        var tooltip = new ToolTip
-                        {
-                            Content = BuildFogGateTooltip(enhancedGate),
-                            Style = (Style)FindResource("TooltipStyle")
-                        };
-                        
-                        tooltip.Opened += (s, e) => { isTooltipActive = true; };
-                        tooltip.Closed += (s, e) => { isTooltipActive = false; };
-                        
-                        var gateContainer = new StackPanel
-                        {
-                            Orientation = Orientation.Vertical,
-                            Margin = new Thickness(10, 1, 0, 3),
-                            ToolTip = tooltip
-                        };
-
-                        var gateNameText = new TextBlock
-                        {
-                            Text = $"📍 {enhancedGate.DisplayName}",
-                            Style = (Style)FindResource("FogGateTextStyle"),
-                            TextWrapping = TextWrapping.Wrap
-                        };
-
-                        var distanceText = new TextBlock
-                        {
-                            Text = $"   Distance: {enhancedGate.DistanceString}u",
-                            Style = (Style)FindResource("DistanceTextStyle"),
-                            Margin = new Thickness(0, 1, 0, 0)
-                        };
-
-                        if (enhancedGate.IsLocationMatched)
-                        {
-                            gateNameText.Foreground = System.Windows.Media.Brushes.LightGreen;
-                        }
-
-                        gateContainer.Children.Add(gateNameText);
-                        gateContainer.Children.Add(distanceText);
-                        FogGatesPanel.Children.Add(gateContainer);
-                    }
-                    else
-                    {
-                        // Use horizontal layout for shorter names
-                        var tooltip = new ToolTip
-                        {
-                            Content = BuildFogGateTooltip(enhancedGate),
-                            Style = (Style)FindResource("TooltipStyle")
-                        };
-                        
-                        tooltip.Opened += (s, e) => { isTooltipActive = true; };
-                        tooltip.Closed += (s, e) => { isTooltipActive = false; };
-                        
-                        var gateContainer = new StackPanel
-                        {
-                            Orientation = Orientation.Horizontal,
-                            Margin = new Thickness(10, 1, 0, 1),
-                            ToolTip = tooltip
-                        };
-
-                        var gateNameText = new TextBlock
-                        {
-                            Text = $"📍 {enhancedGate.DisplayName}",
-                            Style = (Style)FindResource("FogGateTextStyle"),
-                            VerticalAlignment = VerticalAlignment.Center,
-                            TextTrimming = TextTrimming.CharacterEllipsis
-                        };
-
-                        var distanceText = new TextBlock
-                        {
-                            Text = $"({enhancedGate.DistanceString}u)",
-                            Style = (Style)FindResource("DistanceTextStyle"),
-                            VerticalAlignment = VerticalAlignment.Center,
-                            Margin = new Thickness(5, 0, 0, 0)
-                        };
-
-                        if (enhancedGate.IsLocationMatched)
-                        {
-                            gateNameText.Foreground = System.Windows.Media.Brushes.LightGreen;
-                        }
-
-                        gateContainer.Children.Add(gateNameText);
-                        gateContainer.Children.Add(distanceText);
-                        FogGatesPanel.Children.Add(gateContainer);
-                    }
-                }
-            }
-            else
-            {
+                System.Diagnostics.Debug.WriteLine($"[MainWindow] No fog gates found in area: {currentArea}");
+                File.AppendAllText("ds3_debug.log", $"[MainWindow] No fog gates found in area: {currentArea}\n");
                 var noGatesText = new TextBlock
                 {
                     Text = "No fog gates found in this area",
                     Style = (Style)FindResource("OverlayTextStyle")
                 };
                 FogGatesPanel.Children.Add(noGatesText);
+                return;
+            }
+
+            System.Diagnostics.Debug.WriteLine($"[MainWindow] Displaying fog gates for area: {currentArea}");
+            File.AppendAllText("ds3_debug.log", $"[MainWindow] Displaying fog gates for area: {currentArea}\n");
+
+            // Display fog gates
+            foreach (var fogGate in fogGatesInArea)
+            {
+                var connection = fogGateService.GetConnectionForFogGate(fogGate.Area, fogGate.Id);
+                var displayText = BuildFogGateDisplayText(fogGate, connection);
+                
+                var gateContainer = new StackPanel
+                {
+                    Orientation = Orientation.Vertical,
+                    Margin = new Thickness(10, 1, 0, 3)
+                };
+
+                var gateNameText = new TextBlock
+                {
+                    Text = displayText,
+                    Style = (Style)FindResource("FogGateTextStyle"),
+                    TextWrapping = TextWrapping.Wrap
+                };
+
+                // Highlight boss fog gates
+                if (fogGate.IsBoss)
+                {
+                    gateNameText.Foreground = System.Windows.Media.Brushes.Gold;
+                }
+
+                gateContainer.Children.Add(gateNameText);
+                
+                // Add connection info if available
+                if (connection != null)
+                {
+                    var connectionText = new TextBlock
+                    {
+                        Text = $"   → {connection.ToArea}",
+                        Style = (Style)FindResource("DistanceTextStyle"),
+                        Margin = new Thickness(0, 1, 0, 0)
+                    };
+                    gateContainer.Children.Add(connectionText);
+                }
+
+                FogGatesPanel.Children.Add(gateContainer);
+            }
+
+            // Display warps
+            foreach (var warp in warpsInArea)
+            {
+                var connection = fogGateService.GetConnectionForFogGate(warp.Area, warp.Id);
+                var displayText = BuildWarpDisplayText(warp, connection);
+                
+                var warpContainer = new StackPanel
+                {
+                    Orientation = Orientation.Vertical,
+                    Margin = new Thickness(10, 1, 0, 3)
+                };
+
+                var warpNameText = new TextBlock
+                {
+                    Text = displayText,
+                    Style = (Style)FindResource("FogGateTextStyle"),
+                    TextWrapping = TextWrapping.Wrap,
+                    Foreground = System.Windows.Media.Brushes.LightBlue
+                };
+
+                warpContainer.Children.Add(warpNameText);
+                
+                // Add connection info if available
+                if (connection != null)
+                {
+                    var connectionText = new TextBlock
+                    {
+                        Text = $"   → {connection.ToArea}",
+                        Style = (Style)FindResource("DistanceTextStyle"),
+                        Margin = new Thickness(0, 1, 0, 0)
+                    };
+                    warpContainer.Children.Add(connectionText);
+                }
+
+                FogGatesPanel.Children.Add(warpContainer);
             }
         }
 
 
-
-        private (string DestinationName, Area? Area, List<FogGate> ConnectionsToArea, FogGate? Connection)? FindMatchingSpoilerLogData(EnhancedFogGateInfo enhancedGate)
-        {
-            if (currentSpoilerData == null)
-                return null;
-
-            // Try to match 'between X and Y' pattern
-            var betweenMatch = System.Text.RegularExpressions.Regex.Match(enhancedGate.FogGate.Name, @"between (.+?) and (.+)", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
-            if (betweenMatch.Success)
-            {
-                var areaA = betweenMatch.Groups[1].Value.Trim();
-                var areaB = betweenMatch.Groups[2].Value.Trim();
-                // Search for a connection in either direction
-                var connection = currentSpoilerData.Areas
-                    .SelectMany(a => a.FogGates)
-                    .FirstOrDefault(fg =>
-                        (fg.FromArea.IndexOf(areaA, StringComparison.OrdinalIgnoreCase) >= 0 && fg.ToArea.IndexOf(areaB, StringComparison.OrdinalIgnoreCase) >= 0) ||
-                        (fg.FromArea.IndexOf(areaB, StringComparison.OrdinalIgnoreCase) >= 0 && fg.ToArea.IndexOf(areaA, StringComparison.OrdinalIgnoreCase) >= 0)
-                    );
-                if (connection != null)
-                {
-                    // Try to find the Area for the destination
-                    var destArea = currentSpoilerData.Areas.FirstOrDefault(a => a.Name.Equals(connection.ToArea, StringComparison.OrdinalIgnoreCase));
-                    return ($"between {areaA} and {areaB}", destArea, new List<FogGate>(), connection);
-                }
-            }
-
-            // Try to match 'on the X end' pattern
-            var onTheEndMatch = System.Text.RegularExpressions.Regex.Match(enhancedGate.FogGate.Name, @"on the (.+?) end", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
-            if (onTheEndMatch.Success)
-            {
-                var areaName = onTheEndMatch.Groups[1].Value.Trim();
-                // Search for connections involving this area
-                var connection = currentSpoilerData.Areas
-                    .SelectMany(a => a.FogGates)
-                    .FirstOrDefault(fg =>
-                        fg.FromArea.IndexOf(areaName, StringComparison.OrdinalIgnoreCase) >= 0 ||
-                        fg.ToArea.IndexOf(areaName, StringComparison.OrdinalIgnoreCase) >= 0
-                    );
-                if (connection != null)
-                {
-                    var destArea = currentSpoilerData.Areas.FirstOrDefault(a => a.Name.Equals(connection.ToArea, StringComparison.OrdinalIgnoreCase));
-                    return ($"on the {areaName} end", destArea, new List<FogGate>(), connection);
-                }
-            }
-
-            // Try to match 'X end' pattern
-            var endMatch = System.Text.RegularExpressions.Regex.Match(enhancedGate.FogGate.Name, @"(.+?) end", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
-            if (endMatch.Success)
-            {
-                var areaName = endMatch.Groups[1].Value.Trim();
-                // Search for connections involving this area
-                var connection = currentSpoilerData.Areas
-                    .SelectMany(a => a.FogGates)
-                    .FirstOrDefault(fg =>
-                        fg.FromArea.IndexOf(areaName, StringComparison.OrdinalIgnoreCase) >= 0 ||
-                        fg.ToArea.IndexOf(areaName, StringComparison.OrdinalIgnoreCase) >= 0
-                    );
-                if (connection != null)
-                {
-                    var destArea = currentSpoilerData.Areas.FirstOrDefault(a => a.Name.Equals(connection.ToArea, StringComparison.OrdinalIgnoreCase));
-                    return ($"{areaName} end", destArea, new List<FogGate>(), connection);
-                }
-            }
-
-            // Try to match 'from X to Y' pattern
-            var fromToMatch = System.Text.RegularExpressions.Regex.Match(enhancedGate.FogGate.Name, @"from (.+?) to (.+)", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
-            if (fromToMatch.Success)
-            {
-                var fromArea = fromToMatch.Groups[1].Value.Trim();
-                var toArea = fromToMatch.Groups[2].Value.Trim();
-                // Search for this exact connection
-                var connection = currentSpoilerData.Areas
-                    .SelectMany(a => a.FogGates)
-                    .FirstOrDefault(fg =>
-                        fg.FromArea.IndexOf(fromArea, StringComparison.OrdinalIgnoreCase) >= 0 && fg.ToArea.IndexOf(toArea, StringComparison.OrdinalIgnoreCase) >= 0
-                    );
-                if (connection != null)
-                {
-                    var destArea = currentSpoilerData.Areas.FirstOrDefault(a => a.Name.Equals(connection.ToArea, StringComparison.OrdinalIgnoreCase));
-                    return ($"from {fromArea} to {toArea}", destArea, new List<FogGate>(), connection);
-                }
-            }
-
-            // Try to find matching area by various methods
-            string[] searchNames = {
-                enhancedGate.MatchedLocationName ?? "",
-                enhancedGate.FogGate.Name,
-                enhancedGate.DisplayName.Replace("📍 ", "").Replace("👑 ", ""),
-                enhancedGate.FogGate.Name.Replace("_", " ").Replace("-", " ")
-            };
-
-            foreach (var searchName in searchNames.Where(s => !string.IsNullOrEmpty(s)))
-            {
-                // Try exact match first
-                var exactMatch = currentSpoilerData.Areas.FirstOrDefault(a => 
-                    a.Name.Equals(searchName, StringComparison.OrdinalIgnoreCase));
-                
-                if (exactMatch != null)
-                {
-                    return (searchName, exactMatch, new List<FogGate>(), null);
-                }
-
-                // Try partial match
-                var partialMatch = currentSpoilerData.Areas.FirstOrDefault(a => 
-                    a.Name.Contains(searchName, StringComparison.OrdinalIgnoreCase) ||
-                    searchName.Contains(a.Name, StringComparison.OrdinalIgnoreCase));
-                
-                if (partialMatch != null)
-                {
-                    return (searchName, partialMatch, new List<FogGate>(), null);
-                }
-
-                // Try connections TO this area
-                var connectionsToArea = currentSpoilerData.Areas
-                    .SelectMany(a => a.FogGates)
-                    .Where(fg => fg.ToArea.Equals(searchName, StringComparison.OrdinalIgnoreCase) ||
-                                fg.ToArea.Contains(searchName, StringComparison.OrdinalIgnoreCase) ||
-                                searchName.Contains(fg.ToArea, StringComparison.OrdinalIgnoreCase))
-                    .ToList();
-                
-                if (connectionsToArea.Any())
-                {
-                    return (searchName, null, connectionsToArea, null);
-                }
-            }
-
-            return null;
-        }
-
-        private string BuildFogGateTooltip(EnhancedFogGateInfo enhancedGate)
-        {
-            var tooltip = new System.Text.StringBuilder();
-            
-            // Basic fog gate info
-            tooltip.AppendLine($"Fog Gate: {enhancedGate.FogGate.Name}");
-            tooltip.AppendLine($"Distance: {enhancedGate.DistanceString} units");
-            tooltip.AppendLine($"Position: {enhancedGate.FogGate.Position.X:F1}, {enhancedGate.FogGate.Position.Y:F1}, {enhancedGate.FogGate.Position.Z:F1}");
-            
-            if (enhancedGate.FogGate.IsBossFog)
-            {
-                tooltip.AppendLine("Type: Boss Fog Gate");
-            }
-            
-            // Try to find spoiler log information
-            if (currentSpoilerData != null)
-            {
-                var matchedData = FindMatchingSpoilerLogData(enhancedGate);
-                
-                if (matchedData != null)
-                {
-                    tooltip.AppendLine();
-                    tooltip.AppendLine($"Destination: {matchedData.Value.DestinationName}");
-                    if (matchedData.Value.Connection != null)
-                    {
-                        tooltip.AppendLine($"Spoiler Log: {matchedData.Value.Connection.FromArea} → {matchedData.Value.Connection.ToArea}");
-                        tooltip.AppendLine($"Type: {(matchedData.Value.Connection.IsRandom ? "Random" : "Preexisting")}");
-                        if (!string.IsNullOrEmpty(matchedData.Value.Connection.Description))
-                            tooltip.AppendLine($"Description: {matchedData.Value.Connection.Description}");
-                    }
-                    if (matchedData.Value.Area != null)
-                    {
-                        tooltip.AppendLine($"Scaling: {matchedData.Value.Area.ScalingPercent}%");
-                        if (matchedData.Value.Area.IsBoss)
-                            tooltip.AppendLine("👑 Boss Area");
-                        if (matchedData.Value.Area.FogGates.Any())
-                        {
-                            tooltip.AppendLine();
-                            tooltip.AppendLine("Connections from this area:");
-                            foreach (var fogGate in matchedData.Value.Area.FogGates.Take(3))
-                            {
-                                var connectionType = fogGate.IsRandom ? "Random" : "Preexisting";
-                                tooltip.AppendLine($"• {connectionType}: {fogGate.ToArea}");
-                                if (!string.IsNullOrEmpty(fogGate.Description))
-                                    tooltip.AppendLine($"  ({fogGate.Description})");
-                            }
-                            if (matchedData.Value.Area.FogGates.Count > 3)
-                                tooltip.AppendLine($"... and {matchedData.Value.Area.FogGates.Count - 3} more");
-                        }
-                    }
-                    else if (matchedData.Value.ConnectionsToArea.Any())
-                    {
-                        tooltip.AppendLine();
-                        tooltip.AppendLine("Connections to this area:");
-                        foreach (var connection in matchedData.Value.ConnectionsToArea.Take(3))
-                        {
-                            var connectionType = connection.IsRandom ? "Random" : "Preexisting";
-                            tooltip.AppendLine($"• {connectionType}: From {connection.FromArea}");
-                            if (!string.IsNullOrEmpty(connection.Description))
-                                tooltip.AppendLine($"  ({connection.Description})");
-                        }
-                        if (matchedData.Value.ConnectionsToArea.Count > 3)
-                            tooltip.AppendLine($"... and {matchedData.Value.ConnectionsToArea.Count - 3} more");
-                    }
-                }
-                else
-                {
-                    tooltip.AppendLine();
-                    tooltip.AppendLine("No matching spoiler log data found");
-                    tooltip.AppendLine("(Names may differ between game and spoiler log)");
-                }
-            }
-            else
-            {
-                tooltip.AppendLine();
-                tooltip.AppendLine("No spoiler log data loaded");
-            }
-            
-            return tooltip.ToString().TrimEnd();
-        }
 
         private void LoadWindowSettings()
         {
@@ -702,11 +478,8 @@ namespace DS3FogRandoOverlay
                 updateTimer.Stop();
                 fogGateUpdateTimer.Stop();
 
-                // Reload services with new paths
-                // Note: We can't easily recreate the services since they're readonly fields
-                // Instead, we'll reload their data
-                eventsParser.Reload();
-                spoilerLogParser.ParseLatestSpoilerLog();
+                // Reload fog gate service data
+                fogGateService.RefreshData();
 
                 File.AppendAllText("ds3_debug.log",
                     $"[MainWindow] {DateTime.Now:HH:mm:ss.fff} - Services restarted with new paths\n");
@@ -859,6 +632,39 @@ namespace DS3FogRandoOverlay
                     fogGateUpdateTimer.Interval = TimeSpan.FromMilliseconds(400);
                 }
             }
+        }
+
+        private string BuildFogGateDisplayText(DS3FogGate fogGate, DS3Connection? connection)
+        {
+            var prefix = fogGate.IsBoss ? "👑" : "🚪";
+            var text = $"{prefix} {fogGate.Text}";
+            
+            if (string.IsNullOrEmpty(fogGate.Text))
+            {
+                text = $"{prefix} {fogGate.Name}";
+            }
+            
+            if (fogGate.IsBoss)
+            {
+                text += " (Boss)";
+            }
+            
+            return text;
+        }
+
+        private string BuildWarpDisplayText(DS3Warp warp, DS3Connection? connection)
+        {
+            var prefix = "🌀";
+            var text = $"{prefix} {warp.Text}";
+            
+            if (string.IsNullOrEmpty(warp.Text))
+            {
+                text = $"{prefix} Warp {warp.Id}";
+            }
+            
+            text += " (Warp)";
+            
+            return text;
         }
     }
 }

@@ -26,6 +26,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SoulsFormats\SoulsFormats\SoulsFormats.csproj" />
+    <ProjectReference Include="..\DS3Parser\DS3Parser\DS3Parser.csproj" />
   </ItemGroup>
 
 </Project>
