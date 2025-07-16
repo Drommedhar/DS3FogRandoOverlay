@@ -56,14 +56,12 @@ namespace DS3FogRandoOverlay.Services
                 .ToList();
 
             System.Diagnostics.Debug.WriteLine($"[FogGateService] GetFogGatesInArea({areaName} -> {mappedAreaName}): found {result.Count} fog gates");
-            File.AppendAllText("ds3_debug.log", $"[FogGateService] GetFogGatesInArea({areaName} -> {mappedAreaName}): found {result.Count} fog gates\n");
 
             if (result.Count == 0)
             {
                 // Log all available areas for debugging
                 var allAreas = fogDistribution.Entrances.Select(fg => fg.Area).Distinct().ToList();
                 System.Diagnostics.Debug.WriteLine($"[FogGateService] Available areas: {string.Join(", ", allAreas)}");
-                File.AppendAllText("ds3_debug.log", $"[FogGateService] Available areas: {string.Join(", ", allAreas)}\n");
             }
 
             return result;
@@ -186,7 +184,6 @@ namespace DS3FogRandoOverlay.Services
             RefreshDataIfNeeded();
             var hasData = fogDistribution != null || spoilerLog != null;
             System.Diagnostics.Debug.WriteLine($"[FogGateService] HasFogRandomizerData: {hasData} (fogDistribution: {fogDistribution != null}, spoilerLog: {spoilerLog != null})");
-            File.AppendAllText("ds3_debug.log", $"[FogGateService] HasFogRandomizerData: {hasData} (fogDistribution: {fogDistribution != null}, spoilerLog: {spoilerLog != null})\n");
             return hasData;
         }
 
@@ -207,22 +204,20 @@ namespace DS3FogRandoOverlay.Services
             if (now - lastUpdateTime < TimeSpan.FromSeconds(30) && fogDistribution != null && spoilerLog != null)
             {
                 System.Diagnostics.Debug.WriteLine($"[FogGateService] Throttling refresh - last update: {lastUpdateTime}, now: {now}, diff: {(now - lastUpdateTime).TotalSeconds}s");
-                File.AppendAllText("ds3_debug.log", $"[FogGateService] Throttling refresh - last update: {lastUpdateTime}, now: {now}, diff: {(now - lastUpdateTime).TotalSeconds}s\n");
                 return;
             }
             
             System.Diagnostics.Debug.WriteLine($"[FogGateService] Refreshing data - last update: {lastUpdateTime}, now: {now}");
-            File.AppendAllText("ds3_debug.log", $"[FogGateService] Refreshing data - last update: {lastUpdateTime}, now: {now}\n");
 
             try
             {
                 var gameDirectory = configService.Config.DarkSouls3Path;
                 if (string.IsNullOrEmpty(gameDirectory) || !Directory.Exists(gameDirectory))
-                {                System.Diagnostics.Debug.WriteLine($"[FogGateService] Game directory not found: {gameDirectory}");
-                File.AppendAllText("ds3_debug.log", $"[FogGateService] Game directory not found: {gameDirectory}\n");
-                fogDistribution = null;
-                spoilerLog = null;
-                return;
+                {
+                    System.Diagnostics.Debug.WriteLine($"[FogGateService] Game directory not found: {gameDirectory}");
+                    fogDistribution = null;
+                    spoilerLog = null;
+                    return;
                 }
 
                 // Ensure we're using the Game subdirectory
@@ -232,11 +227,11 @@ namespace DS3FogRandoOverlay.Services
                 }
 
                 if (!Directory.Exists(gameDirectory))
-                {                System.Diagnostics.Debug.WriteLine($"[FogGateService] Game subdirectory not found: {gameDirectory}");
-                File.AppendAllText("ds3_debug.log", $"[FogGateService] Game subdirectory not found: {gameDirectory}\n");
-                fogDistribution = null;
-                spoilerLog = null;
-                return;
+                {
+                    System.Diagnostics.Debug.WriteLine($"[FogGateService] Game subdirectory not found: {gameDirectory}");
+                    fogDistribution = null;
+                    spoilerLog = null;
+                    return;
                 }
 
                 System.Diagnostics.Debug.WriteLine($"[FogGateService] Trying to parse from game directory: {gameDirectory}");

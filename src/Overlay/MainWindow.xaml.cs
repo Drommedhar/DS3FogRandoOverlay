@@ -7,6 +7,9 @@ using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Shapes;
 using System.Windows.Threading;
 
 namespace DS3FogRandoOverlay
@@ -25,10 +28,13 @@ namespace DS3FogRandoOverlay
 
         private string? lastKnownArea;
         private DS3FogRandoOverlay.Services.Vector3? lastKnownPosition;
-        private bool isTooltipActive = false;
 
         private DateTime lastFogGateUpdate = DateTime.MinValue;
         private bool hasActiveFogGates = false;
+
+        // Track expanded fog gates for click-to-show functionality
+        private HashSet<string> expandedFogGates = new HashSet<string>();
+        private bool isProcessingClick = false;
 
         public MainWindow()
         {
@@ -41,13 +47,13 @@ namespace DS3FogRandoOverlay
 
             updateTimer = new DispatcherTimer
             {
-                Interval = TimeSpan.FromMilliseconds(100) // Update every 100ms for very fast responsiveness
+                Interval = TimeSpan.FromMilliseconds(1000) // Update every 1 second instead of 100ms
             };
             updateTimer.Tick += UpdateTimer_Tick;
 
             fogGateUpdateTimer = new DispatcherTimer
             {
-                Interval = TimeSpan.FromMilliseconds(200) // Update fog gates every 200ms initially
+                Interval = TimeSpan.FromMilliseconds(2000) // Update fog gates every 2 seconds instead of 200ms
             };
             fogGateUpdateTimer.Tick += FogGateUpdateTimer_Tick;
 
@@ -106,12 +112,10 @@ namespace DS3FogRandoOverlay
         private void LoadSpoilerLogData()
         {
             System.Diagnostics.Debug.WriteLine("[MainWindow] Loading spoiler log data...");
-            File.AppendAllText("ds3_debug.log", "[MainWindow] Loading spoiler log data...\n");
             
             var currentSeed = fogGateService.GetCurrentSeed();
             System.Diagnostics.Debug.WriteLine($"[MainWindow] Current seed: {currentSeed ?? "null"}");
             System.Diagnostics.Debug.WriteLine($"[MainWindow] Has fog randomizer data: {fogGateService.HasFogRandomizerData()}");
-            File.AppendAllText("ds3_debug.log", $"[MainWindow] Current seed: {currentSeed ?? "null"}, Has data: {fogGateService.HasFogRandomizerData()}\n");
             
             if (!string.IsNullOrEmpty(currentSeed))
             {
@@ -201,14 +205,14 @@ namespace DS3FogRandoOverlay
 
             // Force update every 10 seconds even if player hasn't moved much
             // This ensures distances stay accurate and catches any missed updates
-            double forceUpdateInterval = hasActiveFogGates ? 1.0 : 3.0; // Very fast force updates
+            double forceUpdateInterval = 10.0; // Much longer force update interval
             if ((currentTime - lastFogGateUpdate).TotalSeconds > forceUpdateInterval)
             {
                 shouldUpdate = true;
             }
 
             // Update fog gates if player moved significantly or if we need a periodic refresh
-            if (shouldUpdate && !string.IsNullOrEmpty(lastKnownArea) && !isTooltipActive)
+            if (shouldUpdate && !string.IsNullOrEmpty(lastKnownArea) && !isProcessingClick)
             {
                 UpdateFogGatesDisplayWithDistances(lastKnownArea);
                 lastKnownPosition = position;
@@ -227,12 +231,10 @@ namespace DS3FogRandoOverlay
             
             System.Diagnostics.Debug.WriteLine($"[MainWindow] UpdateFogGatesDisplayWithDistances called for area: {currentArea}");
             System.Diagnostics.Debug.WriteLine($"[MainWindow] Has fog randomizer data: {fogGateService.HasFogRandomizerData()}");
-            File.AppendAllText("ds3_debug.log", $"[MainWindow] UpdateFogGatesDisplayWithDistances called for area: {currentArea}, Has data: {fogGateService.HasFogRandomizerData()}\n");
 
             if (!fogGateService.HasFogRandomizerData())
             {
                 System.Diagnostics.Debug.WriteLine("[MainWindow] No fog randomizer data found, displaying error message");
-                File.AppendAllText("ds3_debug.log", "[MainWindow] No fog randomizer data found, displaying error message\n");
                 var noDataText = new TextBlock
                 {
                     Text = "No fog randomizer data found",
@@ -245,7 +247,6 @@ namespace DS3FogRandoOverlay
             if (string.IsNullOrEmpty(currentArea))
             {
                 System.Diagnostics.Debug.WriteLine("[MainWindow] Current area is null or empty");
-                File.AppendAllText("ds3_debug.log", "[MainWindow] Current area is null or empty\n");
                 var noAreaText = new TextBlock
                 {
                     Text = "Current area unknown",
@@ -261,14 +262,12 @@ namespace DS3FogRandoOverlay
             var connectionsInArea = fogGateService.GetConnectionsInArea(currentArea);
 
             System.Diagnostics.Debug.WriteLine($"[MainWindow] Found {fogGatesInArea.Count} fog gates, {warpsInArea.Count} warps, {connectionsInArea.Count} connections in area: {currentArea}");
-            File.AppendAllText("ds3_debug.log", $"[MainWindow] Found {fogGatesInArea.Count} fog gates, {warpsInArea.Count} warps, {connectionsInArea.Count} connections in area: {currentArea}\n");
 
             bool hasAnyGates = fogGatesInArea.Any() || warpsInArea.Any();
 
             if (!hasAnyGates)
             {
                 System.Diagnostics.Debug.WriteLine($"[MainWindow] No fog gates found in area: {currentArea}");
-                File.AppendAllText("ds3_debug.log", $"[MainWindow] No fog gates found in area: {currentArea}\n");
                 var noGatesText = new TextBlock
                 {
                     Text = "No fog gates found in this area",
@@ -279,7 +278,6 @@ namespace DS3FogRandoOverlay
             }
 
             System.Diagnostics.Debug.WriteLine($"[MainWindow] Displaying fog gates for area: {currentArea}");
-            File.AppendAllText("ds3_debug.log", $"[MainWindow] Displaying fog gates for area: {currentArea}\n");
 
             // Display fog gates
             foreach (var fogGate in fogGatesInArea)
@@ -296,28 +294,80 @@ namespace DS3FogRandoOverlay
                 var gateNameText = new TextBlock
                 {
                     Text = displayText,
-                    Style = (Style)FindResource("FogGateTextStyle"),
-                    TextWrapping = TextWrapping.Wrap
+                    Style = (Style)FindResource("OverlayTextStyle"),
+                    Foreground = fogGate.IsBoss ? System.Windows.Media.Brushes.Gold : System.Windows.Media.Brushes.White,
+                    FontSize = 12,
+                    Margin = new Thickness(0, 1, 0, 1),
+                    Cursor = System.Windows.Input.Cursors.Hand
                 };
 
-                // Highlight boss fog gates
-                if (fogGate.IsBoss)
+                // Add click-to-show destination functionality
+                if (connection != null)
                 {
-                    gateNameText.Foreground = System.Windows.Media.Brushes.Gold;
+                    var gateKey = $"{fogGate.Area}_{fogGate.Id}";
+                    
+                    System.Diagnostics.Debug.WriteLine($"[MainWindow] Added click handler for fog gate: {fogGate.Text ?? fogGate.Name} -> {connection.ToArea}");
+                    
+                    // Add click handler using MouseLeftButtonDown event
+                    gateNameText.MouseLeftButtonDown += (s, e) => 
+                    {
+                        System.Diagnostics.Debug.WriteLine($"[MainWindow] ===== CLICK EVENT FIRED =====");
+                        System.Diagnostics.Debug.WriteLine($"[MainWindow] Fog gate clicked: {gateKey}");
+                        System.Diagnostics.Debug.WriteLine($"[MainWindow] Sender: {s?.GetType().Name}");
+                        System.Diagnostics.Debug.WriteLine($"[MainWindow] EventArgs: {e?.GetType().Name}");
+                        System.Diagnostics.Debug.WriteLine($"[MainWindow] isProcessingClick: {isProcessingClick}");
+                        ToggleFogGateExpansion(gateKey);
+                        e.Handled = true; // Prevent event bubbling
+                    };
+                    
+                    // Add hover effects
+                    gateNameText.MouseEnter += (s, e) => 
+                    {
+                        gateNameText.Opacity = 0.8;
+                        gateNameText.TextDecorations = TextDecorations.Underline;
+                    };
+                    
+                    gateNameText.MouseLeave += (s, e) => 
+                    {
+                        gateNameText.Opacity = 1.0;
+                        gateNameText.TextDecorations = null;
+                    };
+                }
+                else
+                {
+                    System.Diagnostics.Debug.WriteLine($"[MainWindow] No connection found for fog gate: {fogGate.Text ?? fogGate.Name}");
+                    gateNameText.Cursor = System.Windows.Input.Cursors.Arrow;
                 }
 
                 gateContainer.Children.Add(gateNameText);
                 
-                // Add connection info if available
+                // Add destination info if gate is expanded
                 if (connection != null)
                 {
-                    var connectionText = new TextBlock
+                    var gateKey = $"{fogGate.Area}_{fogGate.Id}";
+                    if (expandedFogGates.Contains(gateKey))
                     {
-                        Text = $"   → {connection.ToArea}",
-                        Style = (Style)FindResource("DistanceTextStyle"),
-                        Margin = new Thickness(0, 1, 0, 0)
-                    };
-                    gateContainer.Children.Add(connectionText);
+                        var destinationText = new TextBlock
+                        {
+                            Text = $"   → Leads to: {connection.ToArea}",
+                            Style = (Style)FindResource("DistanceTextStyle"),
+                            Foreground = Brushes.LightGreen,
+                            Margin = new Thickness(15, 2, 0, 2),
+                            FontStyle = FontStyles.Italic
+                        };
+                        gateContainer.Children.Add(destinationText);
+                        
+                        var connectionTypeText = new TextBlock
+                        {
+                            Text = $"   → {(connection.IsRandom ? "Randomized" : "Original")} connection",
+                            Style = (Style)FindResource("DistanceTextStyle"),
+                            Foreground = connection.IsRandom ? Brushes.Orange : Brushes.Gray,
+                            Margin = new Thickness(15, 0, 0, 2),
+                            FontStyle = FontStyles.Italic,
+                            FontSize = 10
+                        };
+                        gateContainer.Children.Add(connectionTypeText);
+                    }
                 }
 
                 FogGatesPanel.Children.Add(gateContainer);
@@ -338,23 +388,80 @@ namespace DS3FogRandoOverlay
                 var warpNameText = new TextBlock
                 {
                     Text = displayText,
-                    Style = (Style)FindResource("FogGateTextStyle"),
-                    TextWrapping = TextWrapping.Wrap,
-                    Foreground = System.Windows.Media.Brushes.LightBlue
+                    Style = (Style)FindResource("OverlayTextStyle"),
+                    Foreground = System.Windows.Media.Brushes.LightBlue,
+                    FontSize = 12,
+                    Margin = new Thickness(0, 1, 0, 1),
+                    Cursor = System.Windows.Input.Cursors.Hand
                 };
+
+                // Add click-to-show destination functionality
+                if (connection != null)
+                {
+                    var warpKey = $"{warp.Area}_{warp.Id}_warp";
+                    
+                    System.Diagnostics.Debug.WriteLine($"[MainWindow] Added click handler for warp: {warp.Text ?? $"Warp {warp.Id}"} -> {connection.ToArea}");
+                    
+                    // Add click handler using MouseLeftButtonDown event
+                    warpNameText.MouseLeftButtonDown += (s, e) => 
+                    {
+                        System.Diagnostics.Debug.WriteLine($"[MainWindow] ===== CLICK EVENT FIRED =====");
+                        System.Diagnostics.Debug.WriteLine($"[MainWindow] Warp clicked: {warpKey}");
+                        System.Diagnostics.Debug.WriteLine($"[MainWindow] Sender: {s?.GetType().Name}");
+                        System.Diagnostics.Debug.WriteLine($"[MainWindow] EventArgs: {e?.GetType().Name}");
+                        System.Diagnostics.Debug.WriteLine($"[MainWindow] isProcessingClick: {isProcessingClick}");
+                        ToggleFogGateExpansion(warpKey);
+                        e.Handled = true; // Prevent event bubbling
+                    };
+                    
+                    // Add hover effects
+                    warpNameText.MouseEnter += (s, e) => 
+                    {
+                        warpNameText.Opacity = 0.8;
+                        warpNameText.TextDecorations = TextDecorations.Underline;
+                    };
+                    
+                    warpNameText.MouseLeave += (s, e) => 
+                    {
+                        warpNameText.Opacity = 1.0;
+                        warpNameText.TextDecorations = null;
+                    };
+                }
+                else
+                {
+                    System.Diagnostics.Debug.WriteLine($"[MainWindow] No connection found for warp: {warp.Text ?? $"Warp {warp.Id}"}");
+                    warpNameText.Cursor = System.Windows.Input.Cursors.Arrow;
+                }
 
                 warpContainer.Children.Add(warpNameText);
                 
-                // Add connection info if available
+                // Add destination info if warp is expanded
                 if (connection != null)
                 {
-                    var connectionText = new TextBlock
+                    var warpKey = $"{warp.Area}_{warp.Id}_warp";
+                    if (expandedFogGates.Contains(warpKey))
                     {
-                        Text = $"   → {connection.ToArea}",
-                        Style = (Style)FindResource("DistanceTextStyle"),
-                        Margin = new Thickness(0, 1, 0, 0)
-                    };
-                    warpContainer.Children.Add(connectionText);
+                        var destinationText = new TextBlock
+                        {
+                            Text = $"   → Warps to: {connection.ToArea}",
+                            Style = (Style)FindResource("DistanceTextStyle"),
+                            Foreground = Brushes.LightCyan,
+                            Margin = new Thickness(15, 2, 0, 2),
+                            FontStyle = FontStyles.Italic
+                        };
+                        warpContainer.Children.Add(destinationText);
+                        
+                        var connectionTypeText = new TextBlock
+                        {
+                            Text = $"   → {(connection.IsRandom ? "Randomized" : "Original")} warp",
+                            Style = (Style)FindResource("DistanceTextStyle"),
+                            Foreground = connection.IsRandom ? Brushes.Orange : Brushes.Gray,
+                            Margin = new Thickness(15, 0, 0, 2),
+                            FontStyle = FontStyles.Italic,
+                            FontSize = 10
+                        };
+                        warpContainer.Children.Add(connectionTypeText);
+                    }
                 }
 
                 FogGatesPanel.Children.Add(warpContainer);
@@ -529,7 +636,28 @@ namespace DS3FogRandoOverlay
 
         private void Window_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            // Allow dragging the window when clicking anywhere on it
+            // Only allow dragging the window when clicking on empty areas, not on fog gate entries
+            // Check if the click originated from a Button or TextBlock (fog gate entry)
+            if (e.OriginalSource is Button || e.OriginalSource is TextBlock)
+            {
+                // If it's a clickable TextBlock with a hand cursor, don't interfere
+                if (e.OriginalSource is TextBlock textBlock && textBlock.Cursor == System.Windows.Input.Cursors.Hand)
+                {
+                    return; // Let the TextBlock handle the click
+                }
+                // For other TextBlocks (like headers), allow dragging
+                if (e.OriginalSource is TextBlock)
+                {
+                    if (e.ButtonState == System.Windows.Input.MouseButtonState.Pressed)
+                    {
+                        this.DragMove();
+                    }
+                    return;
+                }
+                return; // Don't drag if clicking on a button
+            }
+            
+            // Allow dragging the window when clicking anywhere else
             if (e.ButtonState == System.Windows.Input.MouseButtonState.Pressed)
             {
                 this.DragMove();
@@ -665,6 +793,43 @@ namespace DS3FogRandoOverlay
             text += " (Warp)";
             
             return text;
+        }
+
+        private void ToggleFogGateExpansion(string gateKey)
+        {
+            isProcessingClick = true;
+            
+            // Stop both timers during click processing
+            updateTimer.Stop();
+            fogGateUpdateTimer.Stop();
+            
+            if (expandedFogGates.Contains(gateKey))
+            {
+                expandedFogGates.Remove(gateKey);
+                System.Diagnostics.Debug.WriteLine($"[MainWindow] Collapsed fog gate: {gateKey}");
+            }
+            else
+            {
+                expandedFogGates.Add(gateKey);
+                System.Diagnostics.Debug.WriteLine($"[MainWindow] Expanded fog gate: {gateKey}");
+            }
+            
+            // Refresh the display to show/hide the destination info
+            UpdateFogGatesDisplayWithDistances(lastKnownArea);
+            
+            // Allow updates to resume after a longer delay
+            var resumeTimer = new DispatcherTimer
+            {
+                Interval = TimeSpan.FromMilliseconds(1000) // Wait 1 second before resuming updates
+            };
+            resumeTimer.Tick += (s, e) =>
+            {
+                isProcessingClick = false;
+                updateTimer.Start();
+                fogGateUpdateTimer.Start();
+                resumeTimer.Stop();
+            };
+            resumeTimer.Start();
         }
     }
 }

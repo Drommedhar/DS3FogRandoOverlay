@@ -14,7 +14,7 @@
         MaxWidth="450"
         WindowStyle="None"
         AllowsTransparency="True"
-        Background="Transparent"
+        Background="#01000000"
         Topmost="True"
         ShowInTaskbar="False"
         ResizeMode="CanResizeWithGrip"
@@ -163,7 +163,7 @@
         </Style>
     </Window.Resources>
 
-    <Grid Margin="8">
+    <Grid x:Name="MainGrid" Margin="8">
         <Border Background="#66000000"
                 CornerRadius="5"
                 Padding="8">
