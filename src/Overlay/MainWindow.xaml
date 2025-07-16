@@ -9,12 +9,10 @@
         Height="400"
         Width="320"
         MinHeight="200"
-        MaxHeight="800"
         MinWidth="280"
-        MaxWidth="450"
         WindowStyle="None"
         AllowsTransparency="True"
-        Background="Transparent"
+        Background="#01000000"
         Topmost="True"
         ShowInTaskbar="False"
         ResizeMode="CanResizeWithGrip"
@@ -26,6 +24,10 @@
             <MenuItem Header="Settings..."
                       Click="Settings_Click"/>
             <Separator/>
+            <!--><MenuItem x:Name="ToggleSpoilerMenuItem"
+                      Header="Show Spoiler Information"
+                      Click="ToggleSpoilerInfo_Click"/>
+            <Separator/><!-->
             <MenuItem Header="Debug Options">
                 <MenuItem Header="Scan for Area IDs"
                           Click="ScanAreaIds_Click"/>
@@ -52,6 +54,8 @@
                     Value="Consolas"/>
             <Setter Property="FontSize"
                     Value="12"/>
+            <Setter Property="TextWrapping"
+                    Value="Wrap"/>
             <Setter Property="Effect">
                 <Setter.Value>
                     <DropShadowEffect Color="Black"
@@ -71,6 +75,8 @@
                     Value="14"/>
             <Setter Property="Foreground"
                     Value="Gold"/>
+            <Setter Property="TextWrapping"
+                    Value="Wrap"/>
         </Style>
 
         <Style x:Key="FogGateTextStyle"
@@ -78,6 +84,8 @@
                BasedOn="{StaticResource OverlayTextStyle}">
             <Setter Property="Margin"
                     Value="5,2"/>
+            <Setter Property="TextWrapping"
+                    Value="Wrap"/>
         </Style>
 
         <Style x:Key="BossGateTextStyle"
@@ -87,6 +95,8 @@
                     Value="Orange"/>
             <Setter Property="FontWeight"
                     Value="Bold"/>
+            <Setter Property="TextWrapping"
+                    Value="Wrap"/>
         </Style>
 
         <Style x:Key="DistanceTextStyle"
@@ -98,6 +108,8 @@
                     Value="Bold"/>
             <Setter Property="FontSize"
                     Value="11"/>
+            <Setter Property="TextWrapping"
+                    Value="Wrap"/>
         </Style>
 
         <Style x:Key="TooltipStyle"
@@ -160,10 +172,12 @@
                     Value="12"/>
             <Setter Property="Foreground"
                     Value="Gold"/>
+            <Setter Property="TextWrapping"
+                    Value="Wrap"/>
         </Style>
     </Window.Resources>
 
-    <Grid Margin="8">
+    <Grid x:Name="MainGrid" Margin="8">
         <Border Background="#66000000"
                 CornerRadius="5"
                 Padding="8">
