@@ -69,6 +69,19 @@
                         <TextBlock x:Name="EventsPathTextBlock" Grid.Row="3" Margin="15,0,0,10" Foreground="Gray"/>
                     </Grid>
                 </GroupBox>
+
+                <GroupBox Header="Overlay Settings" Margin="0,0,0,20">
+                    <Grid Margin="10">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <CheckBox x:Name="TransparentBackgroundCheckBox" 
+                                  Grid.Row="0" 
+                                  Content="Transparent Background (Only show fog gates and title bar)" 
+                                  Margin="0,0,0,5"/>
+                    </Grid>
+                </GroupBox>
             </StackPanel>
         </ScrollViewer>
 

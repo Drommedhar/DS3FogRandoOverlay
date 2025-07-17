@@ -11,6 +11,7 @@ namespace DS3FogRandoOverlay
     {
         private readonly ConfigurationService configurationService;
         private string originalPath;
+        private bool originalTransparentBackground;
 
         public bool SettingsChanged { get; private set; } = false;
 
@@ -20,6 +21,7 @@ namespace DS3FogRandoOverlay
             this.configurationService = configurationService ?? throw new ArgumentNullException(nameof(configurationService));
             
             originalPath = configurationService.Config.DarkSouls3Path;
+            originalTransparentBackground = configurationService.Config.TransparentBackground;
             LoadSettings();
             UpdatePathStatus();
         }
@@ -27,6 +29,7 @@ namespace DS3FogRandoOverlay
         private void LoadSettings()
         {
             DarkSouls3PathTextBox.Text = configurationService.Config.DarkSouls3Path;
+            TransparentBackgroundCheckBox.IsChecked = configurationService.Config.TransparentBackground;
         }
 
         private void UpdatePathStatus()
@@ -165,13 +168,14 @@ namespace DS3FogRandoOverlay
             try
             {
                 configurationService.Config.DarkSouls3Path = newPath;
+                configurationService.Config.TransparentBackground = TransparentBackgroundCheckBox.IsChecked ?? false;
                 configurationService.SaveConfig();
 
-                SettingsChanged = newPath != originalPath;
+                SettingsChanged = newPath != originalPath || configurationService.Config.TransparentBackground != originalTransparentBackground;
 
                 if (SettingsChanged)
                 {
-                    MessageBox.Show(this, "Settings saved successfully!\n\nThe application will refresh to use the new paths.", 
+                    MessageBox.Show(this, "Settings saved successfully!\n\nThe application will refresh to use the new settings.", 
                                   "Settings Saved", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
 

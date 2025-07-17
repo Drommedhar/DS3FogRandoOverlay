@@ -70,6 +70,9 @@ namespace DS3FogRandoOverlay
         {
             // Load window size and position from config
             LoadWindowSettings();
+            
+            // Apply transparency setting
+            ApplyTransparencySettings();
 
             // Load spoiler log data
             LoadSpoilerLogData();
@@ -364,15 +367,48 @@ namespace DS3FogRandoOverlay
                 {
                     File.AppendAllText("ds3_debug.log", $"[MainWindow] {DateTime.Now:HH:mm:ss.fff} - Adding spoiler info for fog gate: {fogGate.Text ?? fogGate.Name} -> {connection.ToArea}\n");
                     
-                    var destinationText = new TextBlock
+                    // Check if ToArea contains multiple destinations (with arrows)
+                    var destinations = connection.ToArea.Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
+                    
+                    if (destinations.Length > 1)
                     {
-                        Text = $"   → Leads to: {connection.ToArea}",
-                        Style = (Style)FindResource("DistanceTextStyle"),
-                        Foreground = Brushes.LightGreen,
-                        Margin = new Thickness(15, 2, 0, 2),
-                        FontStyle = FontStyles.Italic
-                    };
-                    gateContainer.Children.Add(destinationText);
+                        // Multiple destinations - show them in a grid-like format
+                        var leadsToText = new TextBlock
+                        {
+                            Text = "   Leads to:",
+                            Style = (Style)FindResource("DistanceTextStyle"),
+                            Foreground = Brushes.LightGreen,
+                            Margin = new Thickness(15, 2, 0, 2),
+                            FontStyle = FontStyles.Italic
+                        };
+                        gateContainer.Children.Add(leadsToText);
+                        
+                        foreach (var destination in destinations)
+                        {
+                            var destinationText = new TextBlock
+                            {
+                                Text = $"     {destination.Trim()}",
+                                Style = (Style)FindResource("DistanceTextStyle"),
+                                Foreground = Brushes.LightGreen,
+                                Margin = new Thickness(15, 0, 0, 1),
+                                FontStyle = FontStyles.Italic
+                            };
+                            gateContainer.Children.Add(destinationText);
+                        }
+                    }
+                    else
+                    {
+                        // Single destination - show as before
+                        var destinationText = new TextBlock
+                        {
+                            Text = $"   → Leads to: {connection.ToArea}",
+                            Style = (Style)FindResource("DistanceTextStyle"),
+                            Foreground = Brushes.LightGreen,
+                            Margin = new Thickness(15, 2, 0, 2),
+                            FontStyle = FontStyles.Italic
+                        };
+                        gateContainer.Children.Add(destinationText);
+                    }
                     
                     var connectionTypeText = new TextBlock
                     {
@@ -567,6 +603,9 @@ namespace DS3FogRandoOverlay
                 // Stop timers temporarily
                 updateTimer.Stop();
                 fogGateUpdateTimer.Stop();
+
+                // Apply transparency settings
+                ApplyTransparencySettings();
 
                 // Reload fog gate service data
                 fogGateService.ReloadData();
@@ -777,7 +816,7 @@ namespace DS3FogRandoOverlay
             
             return text;
         }
-/*
+
         private void ToggleSpoilerInfo_Click(object sender, RoutedEventArgs e)
         {
             showSpoilerInfo = !showSpoilerInfo;
@@ -790,6 +829,26 @@ namespace DS3FogRandoOverlay
             UpdateFogGatesDisplayWithDistances(lastKnownMapId);
             
             File.AppendAllText("ds3_debug.log", $"[MainWindow] {DateTime.Now:HH:mm:ss.fff} - Spoiler info toggled: {(showSpoilerInfo ? "Shown" : "Hidden")}\n");
-        }*/
+        }
+
+        private void ApplyTransparencySettings()
+        {
+            if (configurationService.Config.TransparentBackground)
+            {
+                // Make the main background transparent
+                MainBorder.Background = System.Windows.Media.Brushes.Transparent;
+                
+                // Remove the corner radius and padding from the main border
+                MainBorder.CornerRadius = new CornerRadius(0);
+                MainBorder.Padding = new Thickness(0);
+            }
+            else
+            {
+                // Restore the original background
+                MainBorder.Background = new SolidColorBrush(Color.FromArgb(0x66, 0x00, 0x00, 0x00));
+                MainBorder.CornerRadius = new CornerRadius(5);
+                MainBorder.Padding = new Thickness(8);
+            }
+        }
     }
 }

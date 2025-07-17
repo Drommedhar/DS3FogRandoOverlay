@@ -15,6 +15,7 @@ namespace DS3FogRandoOverlay.Services
             public double WindowHeight { get; set; } = 400;
             public bool AlwaysOnTop { get; set; } = true;
             public double UpdateIntervalMs { get; set; } = 500;
+            public bool TransparentBackground { get; set; } = false;
         }
 
         private readonly string configPath;

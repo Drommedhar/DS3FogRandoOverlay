@@ -2,6 +2,8 @@
 
 A lightweight C# .NET 8 WPF overlay application for Dark Souls 3 that provides real-time fog gate information from the Fog Randomizer mod. Designed for streamers and players who want to track fog gate connections during randomized runs.
 
+![alt text](/images/screenshot.png "Overlay screenshot")
+
 ## Features
 
 ### Core Functionality
@@ -89,7 +91,7 @@ The overlay automatically searches for DS3 and fog randomizer data in these loca
 - **Mouse wheel**: Scroll through fog gates (when list is longer than window)
 
 ### Context Menu Options
-- **Show/Hide Spoiler Information**: Toggle destination area display (NOTE: Currently disabled, as its not working correctly)
+- **Show/Hide Spoiler Information**: Toggle destination area display
 - **Settings**: Open configuration window
 - **Reset Position**: Move window to top-right corner
 - **Exit**: Close the application
