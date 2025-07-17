@@ -16,10 +16,6 @@ A lightweight C# .NET 8 WPF overlay application for Dark Souls 3 that provides r
 
 ### Streaming Features
 - **OBS-Ready**: Transparent background with clean, professional appearance
-- **Minimal Mode**: Automatically hides non-essential UI when connected to DS3
-- **Compact Design**: Small footprint that doesn't obstruct gameplay
-- **Smart Layout**: Automatically adjusts layout based on fog gate name length
-- **Hidden Scrollbars**: Clean appearance for streaming without visual clutter
 
 ### User Interface
 - **Resizable Window**: Drag bottom-right corner to resize
@@ -29,9 +25,8 @@ A lightweight C# .NET 8 WPF overlay application for Dark Souls 3 that provides r
 - **Toggle Spoiler Info**: Show/hide destination information on demand
 
 ## Requirements
-
 - **Dark Souls 3** (Steam version recommended & needs 1.15 crashfix)
-- **DS3 Fog Randomizer mod** installed and configured
+- **[DS3 Fog Randomizer mod](https://www.nexusmods.com/darksouls3/mods/551)** installed and configured
 - **.NET 8.0 Runtime** (Windows Desktop Runtime)
 - **Windows 10/11** operating system
 
@@ -41,7 +36,8 @@ A lightweight C# .NET 8 WPF overlay application for Dark Souls 3 that provides r
 1. Download the latest release from the [releases page](https://github.com/Drommedhar/DS3FogRandoOverlay/releases)
 2. Extract the files to a folder of your choice
 3. Ensure Dark Souls 3 and the DS3 Fog Randomizer mod are installed
-4. Run `DS3FogRandoOverlay.exe`
+   3.1. Currently only the default 'fog' folder is supported. If needed it can be adjusted in the future.
+5. Run `DS3FogRandoOverlay.exe`
 
 ### Building from Source
 ```bash
@@ -116,12 +112,6 @@ The overlay automatically searches for DS3 and fog randomizer data in these loca
    - Resize using the bottom-right corner grip
    - The overlay will remember your preferences
 
-### Streaming Tips
-- **Minimal Footprint**: In minimal mode, the overlay uses very little screen space
-- **Professional Look**: Clean, readable text with proper contrast
-- **No Clutter**: Status information is hidden when connected to DS3
-- **Smooth Updates**: Distance calculations update smoothly without flickering
-
 ## Display Information
 
 ### Fog Gates
@@ -184,7 +174,7 @@ The application uses Windows API calls to read Dark Souls 3 process memory:
 - **Newtonsoft.Json**: Configuration serialization
 - **System.Diagnostics.Process**: Process monitoring and memory reading
 - **YamlDotNet**: YAML parsing for configuration files
-- **SoulsFormats**: Dark Souls file format parsing
+- **[SoulsFormats](https://github.com/JKAnderson/SoulsFormats)**: Dark Souls file format parsing
 
 ## Troubleshooting
 
@@ -248,14 +238,6 @@ We welcome contributions to improve the DS3 Fog Randomizer Overlay!
 2. Install .NET 8.0 SDK
 3. Open `DS3FogRandoOverlay.sln` in Visual Studio or your preferred IDE
 4. Build and run the solution
-
-### Submitting Changes
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Make your changes and add tests if applicable
-4. Commit your changes (`git commit -m 'Add amazing feature'`)
-5. Push to the branch (`git push origin feature/amazing-feature`)
-6. Open a Pull Request
 
 ## License
 
