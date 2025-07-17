@@ -159,50 +159,174 @@ namespace DS3FogRandoOverlay.Services
             File.AppendAllText("ds3_debug.log", $"[FogGateService] Looking for connection with fog gate name: {fogGate.Name}\n");
             File.AppendAllText("ds3_debug.log", $"[FogGateService] Fog gate text: {fogGate.Text}\n");
             
-            // Try different matching approaches
-            var connection = spoilerLog.Connections.FirstOrDefault(c => 
-                c.FromArea.Contains(fogGate.Name) || 
-                c.FromArea.Contains(fogGate.Text) ||
-                c.FromArea.Contains($"{fogGate.Area}_{fogGateId}") ||
-                c.ToArea.Contains(fogGate.Name) ||
-                c.ToArea.Contains(fogGate.Text) ||
-                c.ToArea.Contains($"{fogGate.Area}_{fogGateId}"));
+            // Extract area names from fog gate text (e.g., "between Iudex Gundyr and Cemetery of Ash")
+            var extractedAreas = ExtractAreaNamesFromFogGateText(fogGate.Text);
+            File.AppendAllText("ds3_debug.log", $"[FogGateService] Extracted areas: {string.Join(", ", extractedAreas)}\n");
             
-            // If no exact match, try matching by text fragments
+            // Try to find all connections that match this specific fog gate
+            // Since we can't determine which side the player approaches from, we'll show both destinations
+            var allConnections = new List<DS3Connection>();
+            
+            // Get the current area name for debugging
+            var currentAreaName = GetAreaNameFromMapId(mapId);
+            File.AppendAllText("ds3_debug.log", $"[FogGateService] Current area: {currentAreaName} (from mapId: {mapId})\n");
+            
+            // Find all connections that match this fog gate (both forward and reverse)
+            foreach (var conn in spoilerLog.Connections)
+            {
+                var parts = conn.Description.Split(new[] { " -> " }, StringSplitOptions.None);
+                if (parts.Length >= 2)
+                {
+                    var sourcePart = parts[0].Trim();
+                    var destinationPart = parts[1].Trim();
+                    
+                    // Check if this fog gate matches the source side (forward direction)
+                    if (string.Equals(sourcePart, fogGate.Text, StringComparison.OrdinalIgnoreCase))
+                    {
+                        File.AppendAllText("ds3_debug.log", $"[FogGateService] Found forward connection: {sourcePart} -> {destinationPart}\n");
+                        
+                        // Create a connection for the forward direction
+                        var forwardConnection = new DS3Connection
+                        {
+                            FromArea = conn.FromArea,
+                            ToArea = destinationPart,
+                            GateId = conn.GateId,
+                            GateName = conn.GateName,
+                            Description = conn.Description,
+                            IsRandom = conn.IsRandom,
+                            IsBoss = conn.IsBoss,
+                            IsWarp = conn.IsWarp,
+                            ScalingPercentage = conn.ScalingPercentage
+                        };
+                        allConnections.Add(forwardConnection);
+                    }
+                    
+                    // Check if this fog gate matches the destination side (reverse direction)
+                    if (string.Equals(destinationPart, fogGate.Text, StringComparison.OrdinalIgnoreCase))
+                    {
+                        File.AppendAllText("ds3_debug.log", $"[FogGateService] Found reverse connection: {destinationPart} -> {sourcePart}\n");
+                        
+                        // Create a connection for the reverse direction
+                        var reverseConnection = new DS3Connection
+                        {
+                            FromArea = conn.ToArea,
+                            ToArea = sourcePart,
+                            GateId = conn.GateId,
+                            GateName = conn.GateName,
+                            Description = $"{destinationPart} -> {sourcePart}",
+                            IsRandom = conn.IsRandom,
+                            IsBoss = conn.IsBoss,
+                            IsWarp = conn.IsWarp,
+                            ScalingPercentage = conn.ScalingPercentage
+                        };
+                        allConnections.Add(reverseConnection);
+                    }
+                }
+            }
+            
+            // Create a combined connection that shows both destinations
+            DS3Connection? connection = null;
+            if (allConnections.Count > 0)
+            {
+                var destinations = allConnections.Select(c => c.ToArea).Distinct().ToList();
+                var formattedDestinations = destinations.Select(dest => $"→ {dest}").ToList();
+                var combinedDestination = string.Join("\n", formattedDestinations);
+                
+                File.AppendAllText("ds3_debug.log", $"[FogGateService] Found {allConnections.Count} connections with destinations: {string.Join(" OR ", destinations)}\n");
+                
+                // Create a combined connection
+                connection = new DS3Connection
+                {
+                    FromArea = allConnections[0].FromArea,
+                    ToArea = combinedDestination,
+                    GateId = allConnections[0].GateId,
+                    GateName = allConnections[0].GateName,
+                    Description = $"{fogGate.Text}\n{combinedDestination}",
+                    IsRandom = allConnections.Any(c => c.IsRandom),
+                    IsBoss = allConnections.Any(c => c.IsBoss),
+                    IsWarp = allConnections.Any(c => c.IsWarp),
+                    ScalingPercentage = allConnections[0].ScalingPercentage
+                };
+            }
+            
+            // If no exact match found, try fallback matching methods
             if (connection == null)
             {
-                // Try matching by keywords from the fog gate text
-                if (fogGate.Text.Contains("Emma"))
+                // Try matching by fog gate name
+                connection = spoilerLog.Connections.FirstOrDefault(c => 
+                    c.Description.Contains(fogGate.Name, StringComparison.OrdinalIgnoreCase) ||
+                    c.GateName.Contains(fogGate.Name, StringComparison.OrdinalIgnoreCase) ||
+                    string.Equals(c.GateName, fogGate.Name, StringComparison.OrdinalIgnoreCase));
+                
+                // If still no match, try matching by fog gate ID
+                if (connection == null)
                 {
-                    connection = spoilerLog.Connections.FirstOrDefault(c => 
-                        c.FromArea.Contains("Emma") || c.ToArea.Contains("Emma"));
-                }
-                else if (fogGate.Text.Contains("Vordt"))
-                {
-                    connection = spoilerLog.Connections.FirstOrDefault(c => 
-                        c.FromArea.Contains("Vordt") || c.ToArea.Contains("Vordt"));
-                }
-                else if (fogGate.Text.Contains("Oceiros"))
-                {
-                    connection = spoilerLog.Connections.FirstOrDefault(c => 
-                        c.FromArea.Contains("Oceiros") || c.ToArea.Contains("Oceiros"));
-                }
-                else if (fogGate.Text.Contains("Consumed"))
-                {
-                    connection = spoilerLog.Connections.FirstOrDefault(c => 
-                        c.FromArea.Contains("Consumed") || c.ToArea.Contains("Consumed"));
+                    connection = spoilerLog.Connections.FirstOrDefault(c => c.GateId == fogGateId);
                 }
                 
-                File.AppendAllText("ds3_debug.log", $"[FogGateService] Keyword matching result: {connection?.FromArea} -> {connection?.ToArea}\n");
+                // If still no match, try matching by extracted areas
+                if (connection == null && extractedAreas.Count >= 2)
+                {
+                    var firstArea = extractedAreas[0];
+                    var secondArea = extractedAreas[1];
+                    
+                    connection = spoilerLog.Connections.FirstOrDefault(c => 
+                        (c.FromArea.Contains(firstArea, StringComparison.OrdinalIgnoreCase) && 
+                         c.ToArea.Contains(secondArea, StringComparison.OrdinalIgnoreCase)) ||
+                        (c.FromArea.Contains(secondArea, StringComparison.OrdinalIgnoreCase) && 
+                         c.ToArea.Contains(firstArea, StringComparison.OrdinalIgnoreCase)));
+                }
+                
+                // Final fallback: try matching by any extracted area
+                if (connection == null)
+                {
+                    foreach (var area in extractedAreas)
+                    {
+                        connection = spoilerLog.Connections.FirstOrDefault(c => 
+                            c.FromArea.Contains(area, StringComparison.OrdinalIgnoreCase) || 
+                            c.ToArea.Contains(area, StringComparison.OrdinalIgnoreCase));
+                        if (connection != null) 
+                        {
+                            // For fallback matches, parse the destination from the description
+                            var parts = connection.Description.Split(new[] { " -> " }, StringSplitOptions.None);
+                            if (parts.Length >= 2)
+                            {
+                                var destinationPart = parts[1].Trim();
+                                connection = new DS3Connection
+                                {
+                                    FromArea = connection.FromArea,
+                                    ToArea = destinationPart,
+                                    GateId = connection.GateId,
+                                    GateName = connection.GateName,
+                                    Description = connection.Description,
+                                    IsRandom = connection.IsRandom,
+                                    IsBoss = connection.IsBoss,
+                                    IsWarp = connection.IsWarp,
+                                    ScalingPercentage = connection.ScalingPercentage
+                                };
+                            }
+                            break;
+                        }
+                    }
+                }
             }
+
+            File.AppendAllText("ds3_debug.log", $"[FogGateService] Final connection result: {connection?.FromArea} -> {connection?.ToArea}\n");
 
             if (connection != null)
             {
-                File.AppendAllText("ds3_debug.log", $"[FogGateService] Found connection: {connection.FromArea} -> {connection.ToArea}\n");
+                File.AppendAllText("ds3_debug.log", $"[FogGateService] Found connection: {connection.FromArea} -> {connection.ToArea} (GateId: {connection.GateId})\n");
             }
             else
             {
                 File.AppendAllText("ds3_debug.log", $"[FogGateService] No connection found for fog gate {fogGate.Name}\n");
+                
+                // Debug: List all available connections for troubleshooting
+                File.AppendAllText("ds3_debug.log", $"[FogGateService] Available connections:\n");
+                foreach (var conn in spoilerLog.Connections.Take(10)) // Show first 10 connections
+                {
+                    File.AppendAllText("ds3_debug.log", $"[FogGateService]   {conn.FromArea} -> {conn.ToArea} (ID: {conn.GateId}, Name: {conn.GateName})\n");
+                }
             }
 
             return connection;
@@ -523,6 +647,129 @@ namespace DS3FogRandoOverlay.Services
                     File.AppendAllText("ds3_debug.log", $"[FogGateService] Cannot initialize combiner - fogDistribution: {fogDistribution != null}, spoilerLog: {spoilerLog != null}\n");
                 }
             }
+        }
+
+        /// <summary>
+        /// Extracts area names from fog gate text (e.g., "between Iudex Gundyr and Cemetery of Ash")
+        /// </summary>
+        /// <param name="fogGateText">The fog gate text</param>
+        /// <returns>List of extracted area names</returns>
+        private static List<string> ExtractAreaNamesFromFogGateText(string fogGateText)
+        {
+            var areas = new List<string>();
+            
+            if (string.IsNullOrEmpty(fogGateText))
+                return areas;
+            
+            // Common area name patterns - these are the canonical area names used in spoiler logs
+            var knownAreas = new Dictionary<string, string[]>
+            {
+                { "Cemetery of Ash", new[] { "Cemetery of Ash", "cemetery" } },
+                { "Firelink Shrine", new[] { "Firelink Shrine", "Firelink", "firelink" } },
+                { "High Wall of Lothric", new[] { "High Wall of Lothric", "High Wall", "highwall", "lothric" } },
+                { "Undead Settlement", new[] { "Undead Settlement", "settlement" } },
+                { "Road of Sacrifices", new[] { "Road of Sacrifices", "Road", "farronkeep" } },
+                { "Farron Keep", new[] { "Farron Keep", "Farron", "farronkeep" } },
+                { "Cathedral of the Deep", new[] { "Cathedral of the Deep", "Cathedral", "cathedral" } },
+                { "Catacombs of Carthus", new[] { "Catacombs of Carthus", "Catacombs", "catacombs" } },
+                { "Smouldering Lake", new[] { "Smouldering Lake", "catacombs" } },
+                { "Irithyll of the Boreal Valley", new[] { "Irithyll of the Boreal Valley", "Irithyll", "irithyll" } },
+                { "Anor Londo", new[] { "Anor Londo", "irithyll" } },
+                { "Irithyll Dungeon", new[] { "Irithyll Dungeon", "Dungeon", "dungeon" } },
+                { "Profaned Capital", new[] { "Profaned Capital", "dungeon" } },
+                { "Lothric Castle", new[] { "Lothric Castle", "Castle", "lothric" } },
+                { "Grand Archives", new[] { "Grand Archives", "Archives", "archives" } },
+                { "Untended Graves", new[] { "Untended Graves", "untended" } },
+                { "Kiln of the First Flame", new[] { "Kiln of the First Flame", "Kiln", "kiln" } },
+                { "Archdragon Peak", new[] { "Archdragon Peak", "archdragon" } },
+                { "Painted World of Ariandel", new[] { "Painted World of Ariandel", "Ariandel", "ariandel" } },
+                { "The Dreg Heap", new[] { "The Dreg Heap", "Dreg Heap", "dregheap" } },
+                { "The Ringed City", new[] { "The Ringed City", "Ringed City", "ringedcity" } },
+                { "Filianore's Rest", new[] { "Filianore's Rest", "filianore" } }
+            };
+            
+            // Also check for boss names that might be in the fog gate text
+            var bossNames = new Dictionary<string, string>
+            {
+                { "Iudex Gundyr", "Cemetery of Ash" },
+                { "Vordt", "High Wall of Lothric" },
+                { "Curse-rotted Greatwood", "Undead Settlement" },
+                { "Crystal Sage", "Road of Sacrifices" },
+                { "Abyss Watchers", "Farron Keep" },
+                { "Deacons of the Deep", "Cathedral of the Deep" },
+                { "High Lord Wolnir", "Catacombs of Carthus" },
+                { "Old Demon King", "Smouldering Lake" },
+                { "Pontiff Sulyvahn", "Irithyll of the Boreal Valley" },
+                { "Aldrich", "Anor Londo" },
+                { "Yhorm the Giant", "Profaned Capital" },
+                { "Dancer of the Boreal Valley", "High Wall of Lothric" },
+                { "Dragonslayer Armour", "Lothric Castle" },
+                { "Oceiros", "Lothric Castle" },
+                { "Champion Gundyr", "Untended Graves" },
+                { "Twin Princes", "Lothric Castle" },
+                { "Soul of Cinder", "Kiln of the First Flame" },
+                { "Nameless King", "Archdragon Peak" },
+                { "Sister Friede", "Painted World of Ariandel" },
+                { "Demon Prince", "The Dreg Heap" },
+                { "Halflight", "The Ringed City" },
+                { "Gael", "Filianore's Rest" }
+            };
+            
+            var lowerText = fogGateText.ToLower();
+            
+            // Check for boss names first
+            foreach (var boss in bossNames)
+            {
+                if (lowerText.Contains(boss.Key.ToLower()))
+                {
+                    areas.Add(boss.Value);
+                }
+            }
+            
+            // Check for area names
+            foreach (var area in knownAreas)
+            {
+                foreach (var keyword in area.Value)
+                {
+                    if (lowerText.Contains(keyword.ToLower()))
+                    {
+                        areas.Add(area.Key);
+                        break;
+                    }
+                }
+            }
+            
+            return areas.Distinct().ToList();
+        }
+
+        /// <summary>
+        /// Gets the display area name from a map ID
+        /// </summary>
+        /// <param name="mapId">The map ID (e.g., "m30_00_00_00")</param>
+        /// <returns>The display area name</returns>
+        private static string GetAreaNameFromMapId(string mapId)
+        {
+            return mapId switch
+            {
+                "m30_00_00_00" => "High Wall of Lothric",
+                "m30_01_00_00" => "Lothric Castle",
+                "m31_00_00_00" => "Undead Settlement",
+                "m32_00_00_00" => "Archdragon Peak",
+                "m33_00_00_00" => "Road of Sacrifices",
+                "m34_00_00_00" => "Grand Archives",
+                "m35_00_00_00" => "Cathedral of the Deep",
+                "m37_00_00_00" => "Irithyll of the Boreal Valley",
+                "m38_00_00_00" => "Catacombs of Carthus",
+                "m39_00_00_00" => "Irithyll Dungeon",
+                "m40_00_00_00" => "Firelink Shrine",
+                "m40_01_00_00" => "Untended Graves",
+                "m41_00_00_00" => "Kiln of the First Flame",
+                "m45_00_00_00" => "Painted World of Ariandel",
+                "m50_00_00_00" => "The Dreg Heap",
+                "m51_00_00_00" => "The Ringed City",
+                "m51_01_00_00" => "Filianore's Rest",
+                _ => mapId // Return the original mapId if not found
+            };
         }
     }
 }

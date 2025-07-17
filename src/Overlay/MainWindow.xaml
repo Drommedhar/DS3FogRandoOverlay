@@ -24,10 +24,10 @@
             <MenuItem Header="Settings..."
                       Click="Settings_Click"/>
             <Separator/>
-            <!--><MenuItem x:Name="ToggleSpoilerMenuItem"
+            <MenuItem x:Name="ToggleSpoilerMenuItem"
                       Header="Show Spoiler Information"
                       Click="ToggleSpoilerInfo_Click"/>
-            <Separator/><!-->
+            <Separator/>
             <MenuItem Header="Debug Options">
                 <MenuItem Header="Scan for Area IDs"
                           Click="ScanAreaIds_Click"/>
@@ -178,7 +178,8 @@
     </Window.Resources>
 
     <Grid x:Name="MainGrid" Margin="8">
-        <Border Background="#66000000"
+        <Border x:Name="MainBorder"
+                Background="#66000000"
                 CornerRadius="5"
                 Padding="8">
             <Grid>

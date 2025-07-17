@@ -187,7 +187,7 @@ namespace DS3Parser.Services
             return spoilerLog;
         }
 
-        private DS3SpoilerLogConnection ParseConnectionText(string connectionText, string currentArea, bool isRandom)
+private DS3SpoilerLogConnection ParseConnectionText(string connectionText, string currentArea, bool isRandom)
         {
             var connection = new DS3SpoilerLogConnection
             {
@@ -195,22 +195,40 @@ namespace DS3Parser.Services
                 FullText = connectionText
             };
 
-            // Parse connection text format: "From X (details) to Y (details)"
+            // Try format: "From X (details) to Y (details)"
             var fromToMatch = Regex.Match(connectionText, @"From (.+?) \((.+?)\) to (.+?) \((.+?)\)");
             if (fromToMatch.Success)
             {
                 connection.FromArea = fromToMatch.Groups[1].Value;
                 connection.ToArea = fromToMatch.Groups[3].Value;
                 connection.Description = $"{fromToMatch.Groups[2].Value} -> {fromToMatch.Groups[4].Value}";
-            }
-            else
-            {
-                // Fallback parsing for other formats
-                connection.FromArea = currentArea;
-                connection.ToArea = "Unknown";
-                connection.Description = connectionText;
+                return connection;
             }
 
+            // Try format: "From X to Y (details)"
+            var fromToSimpleMatch = Regex.Match(connectionText, @"From (.+?) to (.+?) \((.+?)\)");
+            if (fromToSimpleMatch.Success)
+            {
+                connection.FromArea = fromToSimpleMatch.Groups[1].Value;
+                connection.ToArea = fromToSimpleMatch.Groups[2].Value;
+                connection.Description = fromToSimpleMatch.Groups[3].Value;
+                return connection;
+            }
+
+            // Try format: "From X to Y"
+            var fromToBasicMatch = Regex.Match(connectionText, @"From (.+?) to (.+)");
+            if (fromToBasicMatch.Success)
+            {
+                connection.FromArea = fromToBasicMatch.Groups[1].Value;
+                connection.ToArea = fromToBasicMatch.Groups[2].Value;
+                connection.Description = connectionText;
+                return connection;
+            }
+
+            // Fallback parsing for other formats
+            connection.FromArea = currentArea;
+            connection.ToArea = "Unknown";
+            connection.Description = connectionText;
             return connection;
         }
     }
