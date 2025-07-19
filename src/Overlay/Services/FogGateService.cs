@@ -835,5 +835,42 @@ namespace DS3FogRandoOverlay.Services
             fogModDirectory = null;
             LoadDataIfNeeded();
         }
+
+        /// <summary>
+        /// Gets the path to the current spoiler log file being used
+        /// </summary>
+        public string? GetCurrentSpoilerLogPath()
+        {
+            LoadDataIfNeeded();
+            
+            if (string.IsNullOrEmpty(fogModDirectory))
+                return null;
+
+            try
+            {
+                var spoilerLogDir = Path.Combine(fogModDirectory, "spoiler_logs");
+                if (!Directory.Exists(spoilerLogDir))
+                    return null;
+
+                var logFiles = Directory.GetFiles(spoilerLogDir, "*.txt")
+                    .OrderByDescending(f => File.GetCreationTime(f))
+                    .ToArray();
+
+                return logFiles.Length > 0 ? logFiles[0] : null;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Gets the gate object with position and rotation data for a fog gate
+        /// </summary>
+        public SoulsFormats.MSB3.Part.Object? GetGateObject(DS3FogGate gate)
+        {
+            EnsureCombinedDataInitialized();
+            return combiner.GetGateObject(gate);
+        }
     }
 }
