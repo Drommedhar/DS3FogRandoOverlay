@@ -38,9 +38,24 @@ namespace DS3Parser
             DS3FogDistribution? fogDistribution = null;
             DS3SpoilerLog? spoilerLog = null;
 
+            // First, try to find the fog randomizer directory dynamically
+            var fogModDirectory = FindFogRandomizerDirectory(gameDirectory);
+            if (string.IsNullOrEmpty(fogModDirectory))
+            {
+                System.Diagnostics.Debug.WriteLine($"[DS3Parser] No fog randomizer directory found in: {gameDirectory}");
+                return new DS3FogRandomizerData
+                {
+                    FogDistribution = null,
+                    SpoilerLog = null,
+                    GameDirectory = gameDirectory
+                };
+            }
+
+            System.Diagnostics.Debug.WriteLine($"[DS3Parser] Found fog randomizer directory: {fogModDirectory}");
+
             try
             {
-                fogDistribution = _fogDistributionParser.ParseFromGameDirectory(gameDirectory);
+                fogDistribution = _fogDistributionParser.ParseFromFogDirectory(fogModDirectory);
             }
             catch (Exception ex)
             {
@@ -50,7 +65,7 @@ namespace DS3Parser
 
             try
             {
-                spoilerLog = _spoilerLogParser.ParseFromGameDirectory(gameDirectory);
+                spoilerLog = _spoilerLogParser.ParseFromFogDirectory(fogModDirectory);
             }
             catch (Exception ex)
             {
@@ -62,7 +77,8 @@ namespace DS3Parser
             {
                 FogDistribution = fogDistribution,
                 SpoilerLog = spoilerLog,
-                GameDirectory = gameDirectory
+                GameDirectory = gameDirectory,
+                FogModDirectory = fogModDirectory
             };
         }
 
@@ -106,8 +122,95 @@ namespace DS3Parser
             if (!Directory.Exists(gameDirectory))
                 return false;
 
-            var fogPath = Path.Combine(gameDirectory, "fog", "fogdist", "fog.txt");
+            // Try to find fog randomizer data dynamically
+            var fogModPath = FindFogRandomizerDirectory(gameDirectory);
+            if (string.IsNullOrEmpty(fogModPath))
+                return false;
+
+            var fogPath = Path.Combine(fogModPath, "fogdist", "fog.txt");
             return File.Exists(fogPath);
+        }
+
+        /// <summary>
+        /// Dynamically find the fog randomizer mod directory by searching for required files/folders
+        /// </summary>
+        /// <param name="baseDirectory">Base directory to search from (usually DS3 game directory)</param>
+        /// <returns>Path to fog randomizer directory, or null if not found</returns>
+        public string? FindFogRandomizerDirectory(string baseDirectory)
+        {
+            if (!Directory.Exists(baseDirectory))
+                return null;
+
+            return SearchForFogRandomizerDirectory(baseDirectory, maxDepth: 4);
+        }
+
+        /// <summary>
+        /// Recursively search for fog randomizer directory by looking for key files and folders
+        /// </summary>
+        private string? SearchForFogRandomizerDirectory(string basePath, int maxDepth, int currentDepth = 0)
+        {
+            if (currentDepth >= maxDepth || !Directory.Exists(basePath))
+                return null;
+
+            try
+            {
+                // Check if current directory is a fog randomizer directory
+                if (IsValidFogRandomizerDirectory(basePath))
+                    return basePath;
+
+                // Search subdirectories
+                foreach (var subDir in Directory.GetDirectories(basePath))
+                {
+                    var result = SearchForFogRandomizerDirectory(subDir, maxDepth, currentDepth + 1);
+                    if (result != null)
+                        return result;
+                }
+            }
+            catch
+            {
+                // Ignore access denied or other errors when searching
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Check if a directory contains the required fog randomizer files and folders
+        /// </summary>
+        private bool IsValidFogRandomizerDirectory(string path)
+        {
+            if (!Directory.Exists(path))
+                return false;
+
+            // Check for key files that indicate this is a fog randomizer directory
+            var requiredFiles = new[]
+            {
+                Path.Combine(path, "fogdist", "fog.txt"),
+                Path.Combine(path, "fogdist", "locations.txt")
+            };
+
+            var requiredDirs = new[]
+            {
+                Path.Combine(path, "fogdist"),
+                Path.Combine(path, "spoiler_logs")
+            };
+
+            // At least fog.txt must exist
+            bool hasFogFile = File.Exists(requiredFiles[0]);
+            if (!hasFogFile)
+                return false;
+
+            // At least fogdist directory must exist
+            bool hasFogDistDir = Directory.Exists(requiredDirs[0]);
+            if (!hasFogDistDir)
+                return false;
+
+            // Optional: Check for mapstudio directory which is often used
+            var mapStudioPath = Path.Combine(path, "map", "mapstudio");
+            bool hasMapStudio = Directory.Exists(mapStudioPath);
+
+            // Return true if we have the essential files and at least some of the expected structure
+            return hasFogFile && hasFogDistDir;
         }
 
         /// <summary>
@@ -117,17 +220,89 @@ namespace DS3Parser
         /// <returns>Expected file paths</returns>
         public DS3FogRandomizerPaths GetExpectedPaths(string gameDirectory)
         {
+            var fogModDirectory = FindFogRandomizerDirectory(gameDirectory);
+            
+            if (string.IsNullOrEmpty(fogModDirectory))
+            {
+                // Return empty paths if no fog mod directory found
+                return new DS3FogRandomizerPaths
+                {
+                    GameDirectory = gameDirectory,
+                    FogDirectory = "",
+                    FogDistDirectory = "",
+                    FogFile = "",
+                    LocationsFile = "",
+                    EventsFile = "",
+                    SpoilerLogDirectory = "",
+                    FogModExecutable = ""
+                };
+            }
+
             return new DS3FogRandomizerPaths
             {
                 GameDirectory = gameDirectory,
-                FogDirectory = Path.Combine(gameDirectory, "fog"),
-                FogDistDirectory = Path.Combine(gameDirectory, "fog", "fogdist"),
-                FogFile = Path.Combine(gameDirectory, "fog", "fogdist", "fog.txt"),
-                LocationsFile = Path.Combine(gameDirectory, "fog", "fogdist", "locations.txt"),
-                EventsFile = Path.Combine(gameDirectory, "fog", "fogdist", "events.txt"),
-                SpoilerLogDirectory = Path.Combine(gameDirectory, "fog", "spoiler_logs"),
-                FogModExecutable = Path.Combine(gameDirectory, "fog", "FogMod.exe")
+                FogDirectory = fogModDirectory,
+                FogDistDirectory = Path.Combine(fogModDirectory, "fogdist"),
+                FogFile = Path.Combine(fogModDirectory, "fogdist", "fog.txt"),
+                LocationsFile = Path.Combine(fogModDirectory, "fogdist", "locations.txt"),
+                EventsFile = Path.Combine(fogModDirectory, "fogdist", "events.txt"),
+                SpoilerLogDirectory = Path.Combine(fogModDirectory, "spoiler_logs"),
+                FogModExecutable = Path.Combine(fogModDirectory, "FogMod.exe")
             };
+        }
+
+        /// <summary>
+        /// Get diagnostic information about fog randomizer detection
+        /// </summary>
+        /// <param name="gameDirectory">Path to the DS3 game directory</param>
+        /// <returns>Diagnostic information string</returns>
+        public string GetFogRandomizerDiagnostics(string gameDirectory)
+        {
+            var diagnostics = new List<string>();
+            
+            diagnostics.Add($"Searching for fog randomizer in: {gameDirectory}");
+            
+            var fogModDirectory = FindFogRandomizerDirectory(gameDirectory);
+            if (string.IsNullOrEmpty(fogModDirectory))
+            {
+                diagnostics.Add("❌ No fog randomizer directory found");
+                diagnostics.Add("Expected to find a directory containing:");
+                diagnostics.Add("  - fogdist/fog.txt");
+                diagnostics.Add("  - fogdist/locations.txt");
+                diagnostics.Add("  - spoiler_logs/ directory");
+                return string.Join("\n", diagnostics);
+            }
+            
+            diagnostics.Add($"✅ Found fog mod directory: {fogModDirectory}");
+            
+            var paths = GetExpectedPaths(gameDirectory);
+            diagnostics.Add($"✅ Fog file: {(paths.FogFileExists ? "Found" : "Missing")} - {paths.FogFile}");
+            diagnostics.Add($"✅ Locations file: {(File.Exists(paths.LocationsFile) ? "Found" : "Missing")} - {paths.LocationsFile}");
+            diagnostics.Add($"✅ Events file: {(File.Exists(paths.EventsFile) ? "Found" : "Missing")} - {paths.EventsFile}");
+            diagnostics.Add($"✅ Spoiler logs dir: {(paths.SpoilerLogDirectoryExists ? "Found" : "Missing")} - {paths.SpoilerLogDirectory}");
+            diagnostics.Add($"✅ FogMod executable: {(File.Exists(paths.FogModExecutable) ? "Found" : "Missing")} - {paths.FogModExecutable}");
+            
+            // Check for mapstudio directories
+            var mapStudioPaths = new[]
+            {
+                Path.Combine(fogModDirectory, "map", "mapstudio"),
+                Path.Combine(fogModDirectory, "mapstudio"),
+                Path.Combine(fogModDirectory, "Maps", "mapstudio"),
+                Path.Combine(fogModDirectory, "maps", "mapstudio")
+            };
+            
+            var foundMapStudio = mapStudioPaths.FirstOrDefault(Directory.Exists);
+            if (foundMapStudio != null)
+            {
+                var msbFiles = Directory.GetFiles(foundMapStudio, "*.msb.dcx").Length;
+                diagnostics.Add($"✅ MapStudio directory: Found with {msbFiles} MSB files - {foundMapStudio}");
+            }
+            else
+            {
+                diagnostics.Add($"⚠️ MapStudio directory: Not found (distance calculations may not work)");
+            }
+            
+            return string.Join("\n", diagnostics);
         }
     }
 }

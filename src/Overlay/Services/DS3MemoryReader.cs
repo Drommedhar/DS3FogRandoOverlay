@@ -73,10 +73,25 @@ namespace DS3FogRandoOverlay.Services
         {
             try
             {
-                return ds3Process != null && !ds3Process.HasExited;
+                bool isRunning = ds3Process != null && !ds3Process.HasExited;
+                
+                // If the process is no longer running, clean up our connection state
+                if (!isRunning && (ds3Process != null || processHandle != IntPtr.Zero))
+                {
+                    LogDebug("DS3 process is no longer running, cleaning up connection state");
+                    Detach();
+                }
+                
+                return isRunning;
             }
             catch
             {
+                // If we can't check the process state, assume it's not running and clean up
+                if (ds3Process != null || processHandle != IntPtr.Zero)
+                {
+                    LogDebug("Exception checking DS3 process state, cleaning up connection");
+                    Detach();
+                }
                 return false;
             }
         }

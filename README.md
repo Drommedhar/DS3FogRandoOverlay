@@ -68,11 +68,20 @@ dotnet build --configuration Release
 - **Minimal Mode** (DS3 connected): Shows only fog gates and essential info for clean streaming
 
 ### Data Sources
-The overlay automatically searches for DS3 and fog randomizer data in these locations:
-- `C:\Program Files (x86)\Steam\steamapps\common\DARK SOULS III\Game\fog\`
-- `C:\Program Files\Steam\steamapps\common\DARK SOULS III\Game\fog\`
-- `D:\SteamLibrary\steamapps\common\DARK SOULS III\Game\fog\`
-- `E:\SteamLibrary\steamapps\common\DARK SOULS III\Game\fog\`
+The overlay automatically searches for DS3 and fog randomizer data by:
+1. **Auto-detecting DS3 installation** in common Steam directories:
+   - `C:\Program Files (x86)\Steam\steamapps\common\DARK SOULS III\`
+   - `C:\Program Files\Steam\steamapps\common\DARK SOULS III\`
+   - `D:\SteamLibrary\steamapps\common\DARK SOULS III\`
+   - `E:\SteamLibrary\steamapps\common\DARK SOULS III\`
+
+2. **Dynamically locating fog randomizer mod** by recursively searching for:
+   - `fogdist\fog.txt` (required)
+   - `fogdist\locations.txt` 
+   - `spoiler_logs\` directory
+   - `map\mapstudio\` directory (for MSB files)
+
+The overlay no longer relies on the fog randomizer being in a specific `\fog` directory and will find it wherever it's installed within your DS3 game directory.
 
 ## Controls and Navigation
 

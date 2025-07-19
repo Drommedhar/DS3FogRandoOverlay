@@ -48,6 +48,17 @@ namespace DS3Parser.Services
             return ParseFogFile(fogFilePath);
         }
 
+        /// <summary>
+        /// Parse fog distribution data from the fog mod directory
+        /// </summary>
+        /// <param name="fogDirectory">Path to the fog mod directory</param>
+        /// <returns>Parsed fog distribution data</returns>
+        public DS3FogDistribution ParseFromFogDirectory(string fogDirectory)
+        {
+            var fogFilePath = Path.Combine(fogDirectory, "fogdist", "fog.txt");
+            return ParseFogFile(fogFilePath);
+        }
+
         private FogDistributionRaw ParseRawFogData(string fogFilePath)
         {
             using var reader = new StreamReader(fogFilePath);

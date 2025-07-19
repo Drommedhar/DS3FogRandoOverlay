@@ -27,6 +27,11 @@ namespace DS3Parser.Models
         public string GameDirectory { get; set; } = string.Empty;
 
         /// <summary>
+        /// The fog mod directory path where the randomizer files are located
+        /// </summary>
+        public string? FogModDirectory { get; set; }
+
+        /// <summary>
         /// Whether both fog distribution and spoiler log data are available
         /// </summary>
         public bool HasCompleteData => FogDistribution != null && SpoilerLog != null;

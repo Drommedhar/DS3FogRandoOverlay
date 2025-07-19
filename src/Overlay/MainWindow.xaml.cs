@@ -25,6 +25,7 @@ namespace DS3FogRandoOverlay
         private readonly ConfigurationService configurationService;
         private readonly DispatcherTimer updateTimer;
         private readonly DispatcherTimer fogGateUpdateTimer;
+        private DispatcherTimer? retryConnectionTimer; // Timer for retrying DS3 connection
 
         private string? lastKnownArea;
         private string? lastKnownMapId;
@@ -101,33 +102,8 @@ namespace DS3FogRandoOverlay
                 StatusText.Foreground = System.Windows.Media.Brushes.Red;
                 SetMinimalMode(false);
 
-                // Retry connection every 2 seconds
-                var retryTimer = new DispatcherTimer
-                {
-                    Interval = TimeSpan.FromSeconds(2)
-                };
-                retryTimer.Tick += (s, e) =>
-                {
-                    if (memoryReader.AttachToDS3())
-                    {
-                        StatusText.Text = "Connected to DS3";
-                        StatusText.Foreground = System.Windows.Media.Brushes.Green;
-                        SetMinimalMode(true);
-                        updateTimer.Start();
-                        fogGateUpdateTimer.Start();
-                        retryTimer.Stop();
-                        
-                        // Force initial fog gate display
-                        var mapId = memoryReader.GetCurrentMapId();
-                        var position = memoryReader.GetPlayerPosition();
-                        var currentArea = areaMapper.GetCurrentAreaName(mapId, position);
-                        lastKnownArea = currentArea;
-                        lastKnownMapId = mapId;
-                        CurrentAreaText.Text = currentArea ?? "Unknown";
-                        UpdateFogGatesDisplayWithDistances(mapId);
-                    }
-                };
-                retryTimer.Start();
+                // Start retry connection attempt
+                StartRetryConnection();
             }
         }
 
@@ -159,8 +135,15 @@ namespace DS3FogRandoOverlay
                 FogGatesPanel.Children.Clear();
                 updateTimer.Stop();
                 fogGateUpdateTimer.Stop(); // Stop fog gate updates too
+                SetMinimalMode(false);
+                
+                // Start retry connection attempt
+                StartRetryConnection();
                 return;
             }
+
+            // If we get here, DS3 is running, so stop any retry attempts
+            StopRetryConnection();
 
             var position = memoryReader.GetPlayerPosition();
             var mapId = memoryReader.GetCurrentMapId();
@@ -195,6 +178,55 @@ namespace DS3FogRandoOverlay
                     lastKnownPosition = position;
                     lastFogGateUpdate = DateTime.Now;
                 }
+            }
+        }
+
+        /// <summary>
+        /// Start the retry timer to attempt reconnection to DS3
+        /// </summary>
+        private void StartRetryConnection()
+        {
+            // Stop any existing retry timer
+            StopRetryConnection();
+            
+            // Create new retry timer
+            retryConnectionTimer = new DispatcherTimer
+            {
+                Interval = TimeSpan.FromSeconds(2)
+            };
+            retryConnectionTimer.Tick += (s, e) =>
+            {
+                if (memoryReader.AttachToDS3())
+                {
+                    StatusText.Text = "Connected to DS3";
+                    StatusText.Foreground = System.Windows.Media.Brushes.Green;
+                    SetMinimalMode(true);
+                    updateTimer.Start();
+                    fogGateUpdateTimer.Start();
+                    StopRetryConnection();
+                    
+                    // Force initial fog gate display
+                    var mapId = memoryReader.GetCurrentMapId();
+                    var position = memoryReader.GetPlayerPosition();
+                    var currentArea = areaMapper.GetCurrentAreaName(mapId, position);
+                    lastKnownArea = currentArea;
+                    lastKnownMapId = mapId;
+                    CurrentAreaText.Text = currentArea ?? "Unknown";
+                    UpdateFogGatesDisplayWithDistances(mapId);
+                }
+            };
+            retryConnectionTimer.Start();
+        }
+
+        /// <summary>
+        /// Stop the retry connection timer
+        /// </summary>
+        private void StopRetryConnection()
+        {
+            if (retryConnectionTimer != null)
+            {
+                retryConnectionTimer.Stop();
+                retryConnectionTimer = null;
             }
         }
 
@@ -652,6 +684,8 @@ namespace DS3FogRandoOverlay
         protected override void OnClosed(EventArgs e)
         {
             updateTimer?.Stop();
+            fogGateUpdateTimer?.Stop();
+            StopRetryConnection();
             memoryReader?.Detach();
             base.OnClosed(e);
         }

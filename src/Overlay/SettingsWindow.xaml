@@ -33,6 +33,7 @@
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
 
                         <TextBlock Grid.Row="0" Text="Dark Souls 3 Path:" Margin="0,0,0,5"/>
@@ -48,12 +49,15 @@
                         <Button x:Name="AutoDetectButton" Grid.Row="2" Content="Auto-Detect Dark Souls 3" 
                                 Width="200" HorizontalAlignment="Left" Margin="0,0,0,10" Click="AutoDetectButton_Click"/>
 
-                        <TextBlock Grid.Row="3" Text="Status:" Margin="0,0,0,5"/>
-                        <TextBlock x:Name="StatusTextBlock" Grid.Row="4" Text="Ready" Foreground="Green" FontWeight="Bold"/>
+                        <Button x:Name="DiagnosticsButton" Grid.Row="3" Content="Show Fog Randomizer Diagnostics" 
+                                Width="250" HorizontalAlignment="Left" Margin="0,0,0,10" Click="DiagnosticsButton_Click"/>
+
+                        <TextBlock Grid.Row="4" Text="Status:" Margin="0,0,0,5"/>
+                        <TextBlock x:Name="StatusTextBlock" Grid.Row="5" Text="Ready" Foreground="Green" FontWeight="Bold"/>
                     </Grid>
                 </GroupBox>
 
-                <GroupBox Header="Path Detection Results" Margin="0,0,0,20">
+                <GroupBox Header="Fog Randomizer Detection Results" Margin="0,0,0,20">
                     <Grid Margin="10">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
@@ -62,7 +66,7 @@
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
 
-                        <TextBlock Grid.Row="0" Text="Fog Directory:" Margin="0,0,0,5"/>
+                        <TextBlock Grid.Row="0" Text="Fog Randomizer Directory:" Margin="0,0,0,5"/>
                         <TextBlock x:Name="FogPathTextBlock" Grid.Row="1" Margin="15,0,0,10" Foreground="Gray"/>
 
                         <TextBlock Grid.Row="2" Text="Events File:" Margin="0,0,0,5"/>
