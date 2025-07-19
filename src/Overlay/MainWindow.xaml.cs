@@ -23,6 +23,7 @@ namespace DS3FogRandoOverlay
         private readonly FogGateService fogGateService;
         private readonly AreaMapper areaMapper;
         private readonly ConfigurationService configurationService;
+        private readonly FogGateTravelTracker travelTracker;
         private readonly DispatcherTimer updateTimer;
         private readonly DispatcherTimer fogGateUpdateTimer;
         private DispatcherTimer? retryConnectionTimer; // Timer for retrying DS3 connection
@@ -46,6 +47,7 @@ namespace DS3FogRandoOverlay
             memoryReader = new DS3MemoryReader();
             fogGateService = new FogGateService(configurationService);
             areaMapper = new AreaMapper();
+            travelTracker = new FogGateTravelTracker(fogGateService, configurationService);
 
             updateTimer = new DispatcherTimer
             {
@@ -150,6 +152,9 @@ namespace DS3FogRandoOverlay
             var currentArea = areaMapper.GetCurrentAreaName(mapId, position);
             
             File.AppendAllText("ds3_debug.log", $"[MainWindow] {DateTime.Now:HH:mm:ss.fff} - UpdateTimer_Tick - MapId: {mapId}, Position: {position}, CurrentArea: {currentArea}, LastKnownArea: {lastKnownArea}\n");
+
+            // Update travel tracker with current state
+            travelTracker.UpdatePlayerState(mapId, position, memoryReader);
 
             // Update area display if changed
             if (currentArea != lastKnownArea)
@@ -456,6 +461,30 @@ namespace DS3FogRandoOverlay
                 else
                 {
                     File.AppendAllText("ds3_debug.log", $"[MainWindow] {DateTime.Now:HH:mm:ss.fff} - Not adding spoiler info - connection: {connection != null}, showSpoilerInfo: {showSpoilerInfo}\n");
+                }
+
+                // Add traveled connection info (always shown regardless of spoiler setting)
+                // Show travel info based on which side of the gate the player is currently on
+                if (playerPosition != null)
+                {
+                    var (hasTravel, travelInfo, isSource) = travelTracker.GetRelevantTravelInfo(mapId, fogGate.Id, playerPosition);
+                    
+                    File.AppendAllText("ds3_debug.log", $"[MainWindow] {DateTime.Now:HH:mm:ss.fff} - Relevant travel for gate {fogGate.Name} (ID: {fogGate.Id}): hasTravel={hasTravel}, isSource={isSource}, info={travelInfo}\n");
+                    
+                    if (hasTravel && !string.IsNullOrEmpty(travelInfo))
+                    {
+                        var travelText = new TextBlock
+                        {
+                            Text = isSource ? $"   ✓ Traveled to: {travelInfo}" : $"   ← Arrived from: {travelInfo}",
+                            Style = (Style)FindResource("DistanceTextStyle"),
+                            Foreground = isSource ? Brushes.LightYellow : Brushes.LightBlue,
+                            Margin = new Thickness(15, 1, 0, 2),
+                            FontStyle = FontStyles.Italic,
+                            FontWeight = FontWeights.Bold,
+                            FontSize = 10
+                        };
+                        gateContainer.Children.Add(travelText);
+                    }
                 }
 
                 FogGatesPanel.Children.Add(gateContainer);
