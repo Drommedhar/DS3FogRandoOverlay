@@ -19,6 +19,7 @@ namespace DS3FogRandoOverlay.Services
         private readonly DS3Combiner combiner;
         private DS3FogDistribution? fogDistribution;
         private DS3SpoilerLog? spoilerLog;
+        private string? fogModDirectory;
         private bool dataLoaded = false;
         private bool combinedDataInitialized = false;
 
@@ -396,18 +397,6 @@ namespace DS3FogRandoOverlay.Services
             return hasData;
         }
 
-        /// <summary>
-        /// Forces a reload of the fog gate data (useful for when switching to a new randomizer setup)
-        /// </summary>
-        public void ReloadData()
-        {
-            dataLoaded = false;
-            combinedDataInitialized = false;
-            fogDistribution = null;
-            spoilerLog = null;
-            LoadDataIfNeeded();
-        }
-
         private void LoadDataIfNeeded()
         {
             if (dataLoaded)
@@ -446,6 +435,19 @@ namespace DS3FogRandoOverlay.Services
                 {
                     fogDistribution = result.FogDistribution;
                     spoilerLog = result.SpoilerLog;
+                    fogModDirectory = result.FogModDirectory;
+                    
+                    // Log the detected fog mod directory
+                    if (!string.IsNullOrEmpty(result.FogModDirectory))
+                    {
+                        System.Diagnostics.Debug.WriteLine($"[FogGateService] Detected fog mod directory: {result.FogModDirectory}");
+                        File.AppendAllText("ds3_debug.log", $"[FogGateService] Detected fog mod directory: {result.FogModDirectory}\n");
+                    }
+                    else
+                    {
+                        System.Diagnostics.Debug.WriteLine($"[FogGateService] No fog mod directory detected");
+                        File.AppendAllText("ds3_debug.log", $"[FogGateService] No fog mod directory detected\n");
+                    }
                     
                     System.Diagnostics.Debug.WriteLine($"[FogGateService] Successfully parsed data - FogDistribution: {fogDistribution != null}, SpoilerLog: {spoilerLog != null}");
                     File.AppendAllText("ds3_debug.log", $"[FogGateService] Successfully parsed data - FogDistribution: {fogDistribution != null}, SpoilerLog: {spoilerLog != null}\n");
@@ -634,7 +636,8 @@ namespace DS3FogRandoOverlay.Services
                     {
                         FogDistribution = fogDistribution,
                         SpoilerLog = spoilerLog,
-                        GameDirectory = gameDirectory
+                        GameDirectory = gameDirectory,
+                        FogModDirectory = fogModDirectory
                     };
                     
                     combiner.CombineData(gameDirectory, fogData);
@@ -770,6 +773,67 @@ namespace DS3FogRandoOverlay.Services
                 "m51_01_00_00" => "Filianore's Rest",
                 _ => mapId // Return the original mapId if not found
             };
+        }
+        /// <summary>
+        /// Gets diagnostic information about fog randomizer detection and loading
+        /// </summary>
+        /// <returns>Diagnostic information string</returns>
+        public string GetDiagnostics()
+        {
+            var diagnostics = new List<string>();
+            
+            var gameDirectory = configService.Config.DarkSouls3Path;
+            diagnostics.Add($"DS3 Path: {gameDirectory}");
+            
+            if (string.IsNullOrEmpty(gameDirectory) || !Directory.Exists(gameDirectory))
+            {
+                diagnostics.Add("❌ DS3 directory not found or not set");
+                return string.Join("\n", diagnostics);
+            }
+            
+            // Ensure we're using the Game subdirectory
+            if (!gameDirectory.EndsWith("Game", StringComparison.OrdinalIgnoreCase))
+            {
+                gameDirectory = Path.Combine(gameDirectory, "Game");
+            }
+            
+            if (!Directory.Exists(gameDirectory))
+            {
+                diagnostics.Add("❌ DS3 Game subdirectory not found");
+                return string.Join("\n", diagnostics);
+            }
+            
+            diagnostics.Add($"Game Directory: {gameDirectory}");
+            
+            // Get parser diagnostics
+            var parserDiagnostics = parser.GetFogRandomizerDiagnostics(gameDirectory);
+            diagnostics.Add("");
+            diagnostics.Add("Fog Randomizer Detection:");
+            diagnostics.Add(parserDiagnostics);
+            
+            // Add current data status
+            diagnostics.Add("");
+            diagnostics.Add("Current Data Status:");
+            diagnostics.Add($"Data Loaded: {dataLoaded}");
+            diagnostics.Add($"Fog Distribution: {(fogDistribution != null ? $"Loaded ({fogDistribution.Entrances.Count} entrances, {fogDistribution.Warps.Count} warps)" : "Not loaded")}");
+            diagnostics.Add($"Spoiler Log: {(spoilerLog != null ? $"Loaded ({spoilerLog.Connections.Count} connections, Seed: {spoilerLog.Seed})" : "Not loaded")}");
+            diagnostics.Add($"Fog Mod Directory: {fogModDirectory ?? "Not detected"}");
+            diagnostics.Add($"Combined Data Initialized: {combinedDataInitialized}");
+            
+            return string.Join("\n", diagnostics);
+        }
+
+        /// <summary>
+        /// Forces a reload of the fog gate data (useful for when switching to a new randomizer setup)
+        /// </summary>
+        public void ReloadData()
+        {
+            dataLoaded = false;
+            combinedDataInitialized = false;
+            fogDistribution = null;
+            spoilerLog = null;
+            fogModDirectory = null;
+            LoadDataIfNeeded();
         }
     }
 }

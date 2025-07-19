@@ -63,6 +63,32 @@ namespace DS3Parser.Services
         }
 
         /// <summary>
+        /// Parse spoiler log from the fog mod directory
+        /// </summary>
+        /// <param name="fogDirectory">Path to the fog mod directory</param>
+        /// <returns>Parsed spoiler log data, or null if no spoiler log found</returns>
+        public DS3SpoilerLog? ParseFromFogDirectory(string fogDirectory)
+        {
+            var spoilerLogDir = Path.Combine(fogDirectory, "spoiler_logs");
+            if (!Directory.Exists(spoilerLogDir))
+            {
+                return null;
+            }
+
+            var logFiles = Directory.GetFiles(spoilerLogDir, "*.txt")
+                .OrderByDescending(f => File.GetCreationTime(f))
+                .ToList();
+
+            if (logFiles.Count == 0)
+            {
+                return null;
+            }
+
+            // Get the most recent log file
+            return ParseSpoilerLogFile(logFiles.First());
+        }
+
+        /// <summary>
         /// Find all spoiler log files in the game directory
         /// </summary>
         /// <param name="gameDirectory">Path to the DS3 game directory</param>
@@ -70,6 +96,24 @@ namespace DS3Parser.Services
         public List<string> FindSpoilerLogFiles(string gameDirectory)
         {
             var spoilerLogDir = Path.Combine(gameDirectory, "fog", "spoiler_logs");
+            if (!Directory.Exists(spoilerLogDir))
+            {
+                return new List<string>();
+            }
+
+            return Directory.GetFiles(spoilerLogDir, "*.txt")
+                .OrderByDescending(f => File.GetCreationTime(f))
+                .ToList();
+        }
+
+        /// <summary>
+        /// Find all spoiler log files in the fog mod directory
+        /// </summary>
+        /// <param name="fogDirectory">Path to the fog mod directory</param>
+        /// <returns>List of spoiler log file paths</returns>
+        public List<string> FindSpoilerLogFilesInFogDirectory(string fogDirectory)
+        {
+            var spoilerLogDir = Path.Combine(fogDirectory, "spoiler_logs");
             if (!Directory.Exists(spoilerLogDir))
             {
                 return new List<string>();

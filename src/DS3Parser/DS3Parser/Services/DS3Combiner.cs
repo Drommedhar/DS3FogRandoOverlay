@@ -7,6 +7,7 @@ public class DS3Combiner
 {
     private Dictionary<string, Dictionary<DS3FogGate, MSB3.Part.Object>> _areaToGates = new();
     private string _gameDirectory = string.Empty;
+    private string? _fogModDirectory;
     
     /// <summary>
     /// Gets the combined gate data for all areas
@@ -63,8 +64,10 @@ public class DS3Combiner
     public void CombineData(string gameDirectory, DS3FogRandomizerData fogData)
     {
         _gameDirectory = gameDirectory;
+        _fogModDirectory = fogData.FogModDirectory;
         
         File.AppendAllText("ds3_debug.log", $"[DS3Combiner] CombineData called with directory: {gameDirectory}\n");
+        File.AppendAllText("ds3_debug.log", $"[DS3Combiner] Fog mod directory: {_fogModDirectory ?? "null"}\n");
         
         if (fogData.FogDistribution is null)
         {
@@ -174,7 +177,57 @@ public class DS3Combiner
     private List<string> GetMsbFilesForArea(string areaId)
     {
         var msbFiles = new List<string>();
-        var baseDir = Path.Combine(_gameDirectory, "fog", "map", "mapstudio");
+        
+        // Try to find mapstudio directory in fog mod directory first, then fall back to game directory
+        string? baseDir = null;
+        
+        if (!string.IsNullOrEmpty(_fogModDirectory))
+        {
+            // Try fog mod directory paths
+            var fogModMapStudioPaths = new[]
+            {
+                Path.Combine(_fogModDirectory, "map", "mapstudio"),
+                Path.Combine(_fogModDirectory, "mapstudio"),
+                Path.Combine(_fogModDirectory, "Maps", "mapstudio"),
+                Path.Combine(_fogModDirectory, "maps", "mapstudio")
+            };
+            
+            foreach (var path in fogModMapStudioPaths)
+            {
+                if (Directory.Exists(path))
+                {
+                    baseDir = path;
+                    File.AppendAllText("ds3_debug.log", $"[DS3Combiner] Using fog mod mapstudio directory: {baseDir}\n");
+                    break;
+                }
+            }
+        }
+        
+        // Fall back to game directory if not found in fog mod
+        if (string.IsNullOrEmpty(baseDir))
+        {
+            var gameMapStudioPaths = new[]
+            {
+                Path.Combine(_gameDirectory, "fog", "map", "mapstudio"),
+                Path.Combine(_gameDirectory, "map", "mapstudio")
+            };
+            
+            foreach (var path in gameMapStudioPaths)
+            {
+                if (Directory.Exists(path))
+                {
+                    baseDir = path;
+                    File.AppendAllText("ds3_debug.log", $"[DS3Combiner] Using game directory mapstudio: {baseDir}\n");
+                    break;
+                }
+            }
+        }
+        
+        if (string.IsNullOrEmpty(baseDir))
+        {
+            File.AppendAllText("ds3_debug.log", $"[DS3Combiner] No mapstudio directory found for area {areaId}\n");
+            return msbFiles;
+        }
         
         // Add the base area file
         msbFiles.Add(Path.Combine(baseDir, areaId + ".msb.dcx"));
@@ -185,15 +238,12 @@ public class DS3Combiner
         {
             // Look for variations like m34_01_00_00, m34_02_00_00, etc.
             var pattern = $"{baseAreaCode}_*.msb.dcx";
-            if (Directory.Exists(baseDir))
+            var variationFiles = Directory.GetFiles(baseDir, pattern);
+            foreach (var variationFile in variationFiles)
             {
-                var variationFiles = Directory.GetFiles(baseDir, pattern);
-                foreach (var variationFile in variationFiles)
+                if (!msbFiles.Contains(variationFile))
                 {
-                    if (!msbFiles.Contains(variationFile))
-                    {
-                        msbFiles.Add(variationFile);
-                    }
+                    msbFiles.Add(variationFile);
                 }
             }
         }

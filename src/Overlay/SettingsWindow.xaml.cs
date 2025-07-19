@@ -3,6 +3,7 @@ using Microsoft.Win32;
 using System;
 using System.IO;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media;
 
 namespace DS3FogRandoOverlay
@@ -67,32 +68,47 @@ namespace DS3FogRandoOverlay
 
             try
             {
-                var pathResolver = new PathResolver(ds3Path);
-                var fogPath = pathResolver.FindFogDirectory();
-                var eventsPath = pathResolver.FindEventsFile(fogPath);
-
-                if (!string.IsNullOrEmpty(fogPath))
+                // Use the new dynamic detection system
+                var parser = new DS3Parser.DS3Parser();
+                var gameDirectory = Path.Combine(ds3Path, "Game");
+                
+                if (parser.HasFogRandomizerData(gameDirectory))
                 {
-                    StatusTextBlock.Text = "Valid Dark Souls 3 path with fog mod detected";
+                    StatusTextBlock.Text = "Valid Dark Souls 3 path with fog randomizer detected";
                     StatusTextBlock.Foreground = Brushes.Green;
-                    FogPathTextBlock.Text = fogPath;
-                    FogPathTextBlock.Foreground = Brushes.Green;
+                    
+                    var fogModDirectory = parser.FindFogRandomizerDirectory(gameDirectory);
+                    if (!string.IsNullOrEmpty(fogModDirectory))
+                    {
+                        FogPathTextBlock.Text = fogModDirectory;
+                        FogPathTextBlock.Foreground = Brushes.Green;
+                        
+                        var eventsPath = Path.Combine(fogModDirectory, "fogdist", "events.txt");
+                        if (File.Exists(eventsPath))
+                        {
+                            EventsPathTextBlock.Text = eventsPath;
+                            EventsPathTextBlock.Foreground = Brushes.Green;
+                        }
+                        else
+                        {
+                            EventsPathTextBlock.Text = "Not found";
+                            EventsPathTextBlock.Foreground = Brushes.Orange;
+                        }
+                    }
+                    else
+                    {
+                        FogPathTextBlock.Text = "Detection error";
+                        FogPathTextBlock.Foreground = Brushes.Red;
+                        EventsPathTextBlock.Text = "N/A";
+                        EventsPathTextBlock.Foreground = Brushes.Red;
+                    }
                 }
                 else
                 {
-                    StatusTextBlock.Text = "Valid Dark Souls 3 path, but no fog mod detected";
+                    StatusTextBlock.Text = "Valid Dark Souls 3 path, but no fog randomizer detected";
                     StatusTextBlock.Foreground = Brushes.Orange;
                     FogPathTextBlock.Text = "Not found";
                     FogPathTextBlock.Foreground = Brushes.Orange;
-                }
-
-                if (!string.IsNullOrEmpty(eventsPath))
-                {
-                    EventsPathTextBlock.Text = eventsPath;
-                    EventsPathTextBlock.Foreground = Brushes.Green;
-                }
-                else
-                {
                     EventsPathTextBlock.Text = "Not found";
                     EventsPathTextBlock.Foreground = Brushes.Orange;
                 }
@@ -143,6 +159,52 @@ namespace DS3FogRandoOverlay
             catch (Exception ex)
             {
                 MessageBox.Show(this, $"Error during auto-detection:\n{ex.Message}", "Auto-Detection Error", 
+                              MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void DiagnosticsButton_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var ds3Path = DarkSouls3PathTextBox.Text?.Trim();
+                
+                if (string.IsNullOrEmpty(ds3Path) || !Directory.Exists(ds3Path))
+                {
+                    MessageBox.Show(this, "Please select a valid Dark Souls 3 path first.", "Invalid Path", 
+                                  MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                var parser = new DS3Parser.DS3Parser();
+                var gameDirectory = Path.Combine(ds3Path, "Game");
+                var diagnostics = parser.GetFogRandomizerDiagnostics(gameDirectory);
+
+                // Create a new window to show the diagnostics
+                var diagnosticsWindow = new Window
+                {
+                    Title = "Fog Randomizer Diagnostics",
+                    Width = 700,
+                    Height = 500,
+                    Owner = this,
+                    WindowStartupLocation = WindowStartupLocation.CenterOwner,
+                    Content = new ScrollViewer
+                    {
+                        Content = new TextBlock
+                        {
+                            Text = diagnostics,
+                            FontFamily = new System.Windows.Media.FontFamily("Consolas"),
+                            Margin = new Thickness(10),
+                            TextWrapping = TextWrapping.Wrap
+                        }
+                    }
+                };
+
+                diagnosticsWindow.ShowDialog();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(this, $"Error generating diagnostics:\n{ex.Message}", "Diagnostics Error", 
                               MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
