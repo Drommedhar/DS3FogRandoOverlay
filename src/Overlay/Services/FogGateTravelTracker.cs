@@ -670,6 +670,27 @@ namespace DS3FogRandoOverlay.Services
         }
 
         /// <summary>
+        /// Reset the tracker as if the application was restarted (clears all travel data and pending state)
+        /// </summary>
+        public void ResetTracker()
+        {
+            // Clear all travel data
+            ClearAllTravelData();
+            
+            // Clear pending travel state
+            ClearPendingTravel();
+            
+            // Reset position tracking
+            lastClosestGate = null;
+            lastPlayerPosition = null;
+            lastMapId = null;
+            lastPositionUpdate = DateTime.MinValue;
+            lastMapChange = DateTime.MinValue;
+            
+            LogDebug("Travel tracker reset - all data cleared and state reset");
+        }
+
+        /// <summary>
         /// Convert mapId to area name for comparison with DS3FogGate.Area
         /// </summary>
         private string GetAreaNameFromMapId(string mapId)

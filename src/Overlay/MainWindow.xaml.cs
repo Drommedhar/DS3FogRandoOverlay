@@ -24,6 +24,7 @@ namespace DS3FogRandoOverlay
         private readonly AreaMapper areaMapper;
         private readonly ConfigurationService configurationService;
         private readonly FogGateTravelTracker travelTracker;
+        private readonly SpoilerLogMonitor spoilerLogMonitor;
         private readonly DispatcherTimer updateTimer;
         private readonly DispatcherTimer fogGateUpdateTimer;
         private DispatcherTimer? retryConnectionTimer; // Timer for retrying DS3 connection
@@ -39,6 +40,9 @@ namespace DS3FogRandoOverlay
         private bool showSpoilerInfo = false;
         private bool isProcessingClick = false;
 
+        private bool needsSettingsValidation = false;
+        private bool isInitializing = false;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -48,6 +52,10 @@ namespace DS3FogRandoOverlay
             fogGateService = new FogGateService(configurationService);
             areaMapper = new AreaMapper();
             travelTracker = new FogGateTravelTracker(fogGateService, configurationService);
+            spoilerLogMonitor = new SpoilerLogMonitor(configurationService, fogGateService);
+
+            // Set up spoiler log monitoring event
+            spoilerLogMonitor.SpoilerLogChanged += OnSpoilerLogChanged;
 
             updateTimer = new DispatcherTimer
             {
@@ -66,46 +74,84 @@ namespace DS3FogRandoOverlay
             this.SizeChanged += (s, e) => SaveWindowSettings();
             this.Closing += (s, e) => SaveWindowSettings();
 
+            // Check DS3 directory validity
+            needsSettingsValidation = !IsDS3DirectoryValid();
+
             InitializeOverlay();
         }
 
         private void InitializeOverlay()
         {
-            // Load window size and position from config
-            LoadWindowSettings();
-            
-            // Apply transparency setting
-            ApplyTransparencySettings();
-
-            // Load spoiler log data
-            LoadSpoilerLogData();
-
-            // Try to attach to DS3
-            if (memoryReader.AttachToDS3())
-            {
-                StatusText.Text = "Connected to DS3";
-                StatusText.Foreground = System.Windows.Media.Brushes.Green;
-                SetMinimalMode(true);
-                updateTimer.Start();
-                fogGateUpdateTimer.Start();
+            // Prevent recursive initialization
+            if (isInitializing)
+                return;
                 
-                // Force initial fog gate display
-                var mapId = memoryReader.GetCurrentMapId();
-                var position = memoryReader.GetPlayerPosition();
-                var currentArea = areaMapper.GetCurrentAreaName(mapId, position);
-                lastKnownArea = currentArea;
-                lastKnownMapId = mapId;
-                CurrentAreaText.Text = currentArea ?? "Unknown";
-                UpdateFogGatesDisplayWithDistances(mapId);
-            }
-            else
+            isInitializing = true;
+            
+            try
             {
-                StatusText.Text = "DS3 not found";
-                StatusText.Foreground = System.Windows.Media.Brushes.Red;
-                SetMinimalMode(false);
+                // Load window size and position from config
+                LoadWindowSettings();
+                
+                // Apply transparency setting
+                ApplyTransparencySettings();
 
-                // Start retry connection attempt
-                StartRetryConnection();
+                // If we need settings validation, defer it until after the window is loaded
+                if (needsSettingsValidation)
+                {
+                    this.Loaded += MainWindow_Loaded;
+                    StatusText.Text = "Configuration required";
+                    StatusText.Foreground = System.Windows.Media.Brushes.Orange;
+                    HeaderText.Text = "DS3 Fog Randomizer (Configuration Required)";
+                    SetMinimalMode(false);
+                    return;
+                }
+
+                // Load spoiler log data
+                LoadSpoilerLogData();
+
+                // Start monitoring spoiler logs for changes
+                spoilerLogMonitor.StartMonitoring();
+
+                // Set up a timer to periodically check for spoiler log changes (backup method)
+                var spoilerLogCheckTimer = new DispatcherTimer
+                {
+                    Interval = TimeSpan.FromSeconds(10) // Check every 10 seconds
+                };
+                spoilerLogCheckTimer.Tick += (s, e) => spoilerLogMonitor.CheckForNewSpoilerLogs();
+                spoilerLogCheckTimer.Start();
+
+                // Try to attach to DS3
+                if (memoryReader.AttachToDS3())
+                {
+                    StatusText.Text = "Connected to DS3";
+                    StatusText.Foreground = System.Windows.Media.Brushes.Green;
+                    SetMinimalMode(true);
+                    updateTimer.Start();
+                    fogGateUpdateTimer.Start();
+                    
+                    // Force initial fog gate display
+                    var mapId = memoryReader.GetCurrentMapId();
+                    var position = memoryReader.GetPlayerPosition();
+                    var currentArea = areaMapper.GetCurrentAreaName(mapId, position);
+                    lastKnownArea = currentArea;
+                    lastKnownMapId = mapId;
+                    CurrentAreaText.Text = currentArea ?? "Unknown";
+                    UpdateFogGatesDisplayWithDistances(mapId);
+                }
+                else
+                {
+                    StatusText.Text = "DS3 not found";
+                    StatusText.Foreground = System.Windows.Media.Brushes.Red;
+                    SetMinimalMode(false);
+
+                    // Start retry connection attempt
+                    StartRetryConnection();
+                }
+            }
+            finally
+            {
+                isInitializing = false;
             }
         }
 
@@ -661,31 +707,81 @@ namespace DS3FogRandoOverlay
         {
             try
             {
-                // Stop timers temporarily
-                updateTimer.Stop();
-                fogGateUpdateTimer.Stop();
+                // Check if DS3 directory is now valid
+                if (IsDS3DirectoryValid())
+                {
+                    // Directory is now valid, we can proceed with full initialization
+                    File.AppendAllText("ds3_debug.log", $"[MainWindow] DS3 directory now valid, performing full restart\n");
+                    
+                    needsSettingsValidation = false;
+                    
+                    // Stop any existing timers
+                    updateTimer.Stop();
+                    fogGateUpdateTimer.Stop();
+                    
+                    // Restart spoiler log monitoring
+                    spoilerLogMonitor.StopMonitoring();
+                    spoilerLogMonitor.StartMonitoring();
 
-                // Apply transparency settings
-                ApplyTransparencySettings();
+                    // Apply transparency settings
+                    ApplyTransparencySettings();
 
-                // Reload fog gate service data
-                fogGateService.ReloadData();
+                    // Reload fog gate service data
+                    fogGateService.ReloadData();
 
-                File.AppendAllText("ds3_debug.log",
-                    $"[MainWindow] {DateTime.Now:HH:mm:ss.fff} - Services restarted with new paths\n");
+                    // Load spoiler log data
+                    LoadSpoilerLogData();
 
-                // Restart timers
-                updateTimer.Start();
-                fogGateUpdateTimer.Start();
+                    // Try to connect to DS3 and start normal operation
+                    if (memoryReader.AttachToDS3())
+                    {
+                        StatusText.Text = "Connected to DS3";
+                        StatusText.Foreground = System.Windows.Media.Brushes.Green;
+                        SetMinimalMode(true);
+                        updateTimer.Start();
+                        fogGateUpdateTimer.Start();
+                        
+                        // Force initial fog gate display
+                        var mapId = memoryReader.GetCurrentMapId();
+                        var position = memoryReader.GetPlayerPosition();
+                        var currentArea = areaMapper.GetCurrentAreaName(mapId, position);
+                        lastKnownArea = currentArea;
+                        lastKnownMapId = mapId;
+                        CurrentAreaText.Text = currentArea ?? "Unknown";
+                        UpdateFogGatesDisplayWithDistances(mapId);
+                    }
+                    else
+                    {
+                        StatusText.Text = "DS3 not found";
+                        StatusText.Foreground = System.Windows.Media.Brushes.Red;
+                        SetMinimalMode(false);
+                        StartRetryConnection();
+                    }
+                }
+                else
+                {
+                    // Directory is still invalid after settings change
+                    File.AppendAllText("ds3_debug.log", $"[MainWindow] DS3 directory still invalid after settings change\n");
+                    
+                    // Stop timers temporarily
+                    updateTimer.Stop();
+                    fogGateUpdateTimer.Stop();
 
-                // Force a refresh
-                LoadSpoilerLogData();
-                UpdateFogGatesDisplayWithDistances(lastKnownMapId);
+                    // Apply transparency settings (user might have changed this)
+                    ApplyTransparencySettings();
+
+                    // Show error state
+                    StatusText.Text = "Invalid DS3 directory";
+                    StatusText.Foreground = System.Windows.Media.Brushes.Red;
+                    HeaderText.Text = "DS3 Fog Randomizer (Configuration Required)";
+                    SetMinimalMode(false);
+                }
+
+                File.AppendAllText("ds3_debug.log", $"[MainWindow] {DateTime.Now:HH:mm:ss.fff} - Services restarted with new paths\n");
             }
             catch (Exception ex)
             {
-                File.AppendAllText("ds3_debug.log",
-                    $"[MainWindow] {DateTime.Now:HH:mm:ss.fff} - Error restarting services: {ex.Message}\n");
+                File.AppendAllText("ds3_debug.log", $"[MainWindow] {DateTime.Now:HH:mm:ss.fff} - Error restarting services: {ex.Message}\n");
                 
                 MessageBox.Show($"Error restarting services with new paths: {ex.Message}\n\nPlease restart the application.",
                               "Service Restart Error", MessageBoxButton.OK, MessageBoxImage.Warning);
@@ -707,6 +803,7 @@ namespace DS3FogRandoOverlay
         protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
         {
             Detach();
+            spoilerLogMonitor?.Dispose();
             base.OnClosing(e);
         }
 
@@ -911,6 +1008,126 @@ namespace DS3FogRandoOverlay
                 MainBorder.Background = new SolidColorBrush(Color.FromArgb(0x66, 0x00, 0x00, 0x00));
                 MainBorder.CornerRadius = new CornerRadius(5);
                 MainBorder.Padding = new Thickness(8);
+            }
+        }
+
+        /// <summary>
+        /// Check if the DS3 directory is valid and contains fog randomizer data
+        /// </summary>
+        private bool IsDS3DirectoryValid()
+        {
+            try
+            {
+                var ds3Path = configurationService.Config.DarkSouls3Path;
+                if (string.IsNullOrEmpty(ds3Path) || !Directory.Exists(ds3Path))
+                {
+                    File.AppendAllText("ds3_debug.log", $"[MainWindow] DS3 directory invalid or missing: {ds3Path}\n");
+                    return false;
+                }
+
+                var parser = new DS3Parser.DS3Parser();
+                var gameDirectory = System.IO.Path.Combine(ds3Path, "Game");
+                
+                var hasRandomizerData = parser.HasFogRandomizerData(gameDirectory);
+                File.AppendAllText("ds3_debug.log", $"[MainWindow] DS3 directory check - gameDirectory: {gameDirectory}, hasRandomizerData: {hasRandomizerData}\n");
+                
+                return hasRandomizerData;
+            }
+            catch (Exception ex)
+            {
+                File.AppendAllText("ds3_debug.log", $"[MainWindow] Error checking DS3 directory validity: {ex.Message}\n");
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Open the settings window safely (reuses existing Settings_Click logic)
+        /// </summary>
+        private void OpenSettingsWindow()
+        {
+            // Simply call the existing Settings_Click method which already has proper error handling
+            Settings_Click(this, new RoutedEventArgs());
+        }
+
+        /// <summary>
+        /// Handle when spoiler log files change (new log detected)
+        /// </summary>
+        private void OnSpoilerLogChanged()
+        {
+            try
+            {
+                File.AppendAllText("ds3_debug.log", $"[MainWindow] Spoiler log changed detected - resetting travel tracker\n");
+                
+                // Reset the travel tracker (clears all travel data and state)
+                travelTracker.ResetTracker();
+                
+                // Reload spoiler log data
+                LoadSpoilerLogData();
+                
+                // Refresh the display
+                Dispatcher.Invoke(() =>
+                {
+                    UpdateFogGatesDisplayWithDistances(lastKnownMapId);
+                });
+                
+                File.AppendAllText("ds3_debug.log", $"[MainWindow] Travel tracker reset and display refreshed due to spoiler log change\n");
+            }
+            catch (Exception ex)
+            {
+                File.AppendAllText("ds3_debug.log", $"[MainWindow] Error handling spoiler log change: {ex.Message}\n");
+            }
+        }
+
+        /// <summary>
+        /// Handle when the main window is fully loaded (used for deferred settings validation)
+        /// </summary>
+        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            this.Loaded -= MainWindow_Loaded; // Remove the event handler
+            
+            if (needsSettingsValidation)
+            {
+                // Show a message and ask if the user wants to open settings
+                var result = MessageBox.Show(this,
+                    "The Dark Souls 3 directory is not set correctly or does not contain fog randomizer data.\n\n" +
+                    "The overlay requires a valid DS3 installation with the fog randomizer mod installed.\n\n" +
+                    "Would you like to open the settings to configure the correct directory?",
+                    "Invalid Dark Souls 3 Directory",
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Warning);
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    // Try to open settings
+                    try
+                    {
+                        OpenSettingsWindow();
+                    }
+                    catch (Exception ex)
+                    {
+                        File.AppendAllText("ds3_debug.log", $"[MainWindow] Error opening settings from MainWindow_Loaded: {ex.Message}\n");
+                        
+                        MessageBox.Show(this,
+                            "Unable to open settings window. You can access settings through the right-click menu.",
+                            "Settings Error",
+                            MessageBoxButton.OK,
+                            MessageBoxImage.Information);
+                            
+                        // Show help text
+                        StatusText.Text = "Right-click for settings";
+                        StatusText.Foreground = System.Windows.Media.Brushes.Yellow;
+                        HeaderText.Text = "DS3 Fog Randomizer (Configuration Required)";
+                        SetMinimalMode(false);
+                    }
+                }
+                else
+                {
+                    // User chose not to configure, show helpful message
+                    StatusText.Text = "Right-click for settings";
+                    StatusText.Foreground = System.Windows.Media.Brushes.Yellow;
+                    HeaderText.Text = "DS3 Fog Randomizer (Configuration Required)";
+                    SetMinimalMode(false);
+                }
             }
         }
     }
